@@ -1,0 +1,7 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="80" cy="80" r="72" fill="#0F172A" stroke="#E5E7EB" stroke-width="8"/>
+  <path d="M80 28L120 44V84C120 109 103 129 80 138C57 129 40 109 40 84V44L80 28Z" fill="#1E3A8A"/>
+  <path d="M58 48H68V122H58V48ZM80 48H90V122H80V48ZM102 48H112V122H102V48Z" fill="#F8FAFC" fill-opacity="0.95"/>
+  <path d="M50 48H110V64H50V48Z" fill="#DC2626"/>
+  <text x="80" y="86" text-anchor="middle" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="24" font-weight="700">A</text>
+</svg>

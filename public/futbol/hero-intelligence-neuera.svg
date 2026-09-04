@@ -1,0 +1,150 @@
+<svg width="1200" height="920" viewBox="0 0 1200 920" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="920" rx="48" fill="#02030A"/>
+  <rect x="20" y="20" width="1160" height="880" rx="36" fill="url(#bg)" stroke="url(#edge)" stroke-width="2"/>
+
+  <g opacity="0.22">
+    <path d="M60 140H1140" stroke="#1D355F"/>
+    <path d="M60 240H1140" stroke="#1D355F"/>
+    <path d="M60 340H1140" stroke="#1D355F"/>
+    <path d="M60 440H1140" stroke="#1D355F"/>
+    <path d="M60 540H1140" stroke="#1D355F"/>
+    <path d="M60 640H1140" stroke="#1D355F"/>
+    <path d="M60 740H1140" stroke="#1D355F"/>
+    <path d="M140 80V840" stroke="#1D355F"/>
+    <path d="M260 80V840" stroke="#1D355F"/>
+    <path d="M380 80V840" stroke="#1D355F"/>
+    <path d="M500 80V840" stroke="#1D355F"/>
+    <path d="M620 80V840" stroke="#1D355F"/>
+    <path d="M740 80V840" stroke="#1D355F"/>
+    <path d="M860 80V840" stroke="#1D355F"/>
+    <path d="M980 80V840" stroke="#1D355F"/>
+  </g>
+
+  <ellipse cx="600" cy="460" rx="420" ry="320" fill="url(#aura)"/>
+
+  <rect x="86" y="88" width="680" height="744" rx="30" fill="url(#panel)" stroke="#23406F"/>
+  <rect x="794" y="88" width="320" height="744" rx="30" fill="url(#side)" stroke="#23406F"/>
+
+  <text x="120" y="150" fill="#93C5FD" font-family="Arial, sans-serif" font-size="20" letter-spacing="5">MALLA DE INTELIGENCIA S24</text>
+  <text x="134" y="228" fill="#7CAEEB" fill-opacity="0.85" font-family="Arial, sans-serif" font-size="13" letter-spacing="1.4">POSESION 61.8  |  xG 2.34  |  PASES CLAVE 14</text>
+
+  <g filter="url(#neonBlur)">
+    <path d="M170 246C252 182 330 160 418 176C506 192 582 252 670 256" stroke="url(#lineA)" stroke-width="8" stroke-linecap="round"/>
+    <path d="M178 698C262 640 332 620 418 636C504 652 586 706 678 702" stroke="url(#lineB)" stroke-width="8" stroke-linecap="round"/>
+  </g>
+
+  <circle cx="418" cy="176" r="10" fill="#7DD3FC"/>
+  <circle cx="670" cy="256" r="10" fill="#34D399"/>
+  <circle cx="418" cy="636" r="10" fill="#FDE68A"/>
+  <circle cx="678" cy="702" r="10" fill="#60A5FA"/>
+
+  <g>
+    <circle cx="426" cy="454" r="210" fill="url(#core)"/>
+    <circle cx="426" cy="454" r="156" stroke="#60A5FA" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="7 9"/>
+    <circle cx="426" cy="454" r="112" stroke="#67E8F9" stroke-opacity="0.6" stroke-width="2"/>
+    <circle cx="426" cy="454" r="126" fill="url(#ballShade)" stroke="#DCE8F7" stroke-width="5"/>
+    <ellipse cx="382" cy="390" rx="60" ry="38" fill="url(#ballHighlight)" fill-opacity="0.95"/>
+    <ellipse cx="478" cy="528" rx="76" ry="54" fill="#64748B" opacity="0.14"/>
+
+    <path d="M426 408L458 432L446 468L406 468L394 432L426 408Z" fill="#05070B"/>
+    <path d="M426 408L458 432M426 408L394 432M458 432L446 468M394 432L406 468M406 468L446 468" stroke="#EEF4FB" stroke-width="4.5" stroke-linejoin="round"/>
+
+    <path d="M394 432L360 414L334 440L344 482L384 500L406 468" fill="#FFFFFF" stroke="#D9E2EE" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M458 432L492 414L518 440L508 482L468 500L446 468" fill="#FFFFFF" stroke="#D9E2EE" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M384 500L374 538L402 566L450 566L478 538L468 500" fill="#FFFFFF" stroke="#D9E2EE" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M360 414L376 374L426 350L476 374L492 414L458 432L426 408L394 432Z" fill="#FFFFFF" stroke="#D9E2EE" stroke-width="4" stroke-linejoin="round"/>
+
+    <path d="M348 406L330 382L346 348L382 330L396 354L376 374L360 414Z" fill="#111318"/>
+    <path d="M504 406L522 382L506 348L470 330L456 354L476 374L492 414Z" fill="#111318"/>
+    <path d="M392 570L402 596L450 596L460 570L450 566L402 566Z" fill="#111318"/>
+    <path d="M324 470L306 490L312 528L346 544L374 538L384 500L344 482Z" fill="#111318"/>
+    <path d="M528 470L546 490L540 528L506 544L478 538L468 500L508 482Z" fill="#111318"/>
+
+    <path d="M334 440L306 490M518 440L546 490M376 374L346 348M476 374L506 348M402 566L402 596M450 566L450 596" stroke="#CBD5E1" stroke-width="2.5" stroke-linecap="round" opacity="0.75"/>
+    <circle cx="426" cy="454" r="127" stroke="#AFC7E6" stroke-opacity="0.35" stroke-width="2"/>
+  </g>
+
+  <rect x="828" y="122" width="252" height="216" rx="24" fill="#081028" stroke="#27467A"/>
+  <text x="854" y="172" fill="#BFD8FF" font-family="Arial, sans-serif" font-size="22" letter-spacing="3">PUNTAJE IA</text>
+  <text x="854" y="238" fill="white" font-family="Arial, sans-serif" font-size="78" font-weight="700">94</text>
+  <text x="854" y="274" fill="#5EEAD4" font-family="Arial, sans-serif" font-size="20">Manchester City</text>
+  <rect x="854" y="292" width="188" height="12" rx="6" fill="#16305C"/>
+  <rect x="854" y="292" width="168" height="12" rx="6" fill="url(#lineA)"/>
+
+  <rect x="828" y="362" width="252" height="210" rx="24" fill="#081028" stroke="#27467A"/>
+  <text x="854" y="408" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">xG</text>
+  <rect x="854" y="422" width="150" height="16" rx="8" fill="#142D57"/>
+  <rect x="854" y="422" width="112" height="16" rx="8" fill="#60A5FA"/>
+  <text x="854" y="462" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">Control de campo</text>
+  <rect x="854" y="476" width="150" height="16" rx="8" fill="#142D57"/>
+  <rect x="854" y="476" width="126" height="16" rx="8" fill="#34D399"/>
+  <text x="854" y="516" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">Verticalidad</text>
+  <rect x="854" y="530" width="150" height="16" rx="8" fill="#142D57"/>
+  <rect x="854" y="530" width="96" height="16" rx="8" fill="#F59E0B"/>
+
+  <rect x="828" y="596" width="252" height="202" rx="24" fill="#081028" stroke="#27467A"/>
+  <text x="854" y="640" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">Lente neural</text>
+  <text x="854" y="662" fill="#7EA8E6" fill-opacity="0.85" font-family="Arial, sans-serif" font-size="12" letter-spacing="1">NODO 07  |  RIESGO 12%</text>
+  <text x="854" y="782" fill="#7EA8E6" fill-opacity="0.8" font-family="Arial, sans-serif" font-size="12" letter-spacing="1">ESTADO ESTABLE</text>
+  <circle cx="954" cy="708" r="58" fill="url(#lens)"/>
+  <circle cx="954" cy="708" r="38" stroke="#BAE6FD" stroke-width="2"/>
+  <path d="M954 674V742" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round"/>
+  <path d="M920 708H988" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="954" cy="708" r="78" stroke="#2563EB" stroke-opacity="0.32" stroke-width="2" stroke-dasharray="8 10"/>
+
+  <defs>
+    <linearGradient id="bg" x1="90" y1="80" x2="1120" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#040A18"/>
+      <stop offset="0.58" stop-color="#020617"/>
+      <stop offset="1" stop-color="#08142B"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="30" y1="30" x2="1160" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6" stop-opacity="0.52"/>
+      <stop offset="1" stop-color="#0F172A" stop-opacity="0.2"/>
+    </linearGradient>
+    <radialGradient id="aura" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(600 460) rotate(90) scale(320 420)">
+      <stop stop-color="#1D4ED8" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#1D4ED8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="86" y1="88" x2="766" y2="832" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#081227"/>
+      <stop offset="1" stop-color="#050A17"/>
+    </linearGradient>
+    <linearGradient id="side" x1="794" y1="88" x2="1114" y2="832" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#091429"/>
+      <stop offset="1" stop-color="#061126"/>
+    </linearGradient>
+    <radialGradient id="core" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(426 454) rotate(90) scale(210)">
+      <stop stop-color="#2563EB" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#0F172A" stop-opacity="0.12"/>
+    </radialGradient>
+    <radialGradient id="ballShade" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(388 378) rotate(48) scale(162)">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="0.62" stop-color="#E8EEF7"/>
+      <stop offset="1" stop-color="#A4B4CA"/>
+    </radialGradient>
+    <radialGradient id="ballHighlight" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(374 386) rotate(15) scale(80 44)">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="lineA" x1="170" y1="176" x2="670" y2="256" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8"/>
+      <stop offset="0.5" stop-color="#60A5FA"/>
+      <stop offset="1" stop-color="#34D399"/>
+    </linearGradient>
+    <linearGradient id="lineB" x1="178" y1="636" x2="678" y2="702" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60A5FA"/>
+      <stop offset="0.5" stop-color="#67E8F9"/>
+      <stop offset="1" stop-color="#34D399"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="896" y1="650" x2="1012" y2="766" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+    <filter id="neonBlur" x="142" y="140" width="564" height="596" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur"/>
+    </filter>
+  </defs>
+</svg>

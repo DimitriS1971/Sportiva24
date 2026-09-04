@@ -1,0 +1,141 @@
+<svg width="1200" height="920" viewBox="0 0 1200 920" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="920" rx="48" fill="#02030A"/>
+  <rect x="20" y="20" width="1160" height="880" rx="36" fill="url(#bg)" stroke="url(#edge)" stroke-width="2"/>
+
+  <g opacity="0.22">
+    <path d="M60 140H1140" stroke="#1D355F"/>
+    <path d="M60 240H1140" stroke="#1D355F"/>
+    <path d="M60 340H1140" stroke="#1D355F"/>
+    <path d="M60 440H1140" stroke="#1D355F"/>
+    <path d="M60 540H1140" stroke="#1D355F"/>
+    <path d="M60 640H1140" stroke="#1D355F"/>
+    <path d="M60 740H1140" stroke="#1D355F"/>
+    <path d="M140 80V840" stroke="#1D355F"/>
+    <path d="M260 80V840" stroke="#1D355F"/>
+    <path d="M380 80V840" stroke="#1D355F"/>
+    <path d="M500 80V840" stroke="#1D355F"/>
+    <path d="M620 80V840" stroke="#1D355F"/>
+    <path d="M740 80V840" stroke="#1D355F"/>
+    <path d="M860 80V840" stroke="#1D355F"/>
+    <path d="M980 80V840" stroke="#1D355F"/>
+  </g>
+
+  <ellipse cx="600" cy="460" rx="420" ry="320" fill="url(#aura)"/>
+
+  <rect x="86" y="88" width="680" height="744" rx="30" fill="url(#panelLeft)" stroke="#23406F"/>
+  <rect x="794" y="88" width="320" height="744" rx="30" fill="url(#panelRight)" stroke="#23406F"/>
+
+  <text x="120" y="150" fill="#93C5FD" font-family="Arial, sans-serif" font-size="20" letter-spacing="5">MALLA DE INTELIGENCIA S24</text>
+  <text x="134" y="228" fill="#7CAEEB" fill-opacity="0.85" font-family="Arial, sans-serif" font-size="13" letter-spacing="1.4">PACE 101.4  |  OFF RTG 118.2  |  AST% 64</text>
+
+  <g filter="url(#neonBlur)">
+    <path d="M170 246C252 182 330 160 418 176C506 192 582 252 670 256" stroke="url(#lineA)" stroke-width="8" stroke-linecap="round"/>
+    <path d="M178 698C262 640 332 620 418 636C504 652 586 706 678 702" stroke="url(#lineB)" stroke-width="8" stroke-linecap="round"/>
+  </g>
+
+  <circle cx="418" cy="176" r="10" fill="#7DD3FC"/>
+  <circle cx="670" cy="256" r="10" fill="#34D399"/>
+  <circle cx="418" cy="636" r="10" fill="#FDE68A"/>
+  <circle cx="678" cy="702" r="10" fill="#60A5FA"/>
+
+  <g>
+    <circle cx="426" cy="454" r="210" fill="url(#core)"/>
+    <circle cx="426" cy="454" r="156" stroke="#60A5FA" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="7 9"/>
+    <circle cx="426" cy="454" r="112" stroke="#67E8F9" stroke-opacity="0.6" stroke-width="2"/>
+    <circle cx="426" cy="454" r="126" fill="url(#ballCore)" stroke="#3A4C67" stroke-width="5"/>
+    <ellipse cx="386" cy="396" rx="58" ry="38" fill="url(#ballHighlight)" fill-opacity="0.95"/>
+    <ellipse cx="490" cy="520" rx="76" ry="54" fill="#7C2D12" opacity="0.14"/>
+    <path d="M300 454H552" stroke="#5A2A0D" stroke-width="10"/>
+    <path d="M426 328V580" stroke="#5A2A0D" stroke-width="10"/>
+    <path d="M354 360C382 396 398 424 398 454C398 484 382 514 354 548" stroke="#5A2A0D" stroke-width="10" fill="none"/>
+    <path d="M498 360C470 396 454 424 454 454C454 484 470 514 498 548" stroke="#5A2A0D" stroke-width="10" fill="none"/>
+    <g opacity="0.18">
+      <path d="M328 414C368 434 398 444 426 446C454 448 488 442 524 426" stroke="#FFD7B0" stroke-width="7" stroke-linecap="round"/>
+      <path d="M340 504C376 488 402 478 426 476C450 474 480 482 514 500" stroke="#FFD7B0" stroke-width="7" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <rect x="828" y="122" width="252" height="216" rx="24" fill="#081028" stroke="#27467A"/>
+  <text x="854" y="172" fill="#BFD8FF" font-family="Arial, sans-serif" font-size="22" letter-spacing="3">PUNTAJE IA</text>
+  <text x="854" y="238" fill="white" font-family="Arial, sans-serif" font-size="78" font-weight="700">84</text>
+  <text x="854" y="274" fill="#5EEAD4" font-family="Arial, sans-serif" font-size="20">Boston Celtics</text>
+  <rect x="854" y="292" width="188" height="12" rx="6" fill="#16305C"/>
+  <rect x="854" y="292" width="156" height="12" rx="6" fill="url(#lineA)"/>
+
+  <rect x="828" y="362" width="252" height="210" rx="24" fill="#081028" stroke="#27467A"/>
+  <text x="854" y="408" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">eFG%</text>
+  <rect x="854" y="422" width="150" height="16" rx="8" fill="#142D57"/>
+  <rect x="854" y="422" width="108" height="16" rx="8" fill="#60A5FA"/>
+  <text x="854" y="462" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">Control de ritmo</text>
+  <rect x="854" y="476" width="150" height="16" rx="8" fill="#142D57"/>
+  <rect x="854" y="476" width="128" height="16" rx="8" fill="#34D399"/>
+  <text x="854" y="516" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">Versatilidad</text>
+  <rect x="854" y="530" width="150" height="16" rx="8" fill="#142D57"/>
+  <rect x="854" y="530" width="94" height="16" rx="8" fill="#F59E0B"/>
+
+  <rect x="828" y="596" width="252" height="202" rx="24" fill="#081028" stroke="#27467A"/>
+  <text x="854" y="640" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">Lente neural</text>
+  <text x="854" y="662" fill="#7EA8E6" fill-opacity="0.85" font-family="Arial, sans-serif" font-size="12" letter-spacing="1">NODO 11  |  RIESGO 09%</text>
+  <text x="854" y="782" fill="#7EA8E6" fill-opacity="0.8" font-family="Arial, sans-serif" font-size="12" letter-spacing="1">ESTADO ESTABLE</text>
+  <circle cx="954" cy="708" r="58" fill="url(#lens)"/>
+  <circle cx="954" cy="708" r="38" stroke="#BAE6FD" stroke-width="2"/>
+  <path d="M954 674V742" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round"/>
+  <path d="M920 708H988" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="954" cy="708" r="78" stroke="#2563EB" stroke-opacity="0.32" stroke-width="2" stroke-dasharray="8 10"/>
+
+  <defs>
+    <linearGradient id="bg" x1="90" y1="80" x2="1120" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#040A18"/>
+      <stop offset="0.58" stop-color="#020617"/>
+      <stop offset="1" stop-color="#08142B"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="30" y1="30" x2="1160" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6" stop-opacity="0.52"/>
+      <stop offset="1" stop-color="#0F172A" stop-opacity="0.2"/>
+    </linearGradient>
+    <radialGradient id="aura" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(600 460) rotate(90) scale(320 420)">
+      <stop stop-color="#1D4ED8" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#1D4ED8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panelLeft" x1="86" y1="88" x2="766" y2="832" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#081227"/>
+      <stop offset="1" stop-color="#050A17"/>
+    </linearGradient>
+    <linearGradient id="panelRight" x1="794" y1="88" x2="1114" y2="832" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#091429"/>
+      <stop offset="1" stop-color="#061126"/>
+    </linearGradient>
+    <radialGradient id="core" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(426 454) rotate(90) scale(210)">
+      <stop stop-color="#2563EB" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#0F172A" stop-opacity="0.12"/>
+    </radialGradient>
+    <radialGradient id="ballCore" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(390 392) rotate(40) scale(172)">
+      <stop stop-color="#FFCC8E"/>
+      <stop offset="0.5" stop-color="#E58A2C"/>
+      <stop offset="1" stop-color="#8C3F12"/>
+    </radialGradient>
+    <radialGradient id="ballHighlight" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(386 396) rotate(20) scale(84 50)">
+      <stop stop-color="#FFF1E1"/>
+      <stop offset="1" stop-color="#FFF1E1" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="lineA" x1="170" y1="176" x2="670" y2="256" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8"/>
+      <stop offset="0.5" stop-color="#60A5FA"/>
+      <stop offset="1" stop-color="#34D399"/>
+    </linearGradient>
+    <linearGradient id="lineB" x1="178" y1="636" x2="678" y2="702" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60A5FA"/>
+      <stop offset="0.5" stop-color="#67E8F9"/>
+      <stop offset="1" stop-color="#34D399"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="896" y1="650" x2="1012" y2="766" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+    <filter id="neonBlur" x="142" y="140" width="564" height="596" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur"/>
+    </filter>
+  </defs>
+</svg>

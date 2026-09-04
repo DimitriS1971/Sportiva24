@@ -1,0 +1,37 @@
+<svg width="1200" height="920" viewBox="0 0 1200 920" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="920" rx="48" fill="#02030A"/>
+  <rect x="20" y="20" width="1160" height="880" rx="36" fill="#071321" stroke="#1E3A5F" stroke-width="2"/>
+  <rect x="86" y="88" width="680" height="744" rx="30" fill="#091427" stroke="#23406F"/>
+  <rect x="794" y="88" width="320" height="744" rx="30" fill="#081126" stroke="#23406F"/>
+  <text x="120" y="150" fill="#93C5FD" font-family="Arial, sans-serif" font-size="20" letter-spacing="5">MALLA DE INTELIGENCIA S24</text>
+  <text x="134" y="228" fill="#7CAEEB" fill-opacity="0.85" font-family="Arial, sans-serif" font-size="13" letter-spacing="1.4">1ST SERVE 68%  |  HOLD 84%  |  BREAK 31%</text>
+  <circle cx="426" cy="454" r="210" fill="url(#core)"/>
+  <circle cx="426" cy="454" r="156" stroke="#60A5FA" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="7 9"/>
+  <circle cx="426" cy="454" r="120" fill="#B7FF67" stroke="#E6FFD0" stroke-width="5"/>
+  <path d="M362 392C396 424 418 474 416 540" stroke="#F8FFF0" stroke-width="12" stroke-linecap="round"/>
+  <path d="M490 362C448 404 432 448 436 548" stroke="#F8FFF0" stroke-width="12" stroke-linecap="round"/>
+  <path d="M170 246C252 182 330 160 418 176C506 192 582 252 670 256" stroke="url(#lineA)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M178 698C262 640 332 620 418 636C504 652 586 706 678 702" stroke="url(#lineB)" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="418" cy="176" r="10" fill="#7DD3FC"/>
+  <circle cx="670" cy="256" r="10" fill="#34D399"/>
+  <circle cx="418" cy="636" r="10" fill="#FDE68A"/>
+  <circle cx="678" cy="702" r="10" fill="#60A5FA"/>
+  <rect x="828" y="122" width="252" height="216" rx="24" fill="#081028" stroke="#27467A"/>
+  <text x="854" y="172" fill="#BFD8FF" font-family="Arial, sans-serif" font-size="22" letter-spacing="3">PUNTAJE IA</text>
+  <text x="854" y="238" fill="white" font-family="Arial, sans-serif" font-size="78" font-weight="700">93</text>
+  <text x="854" y="274" fill="#5EEAD4" font-family="Arial, sans-serif" font-size="20">Carlos Alcaraz</text>
+  <rect x="854" y="292" width="188" height="12" rx="6" fill="#16305C"/>
+  <rect x="854" y="292" width="162" height="12" rx="6" fill="url(#lineA)"/>
+  <rect x="828" y="362" width="252" height="210" rx="24" fill="#081028" stroke="#27467A"/>
+  <text x="854" y="408" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">Hold</text>
+  <rect x="854" y="422" width="150" height="16" rx="8" fill="#142D57"/><rect x="854" y="422" width="122" height="16" rx="8" fill="#60A5FA"/>
+  <text x="854" y="462" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">Break</text>
+  <rect x="854" y="476" width="150" height="16" rx="8" fill="#142D57"/><rect x="854" y="476" width="92" height="16" rx="8" fill="#34D399"/>
+  <text x="854" y="516" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">Clutch</text>
+  <rect x="854" y="530" width="150" height="16" rx="8" fill="#142D57"/><rect x="854" y="530" width="106" height="16" rx="8" fill="#F59E0B"/>
+  <defs>
+    <radialGradient id="core" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(426 454) rotate(90) scale(210)"><stop stop-color="#2563EB" stop-opacity="0.42"/><stop offset="1" stop-color="#0F172A" stop-opacity="0.12"/></radialGradient>
+    <linearGradient id="lineA" x1="170" y1="176" x2="670" y2="256" gradientUnits="userSpaceOnUse"><stop stop-color="#38BDF8"/><stop offset="0.5" stop-color="#60A5FA"/><stop offset="1" stop-color="#34D399"/></linearGradient>
+    <linearGradient id="lineB" x1="178" y1="636" x2="678" y2="702" gradientUnits="userSpaceOnUse"><stop stop-color="#60A5FA"/><stop offset="0.5" stop-color="#67E8F9"/><stop offset="1" stop-color="#34D399"/></linearGradient>
+  </defs>
+</svg>

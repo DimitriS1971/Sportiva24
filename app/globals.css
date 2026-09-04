@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
+}
+
+@keyframes premiumFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes premiumProgress {
+  from {
+    transform: scaleX(0.3);
+    transform-origin: left;
+    opacity: 0.35;
+  }
+  to {
+    transform: scaleX(1);
+    transform-origin: left;
+    opacity: 1;
+  }
+}
+
+.premium-card-enter {
+  animation: premiumFadeInUp 420ms ease-out;
+}
+
+.premium-progress-bar {
+  animation: premiumProgress 850ms ease-out;
+}
+
+.font-editorial {
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+.premium-grid-pattern {
+  background-image:
+    radial-gradient(circle at 18% 20%, rgba(14, 165, 233, 0.14), transparent 42%),
+    radial-gradient(circle at 82% 78%, rgba(56, 189, 248, 0.1), transparent 45%),
+    linear-gradient(160deg, rgba(15, 23, 42, 0.38), rgba(2, 6, 23, 0.24));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-card-enter,
+  .premium-progress-bar {
+    animation: none;
+  }
+}

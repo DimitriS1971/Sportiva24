@@ -1,0 +1,130 @@
+<svg width="1200" height="920" viewBox="0 0 1200 920" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="920" rx="48" fill="#02040A"/>
+  <rect x="18" y="18" width="1164" height="884" rx="38" fill="url(#bg)" stroke="url(#frame)" stroke-width="2"/>
+
+  <g opacity="0.2">
+    <path d="M70 110H1130" stroke="#17305D"/>
+    <path d="M70 210H1130" stroke="#17305D"/>
+    <path d="M70 310H1130" stroke="#17305D"/>
+    <path d="M70 410H1130" stroke="#17305D"/>
+    <path d="M70 510H1130" stroke="#17305D"/>
+    <path d="M70 610H1130" stroke="#17305D"/>
+    <path d="M70 710H1130" stroke="#17305D"/>
+    <path d="M70 810H1130" stroke="#17305D"/>
+    <path d="M130 70V850" stroke="#17305D"/>
+    <path d="M240 70V850" stroke="#17305D"/>
+    <path d="M350 70V850" stroke="#17305D"/>
+    <path d="M460 70V850" stroke="#17305D"/>
+    <path d="M570 70V850" stroke="#17305D"/>
+    <path d="M680 70V850" stroke="#17305D"/>
+    <path d="M790 70V850" stroke="#17305D"/>
+    <path d="M900 70V850" stroke="#17305D"/>
+    <path d="M1010 70V850" stroke="#17305D"/>
+  </g>
+
+  <ellipse cx="770" cy="460" rx="320" ry="310" fill="url(#halo)"/>
+
+  <rect x="82" y="96" width="752" height="730" rx="34" fill="url(#leftPanel)" stroke="#1D3564"/>
+  <rect x="864" y="96" width="256" height="730" rx="30" fill="url(#rightPanel)" stroke="#1D3564"/>
+
+  <g filter="url(#softGlow)">
+    <path d="M140 224C212 182 278 168 350 176C422 184 488 224 560 232C632 240 688 220 758 188" stroke="url(#neonA)" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  <circle cx="352" cy="176" r="9" fill="#7DD3FC"/>
+  <circle cx="560" cy="232" r="9" fill="#60A5FA"/>
+  <circle cx="758" cy="188" r="9" fill="#34D399"/>
+
+  <rect x="122" y="280" width="332" height="236" rx="26" fill="#091126" stroke="#27437A"/>
+  <rect x="474" y="280" width="328" height="236" rx="26" fill="#091126" stroke="#27437A"/>
+
+  <circle cx="288" cy="398" r="84" fill="url(#core1)"/>
+  <circle cx="288" cy="398" r="54" stroke="#BAE6FD" stroke-opacity="0.8" stroke-width="2"/>
+  <circle cx="288" cy="398" r="34" fill="#E2E8F0" fill-opacity="0.9"/>
+
+  <circle cx="640" cy="398" r="84" fill="url(#core2)"/>
+  <path d="M606 398H674" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round"/>
+  <path d="M640 364V432" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="640" cy="398" r="46" stroke="#BAE6FD" stroke-opacity="0.7" stroke-width="2"/>
+
+  <rect x="122" y="542" width="680" height="252" rx="28" fill="#091126" stroke="#27437A"/>
+  <path d="M160 674C226 634 302 628 364 648C426 668 494 688 562 680C630 672 692 636 760 612" stroke="url(#neonB)" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="364" cy="648" r="10" fill="#FDE68A"/>
+  <circle cx="562" cy="680" r="10" fill="#93C5FD"/>
+  <circle cx="760" cy="612" r="10" fill="#86EFAC"/>
+
+  <text x="902" y="146" fill="#BFD8FF" font-family="Arial, sans-serif" font-size="22" letter-spacing="3">S24 NEURAL</text>
+  <text x="902" y="220" fill="white" font-family="Arial, sans-serif" font-size="84" font-weight="700">94</text>
+  <text x="902" y="262" fill="#5EEAD4" font-family="Arial, sans-serif" font-size="22">Manchester City</text>
+  <rect x="902" y="286" width="180" height="12" rx="6" fill="#102244"/>
+  <rect x="902" y="286" width="166" height="12" rx="6" fill="url(#neonB)"/>
+
+  <rect x="892" y="338" width="200" height="220" rx="22" fill="#081027" stroke="#1F3667"/>
+  <text x="914" y="382" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">xG</text>
+  <rect x="914" y="398" width="132" height="16" rx="8" fill="#14284F"/>
+  <rect x="914" y="398" width="102" height="16" rx="8" fill="#60A5FA"/>
+  <text x="914" y="442" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">Pressure</text>
+  <rect x="914" y="458" width="132" height="16" rx="8" fill="#14284F"/>
+  <rect x="914" y="458" width="112" height="16" rx="8" fill="#34D399"/>
+  <text x="914" y="502" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">Tempo</text>
+  <rect x="914" y="518" width="132" height="16" rx="8" fill="#14284F"/>
+  <rect x="914" y="518" width="92" height="16" rx="8" fill="#F59E0B"/>
+
+  <rect x="892" y="582" width="200" height="212" rx="22" fill="#081027" stroke="#1F3667"/>
+  <text x="914" y="626" fill="#8FB8FF" font-family="Arial, sans-serif" font-size="14">Decision Engine</text>
+  <circle cx="996" cy="706" r="58" fill="url(#core3)"/>
+  <circle cx="996" cy="706" r="40" stroke="#BAE6FD" stroke-opacity="0.75" stroke-width="2"/>
+  <path d="M996 670V742" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round"/>
+  <path d="M960 706H1032" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="996" cy="706" r="74" stroke="#2563EB" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="8 10"/>
+
+  <defs>
+    <linearGradient id="bg" x1="86" y1="66" x2="1118" y2="870" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#030814"/>
+      <stop offset="0.55" stop-color="#020617"/>
+      <stop offset="1" stop-color="#061024"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="44" y1="42" x2="1148" y2="882" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#0F172A" stop-opacity="0.2"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(770 460) rotate(90) scale(312 322)">
+      <stop stop-color="#1D4ED8" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#1D4ED8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="leftPanel" x1="82" y1="96" x2="834" y2="826" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#091327"/>
+      <stop offset="1" stop-color="#050A18"/>
+    </linearGradient>
+    <linearGradient id="rightPanel" x1="864" y1="96" x2="1120" y2="826" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1428"/>
+      <stop offset="1" stop-color="#061024"/>
+    </linearGradient>
+    <linearGradient id="neonA" x1="140" y1="172" x2="758" y2="220" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8"/>
+      <stop offset="0.5" stop-color="#60A5FA"/>
+      <stop offset="1" stop-color="#34D399"/>
+    </linearGradient>
+    <linearGradient id="neonB" x1="160" y1="612" x2="760" y2="680" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60A5FA"/>
+      <stop offset="0.55" stop-color="#67E8F9"/>
+      <stop offset="1" stop-color="#34D399"/>
+    </linearGradient>
+    <linearGradient id="core1" x1="222" y1="322" x2="364" y2="474" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1D4ED8"/>
+      <stop offset="1" stop-color="#0B1328"/>
+    </linearGradient>
+    <linearGradient id="core2" x1="556" y1="318" x2="724" y2="478" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+    <linearGradient id="core3" x1="938" y1="650" x2="1054" y2="762" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+    <filter id="softGlow" x="112" y="143" width="674" height="125" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur"/>
+    </filter>
+  </defs>
+</svg>

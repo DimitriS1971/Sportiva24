@@ -1,0 +1,6 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="80" cy="80" r="72" fill="#0B1120" stroke="#0EA5E9" stroke-width="8"/>
+  <circle cx="80" cy="80" r="52" stroke="#60A5FA" stroke-width="10"/>
+  <circle cx="80" cy="80" r="34" fill="#111827" stroke="#E5E7EB" stroke-width="6"/>
+  <text x="80" y="90" text-anchor="middle" fill="#E5E7EB" font-family="Arial, sans-serif" font-size="28" font-weight="700">IM</text>
+</svg>

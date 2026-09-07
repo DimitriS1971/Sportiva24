@@ -136,22 +136,22 @@ export default function IntelligenceCenterS24Panel({ data }: IntelligenceCenterS
 
   return (
     <div className="px-4 md:px-12 pt-24 pb-14 max-w-7xl mx-auto space-y-8">
-      <section className="rounded-3xl border border-slate-700/45 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.16),transparent_45%),linear-gradient(160deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))] p-6 md:p-8">
-        <div className="flex flex-wrap items-center gap-2 mb-3">
+      <section className="rounded-3xl border border-slate-700/45 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.16),transparent_45%),linear-gradient(160deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))] p-6 text-center md:p-8">
+        <div className="mb-3 flex flex-wrap items-center justify-center gap-2">
           <Pill>Centro de Inteligencia Deportiva S24</Pill>
           <Pill>{data.sourceCount} partidos procesados</Pill>
           <Pill>{data.analyzedTeams} clubes</Pill>
           <Pill>{data.analyzedCompetitions} competiciones</Pill>
         </div>
         <h1 className="text-4xl font-semibold leading-tight text-white md:text-5xl">Centro de Inteligencia Deportiva S24</h1>
-        <p className="mt-4 max-w-3xl text-sm md:text-base leading-relaxed text-slate-300">
+        <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-slate-300 md:text-base">
           Panel global de inteligencia deportiva. Esta seccion no publica analisis completos de partidos y se enfoca en dinamicas de clubes, competiciones, tendencias, rankings y alertas metodologicas.
         </p>
         <p className="mt-2 text-xs text-slate-400">Actualizado: {new Date(data.generatedAt).toLocaleString('es-ES')}</p>
       </section>
 
-      <section className="rounded-2xl border border-slate-700/60 bg-slate-950/50 p-4 md:p-5 space-y-4">
-        <div className="flex flex-wrap gap-2">
+      <section className="space-y-4 rounded-2xl border border-slate-700/60 bg-slate-950/50 p-4 text-center md:p-5">
+        <div className="flex flex-wrap justify-center gap-2">
           {data.views.map((view) => (
             <ViewButton key={view.key} view={view} active={activeView === view.key} onClick={setActiveView} />
           ))}

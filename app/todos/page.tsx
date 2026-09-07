@@ -103,7 +103,7 @@ export default function TodosPage() {
         <div className="relative mx-auto max-w-7xl">
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-sky-300">Mapa total Sportiva24</p>
           <h1 className="mt-5 text-[3rem] font-semibold leading-[0.95] tracking-[-0.04em] text-white sm:text-[4.2rem] md:text-[5rem]">
-            TODOS LOS DEPORTES
+            Todos los deportes
           </h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300 md:text-xl">
             Un índice central para entrar a cada deporte desde su tarjeta principal, manteniendo la misma lógica visual y editorial del ecosistema Sportiva24.

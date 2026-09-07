@@ -67,7 +67,13 @@ export default function HeroNew() {
             <img
               src="/hero/hero-portada.png"
               alt="Visual IA deportiva"
-              className="relative z-10 w-[99%] h-[95%] object-cover rounded-[24px] border border-blue-500/25 shadow-[0_26px_70px_rgba(30,91,255,0.28)]"
+              className="relative z-10 w-[99%] h-[95%] object-cover"
+              style={{
+                maskImage: 'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 7%, black 93%, transparent 100%)',
+                maskComposite: 'intersect',
+                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 7%, black 93%, transparent 100%)',
+                WebkitMaskComposite: 'source-in',
+              }}
             />
           </div>
         </div>

@@ -112,7 +112,20 @@ export default function TodosPage() {
             </p>
           </div>
           <div className="relative mx-auto w-full max-w-[620px] overflow-hidden rounded-[28px] border border-sky-500/25 bg-slate-950/80 shadow-[0_28px_90px_rgba(2,6,23,0.7)]">
-            <Image src="/hero/hero-mas.png" alt="Visual de inteligencia deportiva para todos los deportes" width={1200} height={920} className="h-auto w-full" priority />
+            <Image
+              src="/hero/hero-mas.png"
+              alt="Visual de inteligencia deportiva para todos los deportes"
+              width={1200}
+              height={920}
+              className="h-auto w-full"
+              style={{
+                maskImage: 'linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%)',
+                maskComposite: 'intersect',
+                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%)',
+                WebkitMaskComposite: 'source-in',
+              }}
+              priority
+            />
           </div>
         </div>
       </section>

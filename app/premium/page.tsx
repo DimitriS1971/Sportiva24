@@ -17,7 +17,7 @@ export default function Premium() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="mb-6 leading-tight">
-              <BrandLogo className="mx-auto h-auto w-[260px] md:w-[360px]" width={360} height={95} />
+              <BrandLogo className="mx-auto h-[72px] w-[260px] md:h-[96px] md:w-[360px]" width={360} height={96} />
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
                 PREMIUM

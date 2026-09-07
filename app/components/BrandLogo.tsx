@@ -8,13 +8,15 @@ interface BrandLogoProps {
 
 export default function BrandLogo({ className = '', width = 220, height = 58 }: BrandLogoProps) {
   return (
-    <Image
-      src="/hero/logoS24.png"
-      alt="Sportiva24"
-      width={width}
-      height={height}
-      className={`object-contain object-left ${className}`}
-      priority
-    />
+    <span className={`relative inline-block overflow-hidden ${className}`}>
+      <Image
+        src="/hero/logoS24.png"
+        alt="Sportiva24"
+        fill
+        sizes={`${width}px`}
+        className="object-cover object-center"
+        priority
+      />
+    </span>
   );
 }

@@ -3,6 +3,7 @@
 import Navbar from '../components/Navbar';
 import MatchCardNew from '../components/MatchCardNew';
 import Footer from '../components/Footer';
+import AdSlot from '../components/AdSlot';
 
 export default function AnalisysPage() {
   const analysisData = [
@@ -151,6 +152,9 @@ export default function AnalisysPage() {
             ))}
           </div>
         </div>
+      </section>
+      <section className="bg-black px-4 py-5 md:px-12 md:py-7">
+        <AdSlot />
       </section>
       <Footer />
     </main>

@@ -5,6 +5,7 @@ import HeroNew from './components/HeroNew';
 import StatCardNew from './components/StatCardNew';
 import EditorialMatchCard from './components/EditorialMatchCard';
 import HeroCropIcon from './components/HeroCropIcon';
+import AdSlot from './components/AdSlot';
 import Footer from './components/Footer';
 import { getTodayFootballMatches, getTodayFootballMatchesCount } from './lib/realSportsData';
 
@@ -31,6 +32,10 @@ export default async function Home() {
       <Navbar />
 
       <HeroNew />
+
+      <section className="bg-black px-4 py-5 md:px-12 md:py-7">
+        <AdSlot />
+      </section>
 
       <section className="bg-black px-4 md:px-12 py-4 md:py-5">
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">

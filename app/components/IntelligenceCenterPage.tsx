@@ -5,6 +5,7 @@ import Footer from '@/app/components/Footer';
 import MatchCardNew from '@/app/components/MatchCardNew';
 import Navbar from '@/app/components/Navbar';
 import SportHeroVisual from '@/app/components/SportHeroVisual';
+import AdSlot from '@/app/components/AdSlot';
 import type {
   IntelligenceArticle,
   IntelligenceCenterContent,
@@ -178,6 +179,10 @@ export default function IntelligenceCenterPage({ content }: { content: Intellige
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="px-4 py-6 md:px-12 md:py-8">
+        <AdSlot />
       </section>
 
       <section className="px-4 py-8 md:px-12 md:py-10">

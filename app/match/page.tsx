@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 import { getTodayFootballMatches } from '../lib/realSportsData';
 import { getTeamCrest } from '../lib/teamCrests';
 import { displayLabel } from '../lib/displayLabel';
+import AdSlot from '../components/AdSlot';
 
 export const revalidate = 120;
 
@@ -24,6 +25,10 @@ export default async function MatchesPage() {
             Selecciona un encuentro para ver su análisis detallado en la ruta oficial de cada partido.
           </p>
         </div>
+      </section>
+
+      <section className="px-4 pb-8 md:px-12 md:pb-10">
+        <AdSlot variant="compact" />
       </section>
 
       <section className="px-4 md:px-12 pb-12 md:pb-16">

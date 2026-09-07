@@ -5,6 +5,7 @@ import Footer from "@/app/components/Footer";
 import NewsCardPremium from "@/app/components/NewsCardPremium";
 import { newsData } from "@/app/data/news";
 import Link from "next/link";
+import AdSlot from "@/app/components/AdSlot";
 
 export default function Noticias() {
   // Get featured article
@@ -88,8 +89,8 @@ export default function Noticias() {
             </div>
           </div>
 
-          {/* Ad Space Placeholder 1 - Premium */}
-          <div className="bg-gradient-to-br from-blue-950 via-blue-900/40 to-purple-950 border-2 border-blue-600/30 rounded-2xl p-12 relative overflow-hidden">
+          <AdSlot />
+          <div className="hidden">
             {/* Background elements */}
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-purple-600/5" />
             <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl" />
@@ -125,8 +126,8 @@ export default function Noticias() {
             </div>
           </div>
 
-          {/* Ad Space Placeholder 2 - Premium */}
-          <div className="bg-gradient-to-br from-purple-950 via-blue-900/40 to-blue-950 border-2 border-purple-600/30 rounded-2xl p-12 relative overflow-hidden">
+          <AdSlot variant="compact" />
+          <div className="hidden">
             {/* Background elements */}
             <div className="absolute inset-0 bg-gradient-to-r from-purple-600/5 to-blue-600/5" />
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl" />

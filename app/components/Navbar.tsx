@@ -10,8 +10,6 @@ export default function Navbar() {
 
   const navItems: Array<{ label: string; href: string; sport?: SportCode }> = [
     { label: 'Fútbol', href: '/futbol', sport: 'football' as const },
-    { label: 'Basketball', href: '/basketball', sport: 'basketball' as const },
-    { label: 'Todos', href: '/todos' },
     { label: 'Inteligencia Deportiva S24', href: '/centro-inteligencia-s24' },
     { label: 'Análisis', href: '/analisis' },
     { label: 'Noticias', href: '/noticias' },

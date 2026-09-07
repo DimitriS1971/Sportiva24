@@ -8,12 +8,9 @@ export default function Footer() {
 
   const footerLinks = {
     Producto: [
-      { label: 'Todos', href: '/todos' },
       { label: 'Fútbol', href: '/futbol' },
-      { label: 'Basketball', href: '/basketball' },
-      { label: 'E-games', href: '/egames' },
-      { label: 'Más', href: '/mas' },
       { label: 'Análisis', href: '/analisis' },
+      { label: 'Noticias', href: '/noticias' },
       { label: 'Premium', href: '/premium' },
     ],
     Empresa: [

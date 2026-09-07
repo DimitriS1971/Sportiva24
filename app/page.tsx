@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { isSportActive } from '@/lib/data/config/activeSports';
 
 import Navbar from './components/Navbar';
 import HeroNew from './components/HeroNew';
@@ -7,7 +6,7 @@ import StatCardNew from './components/StatCardNew';
 import EditorialMatchCard from './components/EditorialMatchCard';
 import HeroCropIcon from './components/HeroCropIcon';
 import Footer from './components/Footer';
-import { getTodayFootballMatches, getTodayBasketballMatchesCount, getTodayFootballMatchesCount } from './lib/realSportsData';
+import { getTodayFootballMatches, getTodayFootballMatchesCount } from './lib/realSportsData';
 
 const heroBySport = {
   all: '/hero/hero-portada.png',
@@ -22,32 +21,10 @@ const heroBySport = {
 } as const;
 
 export default async function Home() {
-  const [featuredMatches, footballTodayCount, basketballTodayCount] = await Promise.all([
+  const [featuredMatches, footballTodayCount] = await Promise.all([
     getTodayFootballMatches(48),
     getTodayFootballMatchesCount(),
-    getTodayBasketballMatchesCount(),
   ]);
-
-  const sports = [
-    { label: 'Todos', icon: 'all' as const, href: '/todos' },
-    { label: 'Fútbol', icon: 'football' as const, href: '/futbol', code: 'football' as const },
-    { label: 'Basketball', icon: 'basketball' as const, href: '/basketball', code: 'basketball' as const },
-    { label: 'Tenis', icon: 'tennis' as const, href: '/tenis', code: 'tennis' as const },
-    { label: 'F1', icon: 'f1' as const, href: '/f1', code: 'formula1' as const },
-    { label: 'Ciclismo', icon: 'cycling' as const, href: '/ciclismo', code: 'cycling' as const },
-    { label: 'Béisbol', icon: 'baseball' as const, href: '/beisbol', code: 'baseball' as const },
-    { label: 'E-games', icon: 'egames' as const, href: '/egames', code: 'esports' as const },
-    { label: 'Más', icon: 'more' as const, href: '/mas' },
-  ];
-
-  const visibleSports = sports.filter((sport) => !('code' in sport) || (sport.code && isSportActive(sport.code)));
-
-  const events = [
-    { title: 'ATP Wimbledon', time: 'Hoy, 15:00', tag: 'PRÓXIMO', hero: heroBySport.tennis },
-    { title: 'Formula 1', time: 'Mañana, 16:00', tag: 'PRÓXIMO', hero: heroBySport.f1 },
-    { title: 'Tour de France', time: 'Mañana, 11:30', tag: 'PRÓXIMO', hero: heroBySport.cycling },
-    { title: 'MLB', time: 'Hoy, 19:10', tag: 'EN VIVO', hero: heroBySport.baseball },
-  ];
 
   return (
     <main className="min-h-screen bg-black text-white">
@@ -55,37 +32,11 @@ export default async function Home() {
 
       <HeroNew />
 
-      <section className="relative z-20 bg-black px-4 md:px-12 pt-1 pb-6 md:pb-7 pointer-events-auto">
-        <div className="relative z-20 max-w-7xl mx-auto rounded-2xl border border-blue-900/40 bg-gradient-to-br from-gray-950/95 to-gray-900/75 p-2.5 overflow-x-auto shadow-[0_18px_45px_rgba(2,6,23,0.6)] pointer-events-auto">
-          <div className="flex min-w-max justify-center gap-2 md:min-w-0 md:flex-wrap md:justify-center">
-            {visibleSports.map((sport, index) => (
-              <Link
-                key={sport.label}
-                href={sport.href}
-                prefetch={false}
-                className={`px-4 py-3 rounded-xl text-sm font-medium transition-all border whitespace-nowrap flex flex-col items-center justify-center gap-1.5 min-h-[84px] ${
-                  index === 0
-                    ? 'bg-gray-900/90 text-blue-300 border-blue-500 shadow-[0_0_18px_rgba(37,99,235,0.38)]'
-                    : 'bg-gray-900/70 text-gray-300 border-gray-800 hover:text-white hover:border-blue-500/50 hover:bg-gray-900/90'
-                }`}
-                draggable={false}
-              >
-                  <span className={`w-8 h-8 ${index === 0 ? 'border-blue-400/60' : 'border-gray-700'}`}>
-                  <HeroCropIcon source={heroBySport[sport.icon]} alt={sport.label} className="h-8 w-8" />
-                </span>
-                <span className="text-sm leading-none">{sport.label}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="bg-black px-4 md:px-12 py-4 md:py-5">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCardNew icon={<HeroCropIcon source={heroBySport.football} alt="Fútbol" className="h-11 w-11" />} value={String(footballTodayCount)} title="Partidos hoy" detail="" accent="blue" href="/match" />
-          <StatCardNew icon={<HeroCropIcon source={heroBySport.basketball} alt="Basketball" className="h-11 w-11" />} value={String(basketballTodayCount)} title="Basketball hoy" detail="" accent="orange" href="/basketball" />
           <StatCardNew icon={<HeroCropIcon source={heroBySport.all} alt="Análisis" className="h-11 w-11" />} value="1.248" title="Análisis publicados" detail="" accent="violet" href="/analisis" />
-          <StatCardNew icon={<HeroCropIcon source={heroBySport.egames} alt="Modelo online" className="h-11 w-11" />} value="Modelo Online" title="Última actualización: Ahora" detail="" accent="green" href="/modelo-online" />
+          <StatCardNew icon={<HeroCropIcon source={heroBySport.football} alt="Modelo online" className="h-11 w-11" />} value="Modelo Online" title="Última actualización: Ahora" detail="" accent="green" href="/modelo-online" />
         </div>
       </section>
 
@@ -133,26 +84,6 @@ export default async function Home() {
             <div className="px-4 py-2 rounded-lg border border-dashed border-blue-500/50 text-blue-300 text-sm font-medium bg-blue-500/5">
               970 x 90 Future Ad Slot
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-black px-4 md:px-12 pb-10 md:pb-14">
-        <div className="max-w-7xl mx-auto">
-          <h3 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-5">Próximos eventos</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-            {events.map((event) => (
-              <article key={event.title} className="rounded-2xl border border-gray-800/70 bg-gradient-to-br from-gray-950/95 to-gray-900/70 p-4 hover:border-blue-500/40 transition-colors min-h-[128px]">
-                <div className="flex items-center justify-between mb-3">
-                  <HeroCropIcon source={event.hero} alt={event.title} className="h-9 w-9" />
-                  <span className={`text-[11px] px-2.5 py-1 rounded-full font-semibold ${event.tag === 'EN VIVO' ? 'bg-green-500/15 text-green-300 border border-green-500/30' : 'bg-gray-800/70 text-gray-300 border border-gray-700/60'}`}>
-                    {event.tag}
-                  </span>
-                </div>
-                <h4 className="text-white font-semibold text-lg leading-tight">{event.title}</h4>
-                <p className="text-gray-400 text-sm mt-1">{event.time}</p>
-              </article>
-            ))}
           </div>
         </div>
       </section>

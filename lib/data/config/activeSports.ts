@@ -1,6 +1,6 @@
 import type { SportCode } from '@/lib/domain/entities';
 
-const defaultActiveSports: SportCode[] = ['football', 'basketball', 'baseball'];
+const defaultActiveSports: SportCode[] = ['football'];
 
 const allSports: SportCode[] = ['football', 'basketball', 'tennis', 'formula1', 'cycling', 'baseball', 'esports'];
 
@@ -20,7 +20,7 @@ function parseActiveSportsFromEnv(value?: string): Set<SportCode> {
   return new Set(parsed.length > 0 ? parsed : defaultActiveSports);
 }
 
-const activeSportSet = parseActiveSportsFromEnv(process.env.NEXT_PUBLIC_ACTIVE_SPORTS);
+const activeSportSet = new Set<SportCode>(['football']);
 
 export const activeSportsMap: Record<SportCode, boolean> = {
   football: activeSportSet.has('football'),

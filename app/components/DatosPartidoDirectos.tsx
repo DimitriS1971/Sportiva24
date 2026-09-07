@@ -8,7 +8,13 @@ interface DatosPartidoDirectosProps {
 }
 
 function ProviderLabel({ providerId }: { providerId: string }) {
-  const label = providerId === 'api-football' ? 'API-Football' : providerId;
+  const labels: Record<string, string> = {
+    'api-football': 'API-Football',
+    'football-data': 'football-data.org',
+    sportsdb: 'TheSportsDB',
+    mock: 'Datos locales',
+  };
+  const label = labels[providerId] ?? providerId;
 
   return (
     <span className="rounded-full border border-emerald-400/40 bg-emerald-500/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-100">
@@ -72,6 +78,20 @@ export default function DatosPartidoDirectos({ match, providerId, realContext }:
               <dd className="font-medium text-slate-100">{realContext?.fixture.referee ?? 'No informado por el proveedor'}</dd>
             </div>
           </dl>
+        </div>
+      </article>
+
+      <article className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 shadow-xl shadow-black/20 md:p-7">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Cobertura de la fuente</p>
+            <h2 className="mt-2 font-editorial text-2xl text-white">Qué está confirmado</h2>
+          </div>
+          <ProviderLabel providerId={providerId} />
+        </div>
+        <div className="mt-5 grid gap-3 md:grid-cols-2">
+          <p className="rounded-xl border border-emerald-400/25 bg-emerald-500/10 p-4 text-sm leading-6 text-emerald-50">Equipos, competición, fecha, hora, estado y datos del encuentro que la fuente entregue.</p>
+          <p className="rounded-xl border border-amber-400/25 bg-amber-500/10 p-4 text-sm leading-6 text-amber-50">Esta fuente no aporta aquí clasificación, forma reciente, lesiones, alineaciones ni cuotas verificadas.</p>
         </div>
       </article>
 

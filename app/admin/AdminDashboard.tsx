@@ -11,7 +11,10 @@ export default function AdminDashboard({ email }: { email: string }) {
   const [message, setMessage] = useState('');
 
   async function load() { const response = await fetch('/api/admin/articles'); if (response.ok) setArticles(await response.json()); }
-  useEffect(() => { void load(); }, []);
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void load(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

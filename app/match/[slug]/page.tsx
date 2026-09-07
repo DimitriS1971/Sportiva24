@@ -183,11 +183,8 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
       <div className="px-4 md:px-12 pt-20 md:pt-24 pb-12 md:pb-16 max-w-6xl mx-auto">
         <header className="premium-grid-pattern mb-8 rounded-3xl border border-slate-700/45 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.16),transparent_45%),linear-gradient(165deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))] px-4 py-5 md:px-7 md:py-7">
           <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-start gap-2 md:flex md:items-center md:justify-between md:gap-5">
-            <div className="flex min-w-0 flex-col items-center gap-2 md:flex-row md:gap-3 md:gap-4 md:flex-1">
+            <div className="flex min-w-0 items-center justify-center md:flex-1">
               <TeamBadge team={cleanMatch.homeTeam} crestUrl={preview.homeCrestUrl ?? matchData.homeTeam.badgeUrl} />
-              <h2 className="w-full min-w-0 break-words text-center font-editorial text-base md:text-left md:text-4xl lg:text-5xl font-semibold text-white leading-tight md:line-clamp-2">
-                {cleanMatch.homeTeam}
-              </h2>
             </div>
 
             <div className="flex min-w-[4.8rem] flex-col items-center gap-2 px-0 md:min-w-0 md:px-3 flex-shrink-0">
@@ -197,10 +194,7 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
               </div>
             </div>
 
-            <div className="flex min-w-0 flex-col items-center gap-2 md:flex-row md:justify-end md:gap-3 md:gap-4 md:flex-1">
-              <h2 className="w-full min-w-0 break-words text-center font-editorial text-base md:text-right md:text-4xl lg:text-5xl font-semibold text-white leading-tight md:line-clamp-2">
-                {cleanMatch.awayTeam}
-              </h2>
+            <div className="flex min-w-0 items-center justify-center md:flex-1">
               <TeamBadge team={cleanMatch.awayTeam} crestUrl={preview.awayCrestUrl ?? matchData.awayTeam.badgeUrl} />
             </div>
           </div>

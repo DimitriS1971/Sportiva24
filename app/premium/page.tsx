@@ -3,6 +3,7 @@
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
 import BenefitCard from "@/app/components/BenefitCard";
+import BrandLogo from "@/app/components/BrandLogo";
 import { benefits, comparisonFeatures } from "@/app/data/premium";
 import Link from "next/link";
 
@@ -15,8 +16,8 @@ export default function Premium() {
       <section className="w-full bg-gradient-to-b from-blue-950/40 to-black/80 pt-20 md:pt-32 pb-16 md:pb-24 border-b border-blue-900/20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
-              SPORTIVA24
+            <h1 className="mb-6 leading-tight">
+              <BrandLogo className="mx-auto h-auto w-[260px] md:w-[360px]" width={360} height={95} />
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
                 PREMIUM

@@ -5,47 +5,21 @@ import Navbar from './components/Navbar';
 import HeroNew from './components/HeroNew';
 import StatCardNew from './components/StatCardNew';
 import EditorialMatchCard from './components/EditorialMatchCard';
+import HeroCropIcon from './components/HeroCropIcon';
 import Footer from './components/Footer';
 import { getTodayFootballMatches, getTodayBasketballMatchesCount, getTodayFootballMatchesCount } from './lib/realSportsData';
 
-const SportGlyph = ({ type }: { type: 'all' | 'football' | 'basketball' | 'tennis' | 'f1' | 'cycling' | 'baseball' | 'egames' | 'more' }) => {
-  if (type === 'all') {
-    return (
-      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="3" y="3" width="7" height="7" rx="2" fill="currentColor" />
-        <rect x="14" y="3" width="7" height="7" rx="2" fill="currentColor" />
-        <rect x="3" y="14" width="7" height="7" rx="2" fill="currentColor" />
-        <rect x="14" y="14" width="7" height="7" rx="2" fill="currentColor" />
-      </svg>
-    );
-  }
-
-  if (type === 'f1') return <span className="text-sm">🏁</span>;
-  if (type === 'cycling') return <span className="text-sm">🚴</span>;
-  if (type === 'egames') return <span className="text-sm">🎮</span>;
-  if (type === 'more') return <span className="text-sm">•••</span>;
-  if (type === 'football') return <span className="text-sm">⚽</span>;
-  if (type === 'basketball') return <span className="text-sm">🏀</span>;
-  if (type === 'tennis') return <span className="text-sm">🎾</span>;
-
-  return <span className="text-sm">⚾</span>;
-};
-
-const FootballIcon = () => (
-  <img src="/icons/football-premium.svg" alt="Fútbol" className="w-10 h-10" />
-);
-
-const BasketballIcon = () => (
-  <img src="/icons/basketball-premium.svg" alt="Basketball" className="w-10 h-10" />
-);
-
-const AnalyticsIcon = () => (
-  <img src="/icons/analytics-premium.svg" alt="Análisis" className="w-10 h-10" />
-);
-
-const ModelIcon = () => (
-  <img src="/icons/model-premium.svg" alt="Modelo online" className="w-10 h-10" />
-);
+const heroBySport = {
+  all: '/hero/hero-portada.png',
+  football: '/hero/hero-football.png',
+  basketball: '/hero/hero-basketball.png',
+  tennis: '/hero/hero-tenis.png',
+  f1: '/hero/hero-f1.png',
+  cycling: '/hero/hero-ciclismo.png',
+  baseball: '/hero/hero-beisball.png',
+  egames: '/hero/hero-egames.png',
+  more: '/hero/hero-mas.png',
+} as const;
 
 export default async function Home() {
   const [featuredMatches, footballTodayCount, basketballTodayCount] = await Promise.all([
@@ -69,10 +43,10 @@ export default async function Home() {
   const visibleSports = sports.filter((sport) => !('code' in sport) || (sport.code && isSportActive(sport.code)));
 
   const events = [
-    { title: 'ATP Wimbledon', time: 'Hoy, 15:00', tag: 'PRÓXIMO', icon: '🎾' },
-    { title: 'Formula 1', time: 'Mañana, 16:00', tag: 'PRÓXIMO', icon: '🏎️' },
-    { title: 'Tour de France', time: 'Mañana, 11:30', tag: 'PRÓXIMO', icon: '🚴' },
-    { title: 'MLB', time: 'Hoy, 19:10', tag: 'EN VIVO', icon: '⚾' },
+    { title: 'ATP Wimbledon', time: 'Hoy, 15:00', tag: 'PRÓXIMO', hero: heroBySport.tennis },
+    { title: 'Formula 1', time: 'Mañana, 16:00', tag: 'PRÓXIMO', hero: heroBySport.f1 },
+    { title: 'Tour de France', time: 'Mañana, 11:30', tag: 'PRÓXIMO', hero: heroBySport.cycling },
+    { title: 'MLB', time: 'Hoy, 19:10', tag: 'EN VIVO', hero: heroBySport.baseball },
   ];
 
   return (
@@ -96,8 +70,8 @@ export default async function Home() {
                 }`}
                 draggable={false}
               >
-                <span className={`w-8 h-8 rounded-full border flex items-center justify-center leading-none ${index === 0 ? 'border-blue-400/60 bg-blue-500/15 text-blue-300' : 'border-gray-700 bg-gray-900/85 text-gray-200'}`}>
-                  <SportGlyph type={sport.icon} />
+                  <span className={`w-8 h-8 ${index === 0 ? 'border-blue-400/60' : 'border-gray-700'}`}>
+                  <HeroCropIcon source={heroBySport[sport.icon]} alt={sport.label} className="h-8 w-8" />
                 </span>
                 <span className="text-sm leading-none">{sport.label}</span>
               </Link>
@@ -108,10 +82,10 @@ export default async function Home() {
 
       <section className="bg-black px-4 md:px-12 py-4 md:py-5">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCardNew icon={<FootballIcon />} value={String(footballTodayCount)} title="Partidos hoy" detail="" accent="blue" href="/match" />
-          <StatCardNew icon={<BasketballIcon />} value={String(basketballTodayCount)} title="Basketball hoy" detail="" accent="orange" href="/basketball" />
-          <StatCardNew icon={<AnalyticsIcon />} value="1.248" title="Análisis publicados" detail="" accent="violet" href="/analisis" />
-          <StatCardNew icon={<ModelIcon />} value="Modelo Online" title="Última actualización: Ahora" detail="" accent="green" href="/modelo-online" />
+          <StatCardNew icon={<HeroCropIcon source={heroBySport.football} alt="Fútbol" className="h-11 w-11" />} value={String(footballTodayCount)} title="Partidos hoy" detail="" accent="blue" href="/match" />
+          <StatCardNew icon={<HeroCropIcon source={heroBySport.basketball} alt="Basketball" className="h-11 w-11" />} value={String(basketballTodayCount)} title="Basketball hoy" detail="" accent="orange" href="/basketball" />
+          <StatCardNew icon={<HeroCropIcon source={heroBySport.all} alt="Análisis" className="h-11 w-11" />} value="1.248" title="Análisis publicados" detail="" accent="violet" href="/analisis" />
+          <StatCardNew icon={<HeroCropIcon source={heroBySport.egames} alt="Modelo online" className="h-11 w-11" />} value="Modelo Online" title="Última actualización: Ahora" detail="" accent="green" href="/modelo-online" />
         </div>
       </section>
 
@@ -170,7 +144,7 @@ export default async function Home() {
             {events.map((event) => (
               <article key={event.title} className="rounded-2xl border border-gray-800/70 bg-gradient-to-br from-gray-950/95 to-gray-900/70 p-4 hover:border-blue-500/40 transition-colors min-h-[128px]">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xl">{event.icon}</span>
+                  <HeroCropIcon source={event.hero} alt={event.title} className="h-9 w-9" />
                   <span className={`text-[11px] px-2.5 py-1 rounded-full font-semibold ${event.tag === 'EN VIVO' ? 'bg-green-500/15 text-green-300 border border-green-500/30' : 'bg-gray-800/70 text-gray-300 border border-gray-700/60'}`}>
                     {event.tag}
                   </span>
@@ -186,19 +160,19 @@ export default async function Home() {
       <section className="bg-black px-4 md:px-12 pb-9">
         <div className="max-w-7xl mx-auto rounded-2xl border border-gray-800/70 bg-gradient-to-r from-gray-950 to-gray-900/80 p-5 md:p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
           <div className="rounded-xl bg-black/35 border border-blue-900/35 p-4">
-            <p className="text-blue-300 text-lg font-semibold">🧠 Inteligencia Artificial</p>
+            <p className="flex items-center gap-2 text-blue-300 text-lg font-semibold"><HeroCropIcon source={heroBySport.egames} alt="Inteligencia Artificial" className="h-7 w-7" />Inteligencia Artificial</p>
             <p className="text-gray-400 text-sm mt-1">Modelos avanzados que aprenden y mejoran cada día.</p>
           </div>
           <div className="rounded-xl bg-black/35 border border-orange-900/35 p-4">
-            <p className="text-orange-300 text-lg font-semibold">⚡ Datos en tiempo real</p>
+            <p className="flex items-center gap-2 text-orange-300 text-lg font-semibold"><HeroCropIcon source={heroBySport.basketball} alt="Datos en tiempo real" className="h-7 w-7" />Datos en tiempo real</p>
             <p className="text-gray-400 text-sm mt-1">Estadísticas actualizadas al instante desde múltiples fuentes.</p>
           </div>
           <div className="rounded-xl bg-black/35 border border-violet-900/35 p-4">
-            <p className="text-violet-300 text-lg font-semibold">🛡️ Análisis confiable</p>
+            <p className="flex items-center gap-2 text-violet-300 text-lg font-semibold"><HeroCropIcon source={heroBySport.football} alt="Análisis confiable" className="h-7 w-7" />Análisis confiable</p>
             <p className="text-gray-400 text-sm mt-1">Metodología transparente y resultados respaldados por datos.</p>
           </div>
           <div className="rounded-xl bg-black/35 border border-emerald-900/35 p-4">
-            <p className="text-emerald-300 text-lg font-semibold">🌍 Cobertura global</p>
+            <p className="flex items-center gap-2 text-emerald-300 text-lg font-semibold"><HeroCropIcon source={heroBySport.all} alt="Cobertura global" className="h-7 w-7" />Cobertura global</p>
             <p className="text-gray-400 text-sm mt-1">Los principales eventos deportivos del mundo en un solo lugar.</p>
           </div>
         </div>

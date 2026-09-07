@@ -5,6 +5,7 @@ import DatosPartidoDirectos from '@/app/components/DatosPartidoDirectos';
 import Footer from '@/app/components/Footer';
 import Navbar from '@/app/components/Navbar';
 import { buildEditorialMatchPreview, editorialMatchPreviews } from '@/app/data/editorialMatchPreviews';
+import { getTeamCrest } from '@/app/lib/teamCrests';
 import { sportsDataService } from '@/lib/data';
 import type { Match } from '@/lib/data/types/domain';
 import { getRealMatchContext } from '@/lib/intelligence-s24/realMatchContext';
@@ -68,17 +69,8 @@ function buildEditorialDemoMatch(slug: string): Match | null {
 const BallIcon = () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 2 C10 7 10 17 12 22"/><path d="M2 12 C7 10 17 10 22 12"/></svg>;
 const CalendarIcon = () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>;
 
-const teamCrests: Record<string, string> = {
-  'Real Madrid': '/teams-official/real-madrid.png',
-  Barcelona: '/teams-official/barcelona.png',
-  'Los Angeles Lakers': '/teams-official/lakers.png',
-  'Boston Celtics': '/teams-official/celtics.png',
-  'Manchester City': '/teams-official/manchester-city.png',
-  Arsenal: '/teams-official/arsenal.png',
-};
-
 function TeamBadge({ team, crestUrl }: { team: string; crestUrl?: string }) {
-  const crest = teamCrests[team] ?? (crestUrl?.startsWith('/') ? crestUrl : undefined);
+  const crest = getTeamCrest(team, crestUrl?.startsWith('/') ? crestUrl : undefined);
 
   if (crest || crestUrl) {
     return (

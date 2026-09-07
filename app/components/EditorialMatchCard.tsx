@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getTeamCrest } from '@/app/lib/teamCrests';
 
 interface EditorialMatchCardProps {
   competition: string;
@@ -14,9 +15,11 @@ interface EditorialMatchCardProps {
 }
 
 function Crest({ src, team }: { src: string; team: string }) {
+  const resolvedSrc = getTeamCrest(team, src);
+
   return (
     <div className="flex h-16 w-16 items-center justify-center rounded-xl border border-slate-700 bg-slate-950/75 p-2 shadow-lg">
-      <img src={src} alt={`Escudo de ${team}`} className="h-full w-full object-contain" />
+      <img src={resolvedSrc} alt={`Escudo de ${team}`} className="h-full w-full object-contain" />
     </div>
   );
 }

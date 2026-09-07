@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { getTeamCrest } from '@/app/lib/teamCrests';
 
 interface MatchCardNewProps {
   competition: string;
@@ -34,6 +35,8 @@ export default function MatchCardNew({
   href,
   sourceLabel,
 }: MatchCardNewProps) {
+  const resolvedTeam1Logo = getTeamCrest(team1, team1Logo);
+  const resolvedTeam2Logo = getTeamCrest(team2, team2Logo);
   const confidenceColor = {
     'Alta': 'text-green-400',
     'Media': 'text-yellow-400',
@@ -72,7 +75,7 @@ export default function MatchCardNew({
         <div className="grid grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] items-start gap-1 mb-5 min-h-[132px] sm:flex sm:justify-between sm:gap-3">
           <div className="flex min-w-0 flex-col items-center sm:flex-1">
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border border-gray-700/70 bg-gradient-to-br from-gray-900/80 to-gray-950/80 p-2 mb-3 shadow-inner shadow-blue-500/5 flex items-center justify-center">
-              <Image src={team1Logo} alt={team1} width={72} height={72} className="rounded-xl object-contain" />
+              <Image src={resolvedTeam1Logo} alt={`Escudo de ${team1}`} width={72} height={72} className="rounded-xl object-contain" />
             </div>
             <span className="w-full break-words text-sm md:text-base text-white font-semibold text-center leading-tight min-h-[40px] flex items-start justify-center">
               {team1}
@@ -85,7 +88,7 @@ export default function MatchCardNew({
 
           <div className="flex min-w-0 flex-col items-center sm:flex-1">
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border border-gray-700/70 bg-gradient-to-br from-gray-900/80 to-gray-950/80 p-2 mb-3 shadow-inner shadow-blue-500/5 flex items-center justify-center">
-              <Image src={team2Logo} alt={team2} width={72} height={72} className="rounded-xl object-contain" />
+              <Image src={resolvedTeam2Logo} alt={`Escudo de ${team2}`} width={72} height={72} className="rounded-xl object-contain" />
             </div>
             <span className="w-full break-words text-sm md:text-base text-white font-semibold text-center leading-tight min-h-[40px] flex items-start justify-center">
               {team2}

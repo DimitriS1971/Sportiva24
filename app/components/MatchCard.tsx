@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import { getTeamCrest } from '@/app/lib/teamCrests';
 
 interface MatchCardProps {
   competition: string;
@@ -24,6 +25,8 @@ export default function MatchCard({
   s24Index,
   confidence 
 }: MatchCardProps) {
+  const resolvedTeam1Logo = getTeamCrest(team1, team1Logo);
+  const resolvedTeam2Logo = getTeamCrest(team2, team2Logo);
   const getConfidenceColor = (percent: number) => {
     if (percent >= 85) return 'from-green-500 to-green-600';
     if (percent >= 70) return 'from-blue-500 to-blue-600';
@@ -59,8 +62,8 @@ export default function MatchCard({
           <div className="flex-1 flex flex-col items-center space-y-2.5">
             <div className="relative w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-gray-800/60 to-gray-900/60 rounded-xl p-2 border border-gray-700/40">
               <Image
-                src={team1Logo}
-                alt={team1}
+                src={resolvedTeam1Logo}
+                alt={`Escudo de ${team1}`}
                 fill
                 className="object-contain p-2"
               />
@@ -86,8 +89,8 @@ export default function MatchCard({
           <div className="flex-1 flex flex-col items-center space-y-2.5">
             <div className="relative w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-gray-800/60 to-gray-900/60 rounded-xl p-2 border border-gray-700/40">
               <Image
-                src={team2Logo}
-                alt={team2}
+                src={resolvedTeam2Logo}
+                alt={`Escudo de ${team2}`}
                 fill
                 className="object-contain p-2"
               />

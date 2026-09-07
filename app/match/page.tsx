@@ -4,19 +4,7 @@ import Link from 'next/link';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { getTodayFootballMatches } from '../lib/realSportsData';
-
-const teamCrests: Record<string, string> = {
-  'Real Madrid': '/teams-official/real-madrid.png',
-  'Barcelona': '/teams-official/barcelona.png',
-  'Los Angeles Lakers': '/teams-official/lakers.png',
-  'Boston Celtics': '/teams-official/celtics.png',
-  'Manchester City': '/teams-official/manchester-city.png',
-  'Arsenal': '/teams-official/arsenal.png',
-};
-
-function getTeamCrest(team: string) {
-  return teamCrests[team] ?? '/icons/model-premium.svg';
-}
+import { getTeamCrest } from '../lib/teamCrests';
 
 export const revalidate = 120;
 
@@ -66,12 +54,12 @@ export default async function MatchesPage() {
 
                   <div className="flex items-center justify-between gap-4 mb-5">
                     <div className="flex flex-col items-center flex-1">
-                      <Image src={getTeamCrest(match.team1)} alt={match.team1} width={64} height={64} className="object-contain" />
+                      <Image src={getTeamCrest(match.team1, match.team1Logo)} alt={`Escudo de ${match.team1}`} width={64} height={64} className="object-contain" />
                       <p className="mt-2 text-sm font-semibold text-center text-white">{match.team1}</p>
                     </div>
                     <span className="text-blue-300 font-bold text-sm">VS</span>
                     <div className="flex flex-col items-center flex-1">
-                      <Image src={getTeamCrest(match.team2)} alt={match.team2} width={64} height={64} className="object-contain" />
+                      <Image src={getTeamCrest(match.team2, match.team2Logo)} alt={`Escudo de ${match.team2}`} width={64} height={64} className="object-contain" />
                       <p className="mt-2 text-sm font-semibold text-center text-white">{match.team2}</p>
                     </div>
                   </div>

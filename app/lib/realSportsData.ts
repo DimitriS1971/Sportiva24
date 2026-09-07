@@ -1,5 +1,6 @@
 import type { IntelligenceMatch } from '@/lib/domain/intelligenceCenter';
 import { sportsDataService } from '@/lib/data';
+import { getTeamCrest } from './teamCrests';
 
 function toUiStatus(status: 'EN VIVO' | 'PRÓXIMO' | 'FINALIZADO'): IntelligenceMatch['status'] | null {
   if (status === 'EN VIVO') {
@@ -11,19 +12,6 @@ function toUiStatus(status: 'EN VIVO' | 'PRÓXIMO' | 'FINALIZADO'): Intelligence
   }
 
   return null;
-}
-
-function fallbackCrest(name: string): string {
-  const localCrests: Record<string, string> = {
-    'Real Madrid': '/teams-official/real-madrid.png',
-    'Barcelona': '/teams-official/barcelona.png',
-    'Manchester City': '/teams-official/manchester-city.png',
-    'Arsenal': '/teams-official/arsenal.png',
-    'Los Angeles Lakers': '/teams-official/lakers.png',
-    'Boston Celtics': '/teams-official/celtics.png',
-  };
-
-  return localCrests[name] ?? '/icons/analytics-premium.svg';
 }
 
 const topCompetitionMatchers = [
@@ -97,9 +85,9 @@ function mapToIntelligenceMatch(match: Awaited<ReturnType<typeof sportsDataServi
     time: match.time,
     status,
     team1: match.homeTeam.name,
-    team1Logo: match.homeTeam.badgeUrl ?? fallbackCrest(match.homeTeam.name),
+    team1Logo: getTeamCrest(match.homeTeam.name, match.homeTeam.badgeUrl),
     team2: match.awayTeam.name,
-    team2Logo: match.awayTeam.badgeUrl ?? fallbackCrest(match.awayTeam.name),
+    team2Logo: getTeamCrest(match.awayTeam.name, match.awayTeam.badgeUrl),
     s24Index: match.indexScore ?? 84,
     confidence: match.confidence ?? 'Media',
     probability: match.probabilityHomeWin ?? 52,

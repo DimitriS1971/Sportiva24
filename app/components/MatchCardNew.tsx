@@ -50,8 +50,8 @@ export default function MatchCardNew({
       <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl -mr-20 -mt-20 group-hover:bg-blue-500/10 transition-all duration-300" />
 
       <div className="relative z-10 flex flex-col h-full">
-        <div className="flex items-center justify-between mb-5 pb-3 border-b border-gray-800/50">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-2 mb-5 pb-3 border-b border-gray-800/50 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-center gap-2">
             <span className="text-xs font-semibold text-gray-500 tracking-[0.08em] uppercase">
               {competition}
             </span>
@@ -61,7 +61,7 @@ export default function MatchCardNew({
               </span>
             ) : null}
           </div>
-          <div className="flex items-center gap-3 text-xs">
+          <div className="flex items-center justify-between gap-3 text-xs sm:justify-end">
             <span className="text-gray-600 text-xs">{time}</span>
             <span className={`px-2.5 py-1 rounded-full text-[11px] font-semibold ${statusBg} ${statusColor}`}>
               {status}
@@ -69,25 +69,25 @@ export default function MatchCardNew({
           </div>
         </div>
 
-        <div className="flex items-start justify-between gap-3 mb-5 min-h-[132px]">
-          <div className="flex flex-col items-center flex-1">
+        <div className="grid grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] items-start gap-1 mb-5 min-h-[132px] sm:flex sm:justify-between sm:gap-3">
+          <div className="flex min-w-0 flex-col items-center sm:flex-1">
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border border-gray-700/70 bg-gradient-to-br from-gray-900/80 to-gray-950/80 p-2 mb-3 shadow-inner shadow-blue-500/5 flex items-center justify-center">
               <Image src={team1Logo} alt={team1} width={72} height={72} className="rounded-xl object-contain" />
             </div>
-            <span className="text-sm md:text-base text-white font-semibold text-center leading-tight min-h-[40px] flex items-start justify-center">
+            <span className="w-full break-words text-sm md:text-base text-white font-semibold text-center leading-tight min-h-[40px] flex items-start justify-center">
               {team1}
             </span>
           </div>
 
-          <div className="flex flex-col items-center justify-center pt-8">
+          <div className="flex min-w-0 flex-col items-center justify-center pt-8">
             <span className="text-sm text-blue-300 font-bold tracking-wide">VS</span>
           </div>
 
-          <div className="flex flex-col items-center flex-1">
+          <div className="flex min-w-0 flex-col items-center sm:flex-1">
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border border-gray-700/70 bg-gradient-to-br from-gray-900/80 to-gray-950/80 p-2 mb-3 shadow-inner shadow-blue-500/5 flex items-center justify-center">
               <Image src={team2Logo} alt={team2} width={72} height={72} className="rounded-xl object-contain" />
             </div>
-            <span className="text-sm md:text-base text-white font-semibold text-center leading-tight min-h-[40px] flex items-start justify-center">
+            <span className="w-full break-words text-sm md:text-base text-white font-semibold text-center leading-tight min-h-[40px] flex items-start justify-center">
               {team2}
             </span>
           </div>

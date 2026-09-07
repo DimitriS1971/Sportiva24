@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getTeamCrest } from '@/app/lib/teamCrests';
+import { displayLabel } from '@/app/lib/displayLabel';
 
 interface EditorialMatchCardProps {
   competition: string;
@@ -41,7 +42,7 @@ export default function EditorialMatchCard({
   return (
     <article className="overflow-hidden rounded-2xl border border-slate-700/60 bg-slate-950 shadow-lg shadow-black/25 transition-colors hover:border-cyan-400/45">
       <div className="flex items-center justify-between gap-3 border-b border-slate-800 bg-slate-900/65 px-4 py-3">
-        <p className="min-w-0 truncate text-[11px] font-semibold uppercase tracking-[0.13em] text-slate-300">{competition}</p>
+        <p className="min-w-0 truncate text-[11px] font-semibold text-slate-300">{displayLabel(competition)}</p>
         <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] ${isLive ? 'border-emerald-400/40 bg-emerald-500/15 text-emerald-100' : 'border-slate-600 bg-slate-800 text-slate-300'}`}>{status}</span>
       </div>
 

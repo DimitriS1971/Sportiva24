@@ -6,6 +6,7 @@ import Footer from '@/app/components/Footer';
 import Navbar from '@/app/components/Navbar';
 import { buildEditorialMatchPreview, editorialMatchPreviews } from '@/app/data/editorialMatchPreviews';
 import { getTeamCrest } from '@/app/lib/teamCrests';
+import { displayLabel } from '@/app/lib/displayLabel';
 import { sportsDataService } from '@/lib/data';
 import type { Match } from '@/lib/data/types/domain';
 import { getRealMatchContext } from '@/lib/intelligence-s24/realMatchContext';
@@ -107,7 +108,7 @@ function sanitizeCompetitionName(value: string): string {
   if (!normalized || normalized.toLowerCase() === 'liga') {
     return 'Competicion en analisis';
   }
-  return normalized;
+  return displayLabel(normalized);
 }
 
 function sanitizeTeamName(value: string, fallback: string): string {

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { getTeamCrest } from '@/app/lib/teamCrests';
+import { displayLabel } from '@/app/lib/displayLabel';
 
 interface MatchCardNewProps {
   competition: string;
@@ -56,7 +57,7 @@ export default function MatchCardNew({
         <div className="flex flex-col gap-2 mb-5 pb-3 border-b border-gray-800/50 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex min-w-0 items-center gap-2">
             <span className="text-xs font-semibold text-gray-500 tracking-[0.08em] uppercase">
-              {competition}
+              {displayLabel(competition)}
             </span>
             {sourceLabel ? (
               <span className="rounded-full border border-sky-500/40 bg-sky-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-sky-300">

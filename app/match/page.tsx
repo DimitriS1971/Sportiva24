@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { getTodayFootballMatches } from '../lib/realSportsData';
 import { getTeamCrest } from '../lib/teamCrests';
+import { displayLabel } from '../lib/displayLabel';
 
 export const revalidate = 120;
 
@@ -40,7 +41,7 @@ export default async function MatchesPage() {
                 >
                   <div className="flex items-center justify-between gap-3 mb-4">
                     <div className="flex items-center gap-2 min-w-0">
-                      <p className="text-[11px] uppercase tracking-[0.12em] text-gray-500 truncate">{match.competition}</p>
+                      <p className="text-[11px] text-gray-500 truncate">{displayLabel(match.competition)}</p>
                       {match.sourceLabel ? (
                         <span className="rounded-full border border-sky-500/40 bg-sky-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-sky-300">
                           Fuente gratis

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const basketballContent: IntelligenceCenterContent = {
   hero: {
     badge: 'Centro de inteligencia Sportiva24',
-    title: 'BASKETBALL',
+    title: 'Basketball',
     subtitle: 'Toda la inteligencia del basketball mundial impulsada por Inteligencia Artificial y análisis de datos.',
     description:
       'Modelos de eficiencia, contexto de posesiones y lectura de ritmo para seguir la NBA, EuroLeague y grandes torneos con una experiencia editorial premium.',

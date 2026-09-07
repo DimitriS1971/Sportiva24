@@ -21,7 +21,7 @@ export default function Noticias() {
       <section className="w-full bg-gradient-to-b from-blue-950/30 to-black/50 pt-16 md:pt-20 pb-6 md:pb-8 border-b border-blue-900/20">
         <div className="max-w-6xl mx-auto px-6">
           <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
-            NOTICIAS
+            Noticias
           </h1>
           <p className="text-lg md:text-xl text-gray-300 font-light max-w-2xl">
             La actualidad del deporte analizada con contexto e inteligencia.

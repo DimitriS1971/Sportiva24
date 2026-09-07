@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { getTeamCrest } from '@/app/lib/teamCrests';
+import { displayLabel } from '@/app/lib/displayLabel';
 
 interface MatchCardProps {
   competition: string;
@@ -51,7 +52,7 @@ export default function MatchCard({
                 className="object-contain"
               />
             </div>
-            <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">{competition}</span>
+            <span className="text-xs text-gray-500 font-medium">{displayLabel(competition)}</span>
           </div>
           <span className="text-xs text-gray-600 font-light">{time}</span>
         </div>

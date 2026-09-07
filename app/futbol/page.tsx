@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const futbolContent: IntelligenceCenterContent = {
   hero: {
     badge: 'Centro de inteligencia Sportiva24',
-    title: 'FÚTBOL',
+    title: 'Fútbol',
     subtitle: 'Toda la inteligencia deportiva del fútbol mundial en un solo lugar.',
     description:
       'Señales de rendimiento, lectura contextual y modelos predictivos para entender el juego con una interfaz editorial, limpia y profundamente orientada a datos.',
@@ -47,7 +47,7 @@ const futbolContent: IntelligenceCenterContent = {
     ctaHref: '/match',
     items: [
       {
-        competition: 'UEFA CHAMPIONS LEAGUE',
+        competition: 'Uefa champions league',
         time: 'Hoy, 21:00',
         status: 'PROXIMO',
         team1: 'Real Madrid',
@@ -60,7 +60,7 @@ const futbolContent: IntelligenceCenterContent = {
         slug: 'real-madrid-manchester-city',
       },
       {
-        competition: 'PREMIER LEAGUE',
+        competition: 'Premier league',
         time: 'Mañana, 18:30',
         status: 'PROXIMO',
         team1: 'Arsenal',

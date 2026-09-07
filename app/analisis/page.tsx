@@ -7,7 +7,7 @@ import Footer from '../components/Footer';
 export default function AnalisysPage() {
   const analysisData = [
     {
-      competition: 'UEFA CHAMPIONS LEAGUE',
+      competition: 'Uefa champions league',
       time: 'Hoy, 21:00',
       status: 'PRÓXIMO' as const,
       team1: 'Real Madrid',
@@ -33,7 +33,7 @@ export default function AnalisysPage() {
       slug: 'lakers-celtics',
     },
     {
-      competition: 'PREMIER LEAGUE',
+      competition: 'Premier league',
       time: 'Hoy, 20:00',
       status: 'PRÓXIMO' as const,
       team1: 'Manchester City',
@@ -80,7 +80,7 @@ export default function AnalisysPage() {
       <section className="bg-gradient-to-b from-gray-900/40 to-black px-4 md:px-12 pt-6 md:pt-8 pb-16 md:pb-20 mt-16 md:mt-20">
         <div className="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-[0.72fr_1.28fr] gap-10 xl:gap-8 items-start">
           <div className="mb-4 xl:pt-2">
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-3">ANÁLISIS</h1>
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-3">Análisis</h1>
             <p className="text-lg text-gray-400 max-w-2xl">
               Todos los análisis generados por Sportiva24.
             </p>

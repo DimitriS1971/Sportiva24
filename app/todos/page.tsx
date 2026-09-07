@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 import SportHubCard from '@/app/components/SportHubCard';
@@ -100,14 +101,19 @@ export default function TodosPage() {
 
       <section className="relative overflow-hidden border-b border-slate-900/80 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.18),transparent_25%),radial-gradient(circle_at_85%_20%,rgba(59,130,246,0.12),transparent_24%),linear-gradient(180deg,#020617_0%,#020617_65%,#000000_100%)] px-4 pb-12 pt-24 md:px-12 md:pb-16 md:pt-28">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(15,23,42,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.45)_1px,transparent_1px)] bg-[size:56px_56px] opacity-20" />
-        <div className="relative mx-auto max-w-7xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-sky-300">Mapa total Sportiva24</p>
-          <h1 className="mt-5 text-[3rem] font-semibold leading-[0.95] tracking-[-0.04em] text-white sm:text-[4.2rem] md:text-[5rem]">
-            Todos los deportes
-          </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300 md:text-xl">
-            Un índice central para entrar a cada deporte desde su tarjeta principal, manteniendo la misma lógica visual y editorial del ecosistema Sportiva24.
-          </p>
+        <div className="relative mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-sky-300">Mapa total Sportiva24</p>
+            <h1 className="mt-5 text-[3rem] font-semibold leading-[0.95] tracking-[-0.04em] text-white sm:text-[4.2rem] md:text-[5rem]">
+              Todos los deportes
+            </h1>
+            <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300 md:text-xl">
+              Un índice central para entrar a cada deporte desde su tarjeta principal, manteniendo la misma lógica visual y editorial del ecosistema Sportiva24.
+            </p>
+          </div>
+          <div className="relative mx-auto w-full max-w-[620px] overflow-hidden rounded-[28px] border border-sky-500/25 bg-slate-950/80 shadow-[0_28px_90px_rgba(2,6,23,0.7)]">
+            <Image src="/hero/hero-mas.png" alt="Visual de inteligencia deportiva para todos los deportes" width={1200} height={920} className="h-auto w-full" priority />
+          </div>
         </div>
       </section>
 

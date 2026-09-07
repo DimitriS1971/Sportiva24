@@ -33,7 +33,7 @@ export default async function Home() {
       <HeroNew />
 
       <section className="bg-black px-4 md:px-12 py-4 md:py-5">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
           <StatCardNew icon={<HeroCropIcon source={heroBySport.football} alt="Fútbol" className="h-11 w-11" />} value={String(footballTodayCount)} title="Partidos hoy" detail="" accent="blue" href="/match" />
           <StatCardNew icon={<HeroCropIcon source={heroBySport.all} alt="Análisis" className="h-11 w-11" />} value="1.248" title="Análisis publicados" detail="" accent="violet" href="/analisis" />
           <StatCardNew icon={<HeroCropIcon source={heroBySport.football} alt="Modelo online" className="h-11 w-11" />} value="Modelo Online" title="Última actualización: Ahora" detail="" accent="green" href="/modelo-online" />
@@ -42,12 +42,12 @@ export default async function Home() {
 
       <section className="bg-black px-4 md:px-12 py-10 md:py-14">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-8 md:mb-10 flex items-end justify-between gap-4">
+          <div className="mb-8 flex flex-col items-center gap-4 text-center md:mb-10">
             <div>
               <h2 className="text-3xl md:text-5xl font-bold text-white mb-2 tracking-tight">Partidos destacados</h2>
               <p className="text-gray-400 text-base md:text-lg">Análisis en tiempo real de los encuentros más importantes</p>
             </div>
-            <button className="hidden md:inline-flex px-5 py-2.5 rounded-xl border border-blue-500/50 text-blue-300 hover:bg-blue-500/10 transition-colors text-sm font-semibold">
+            <button className="hidden md:inline-flex rounded-xl border border-blue-500/50 px-5 py-2.5 text-sm font-semibold text-blue-300 transition-colors hover:bg-blue-500/10">
               Ver todos
             </button>
           </div>

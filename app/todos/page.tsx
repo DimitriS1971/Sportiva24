@@ -99,7 +99,7 @@ export default function TodosPage() {
     <main className="min-h-screen bg-black text-white">
       <Navbar />
 
-      <section className="relative overflow-hidden border-b border-slate-900/80 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.18),transparent_25%),radial-gradient(circle_at_85%_20%,rgba(59,130,246,0.12),transparent_24%),linear-gradient(180deg,#020617_0%,#020617_65%,#000000_100%)] px-4 pb-12 pt-24 md:px-12 md:pb-16 md:pt-28">
+      <section className="relative overflow-hidden border-b border-slate-900/80 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.18),transparent_25%),radial-gradient(circle_at_85%_20%,rgba(59,130,246,0.12),transparent_24%),linear-gradient(180deg,#020617_0%,#020617_65%,#000000_100%)] px-4 pb-12 pt-24 md:px-12 md:pb-16 md:pt-28 lg:min-h-[calc(100vh-80px)]">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(15,23,42,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.45)_1px,transparent_1px)] bg-[size:56px_56px] opacity-20" />
         <div className="relative mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div>

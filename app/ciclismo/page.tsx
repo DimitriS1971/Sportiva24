@@ -15,7 +15,7 @@ const cyclingContent: IntelligenceCenterContent = {
     description: 'Modelos de fatiga, watts/kg y escenarios de ataque para seguir grandes vueltas, clásicas y contrarreloj con contexto premium.',
     primaryCta: { label: 'Ver análisis', href: '/analisis' },
     secondaryCta: { label: 'Últimas noticias', href: '/noticias' },
-    image: { src: '/ciclismo/hero-intelligence-cycling.svg', alt: 'Visual premium de ciclismo, inteligencia artificial y análisis de datos', width: 1200, height: 920 },
+    image: { src: '/hero/hero-ciclismo.png', alt: 'Visual premium de ciclismo, inteligencia artificial y análisis de datos', width: 1200, height: 920 },
   },
   leagues: { intro: 'Mapa competitivo', title: 'Competiciones principales', helper: 'Cobertura editorial sin filtros activados por ahora.', chipLabel: 'Prueba', items: [
     { name: 'Tour de France', badge: 'TDF' }, { name: 'Giro d’Italia', badge: 'GIR' }, { name: 'La Vuelta', badge: 'VUE' }, { name: 'París-Roubaix', badge: 'PRX' }, { name: 'Lieja', badge: 'LIE' }, { name: 'Milán-San Remo', badge: 'MSR' }, { name: 'Dauphiné', badge: 'DAU' }, { name: 'Contrarreloj', badge: 'ITT' },

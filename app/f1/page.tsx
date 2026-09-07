@@ -15,7 +15,7 @@ const f1Content: IntelligenceCenterContent = {
     description: 'Lectura de ritmo, degradación, ventanas de pit y simulaciones de carrera para seguir la parrilla con contexto analítico premium.',
     primaryCta: { label: 'Ver análisis', href: '/analisis' },
     secondaryCta: { label: 'Últimas noticias', href: '/noticias' },
-    image: { src: '/f1/hero-intelligence-f1.svg', alt: 'Visual premium de Fórmula 1, inteligencia artificial y análisis de datos', width: 1200, height: 920 },
+    image: { src: '/hero/hero-f1.png', alt: 'Visual premium de Fórmula 1, inteligencia artificial y análisis de datos', width: 1200, height: 920 },
   },
   leagues: {
     intro: 'Mapa competitivo', title: 'Competiciones principales', helper: 'Cobertura editorial sin filtros activados por ahora.', chipLabel: 'Serie', items: [

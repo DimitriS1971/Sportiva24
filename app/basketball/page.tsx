@@ -17,7 +17,7 @@ const basketballContent: IntelligenceCenterContent = {
     primaryCta: { label: 'Ver análisis', href: '/analisis' },
     secondaryCta: { label: 'Últimas noticias', href: '/noticias' },
     image: {
-      src: '/basketball/hero-intelligence-basketball.svg',
+      src: '/hero/hero-basketball.png',
       alt: 'Visual premium de basketball, inteligencia artificial y análisis de datos',
       width: 1280,
       height: 920,

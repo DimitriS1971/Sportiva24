@@ -18,7 +18,7 @@ const futbolContent: IntelligenceCenterContent = {
     primaryCta: { label: 'Ver análisis', href: '/analisis' },
     secondaryCta: { label: 'Últimas noticias', href: '/noticias' },
     image: {
-      src: '/hero/hero-main-crop.png',
+      src: '/hero/hero-football.png',
       alt: 'Visual premium de fútbol, inteligencia artificial y análisis de datos',
       width: 1200,
       height: 920,

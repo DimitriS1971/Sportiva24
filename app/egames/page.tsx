@@ -15,7 +15,7 @@ const egamesContent: IntelligenceCenterContent = {
     description: 'Modelos de macro, control de mapa, economía y clutch para seguir las principales escenas competitivas con una experiencia editorial premium.',
     primaryCta: { label: 'Ver análisis', href: '/analisis' },
     secondaryCta: { label: 'Últimas noticias', href: '/noticias' },
-    image: { src: '/egames/hero-intelligence-egames.svg', alt: 'Visual premium de e-games, inteligencia artificial y análisis de datos', width: 1200, height: 920 },
+    image: { src: '/hero/hero-egames.png', alt: 'Visual premium de e-games, inteligencia artificial y análisis de datos', width: 1200, height: 920 },
   },
   leagues: {
     intro: 'Mapa competitivo',

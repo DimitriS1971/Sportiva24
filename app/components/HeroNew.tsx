@@ -60,18 +60,12 @@ export default function HeroNew() {
           </div>
 
           <div className="relative h-[340px] md:h-[430px] lg:h-[470px] flex items-center justify-center">
-            <div className="pointer-events-none absolute inset-0 z-0 opacity-35">
-              <img src="/icons/basketball-premium.svg" alt="" className="absolute left-[2%] top-[8%] h-16 w-16 rotate-[-18deg] object-contain blur-[1px] md:h-24 md:w-24" />
-              <img src="/icons/tennis-premium.svg" alt="" className="absolute right-[4%] top-[8%] h-14 w-14 rotate-[18deg] object-contain blur-[1px] md:h-20 md:w-20" />
-              <img src="/icons/baseball-premium.svg" alt="" className="absolute bottom-[8%] left-[6%] h-14 w-14 rotate-[14deg] object-contain blur-[1px] md:h-20 md:w-20" />
-              <img src="/icons/f1-premium.svg" alt="" className="absolute bottom-[9%] right-[7%] h-14 w-14 rotate-[-12deg] object-contain blur-[1px] md:h-20 md:w-20" />
-            </div>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="absolute w-[99%] h-[95%] rounded-[24px] border border-blue-500/25 bg-gradient-to-br from-blue-500/8 via-transparent to-blue-700/18 backdrop-blur-sm" />
               <div className="absolute w-96 h-96 bg-blue-500/24 rounded-full blur-3xl" />
             </div>
             <img
-              src="/hero/hero-main-crop.png"
+              src="/hero/hero-portada.png"
               alt="Visual IA deportiva"
               className="relative z-10 w-[99%] h-[95%] object-cover rounded-[24px] border border-blue-500/25 shadow-[0_26px_70px_rgba(30,91,255,0.28)]"
             />

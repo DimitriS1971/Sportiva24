@@ -17,7 +17,7 @@ const tennisContent: IntelligenceCenterContent = {
     primaryCta: { label: 'Ver análisis', href: '/analisis' },
     secondaryCta: { label: 'Últimas noticias', href: '/noticias' },
     image: {
-      src: '/tenis/hero-intelligence-tennis.svg',
+      src: '/hero/hero-tenis.png',
       alt: 'Visual premium de tenis, inteligencia artificial y análisis de datos',
       width: 1200,
       height: 920,

@@ -15,7 +15,7 @@ const moreContent: IntelligenceCenterContent = {
     description: 'Aquí viven los deportes emergentes o de menor cobertura principal, con la misma lógica visual y de análisis del ecosistema Sportiva24.',
     primaryCta: { label: 'Ver análisis', href: '/analisis' },
     secondaryCta: { label: 'Últimas noticias', href: '/noticias' },
-    image: { src: '/mas/hero-intelligence-mas.svg', alt: 'Visual premium de deportes menores, inteligencia artificial y análisis de datos', width: 1200, height: 920 },
+    image: { src: '/hero/hero-mas.png', alt: 'Visual premium de deportes menores, inteligencia artificial y análisis de datos', width: 1200, height: 920 },
   },
   leagues: {
     intro: 'Mapa competitivo',

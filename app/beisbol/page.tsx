@@ -15,7 +15,7 @@ const baseballContent: IntelligenceCenterContent = {
     description: 'Modelos de OPS, pitcheo, bullpen y contacto fuerte para seguir MLB y torneos internacionales con experiencia editorial premium.',
     primaryCta: { label: 'Ver análisis', href: '/analisis' },
     secondaryCta: { label: 'Últimas noticias', href: '/noticias' },
-    image: { src: '/beisbol/hero-intelligence-baseball.svg', alt: 'Visual premium de béisbol, inteligencia artificial y análisis de datos', width: 1200, height: 920 },
+    image: { src: '/hero/hero-beisball.png', alt: 'Visual premium de béisbol, inteligencia artificial y análisis de datos', width: 1200, height: 920 },
   },
   leagues: { intro: 'Mapa competitivo', title: 'Competiciones principales', helper: 'Cobertura editorial sin filtros activados por ahora.', chipLabel: 'Liga', items: [
     { name: 'MLB', badge: 'MLB' }, { name: 'AL East', badge: 'ALE' }, { name: 'NL West', badge: 'NLW' }, { name: 'World Series', badge: 'WS' }, { name: 'Wild Card', badge: 'WC' }, { name: 'Spring Training', badge: 'SPR' }, { name: 'Serie del Caribe', badge: 'CAR' }, { name: 'WBC', badge: 'WBC' },

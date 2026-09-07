@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Footer from '@/app/components/Footer';
 import MatchCardNew from '@/app/components/MatchCardNew';
 import Navbar from '@/app/components/Navbar';
+import SportHeroVisual from '@/app/components/SportHeroVisual';
 import type {
   IntelligenceArticle,
   IntelligenceCenterContent,
@@ -168,13 +169,11 @@ export default function IntelligenceCenterPage({ content }: { content: Intellige
           <div className="relative mx-auto w-full max-w-[620px] lg:max-w-[590px]">
             <div className="absolute -inset-4 rounded-[36px] bg-sky-500/10 blur-3xl" />
             <div className="relative overflow-hidden rounded-[32px] border border-sky-500/20 bg-slate-950/80 p-3 shadow-[0_28px_90px_rgba(2,6,23,0.7)]">
-              <Image
-                src={content.hero.image.src}
+              <SportHeroVisual
+                imageSrc={content.hero.image.src}
                 alt={content.hero.image.alt}
                 width={content.hero.image.width}
                 height={content.hero.image.height}
-                className="h-auto w-full rounded-[26px]"
-                priority
               />
             </div>
           </div>

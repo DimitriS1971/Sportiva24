@@ -143,7 +143,7 @@ export default function IntelligenceCenterS24Panel({ data }: IntelligenceCenterS
           <Pill>{data.analyzedTeams} clubes</Pill>
           <Pill>{data.analyzedCompetitions} competiciones</Pill>
         </div>
-        <h1 className="font-editorial text-4xl md:text-5xl leading-tight text-white">Centro de Inteligencia Deportiva S24</h1>
+        <h1 className="text-4xl font-semibold leading-tight text-white md:text-5xl">Centro de Inteligencia Deportiva S24</h1>
         <p className="mt-4 max-w-3xl text-sm md:text-base leading-relaxed text-slate-300">
           Panel global de inteligencia deportiva. Esta seccion no publica analisis completos de partidos y se enfoca en dinamicas de clubes, competiciones, tendencias, rankings y alertas metodologicas.
         </p>

@@ -22,7 +22,7 @@ function buildDataSummary(match: Match, context: RealMatchContext | null): strin
     return `El proveedor confirma ${match.homeTeam.name} vs ${match.awayTeam.name} en ${match.competition}. No hay historial directo finalizado disponible en la fuente actual.`;
   }
 
-  const { homeWins, draws, awayWins, matches } = context.headToHead;
+  const { homeWins, draws, awayWins } = context.headToHead;
   const balance = homeWins === awayWins
     ? `El historial disponible está equilibrado: ${homeWins} triunfo${homeWins === 1 ? '' : 's'} por lado y ${draws} empate${draws === 1 ? '' : 's'}.`
     : homeWins > awayWins

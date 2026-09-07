@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const moreContent: IntelligenceCenterContent = {
   hero: {
     badge: 'Centro de inteligencia Sportiva24',
-    title: 'MÁS',
+    title: 'Más',
     subtitle: 'Un centro para deportes menores con inteligencia editorial, datos mock y cobertura expandida.',
     description: 'Aquí viven los deportes emergentes o de menor cobertura principal, con la misma lógica visual y de análisis del ecosistema Sportiva24.',
     primaryCta: { label: 'Ver análisis', href: '/analisis' },

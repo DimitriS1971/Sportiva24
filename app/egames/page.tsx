@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const egamesContent: IntelligenceCenterContent = {
   hero: {
     badge: 'Centro de inteligencia Sportiva24',
-    title: 'E-GAMES',
+    title: 'E-games',
     subtitle: 'Toda la inteligencia competitiva de los e-games impulsada por datos, lectura táctica y scouting digital.',
     description: 'Modelos de macro, control de mapa, economía y clutch para seguir las principales escenas competitivas con una experiencia editorial premium.',
     primaryCta: { label: 'Ver análisis', href: '/analisis' },

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const tennisContent: IntelligenceCenterContent = {
   hero: {
     badge: 'Centro de inteligencia Sportiva24',
-    title: 'TENIS',
+    title: 'Tenis',
     subtitle: 'Toda la inteligencia del tenis mundial impulsada por datos, contexto y lectura táctica.',
     description:
       'Modelos de servicio, presión al resto y rendimiento por superficie para seguir ATP, WTA y Grand Slams con una experiencia editorial premium.',

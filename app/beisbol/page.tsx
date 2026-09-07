@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const baseballContent: IntelligenceCenterContent = {
   hero: {
     badge: 'Centro de inteligencia Sportiva24',
-    title: 'BÉISBOL',
+    title: 'Béisbol',
     subtitle: 'Toda la inteligencia del béisbol mundial impulsada por métricas avanzadas y contexto de juego.',
     description: 'Modelos de OPS, pitcheo, bullpen y contacto fuerte para seguir MLB y torneos internacionales con experiencia editorial premium.',
     primaryCta: { label: 'Ver análisis', href: '/analisis' },

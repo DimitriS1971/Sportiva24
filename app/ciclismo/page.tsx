@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const cyclingContent: IntelligenceCenterContent = {
   hero: {
     badge: 'Centro de inteligencia Sportiva24',
-    title: 'CICLISMO',
+    title: 'Ciclismo',
     subtitle: 'Toda la inteligencia del ciclismo mundial impulsada por potencia, perfil de etapa y lectura táctica.',
     description: 'Modelos de fatiga, watts/kg y escenarios de ataque para seguir grandes vueltas, clásicas y contrarreloj con contexto premium.',
     primaryCta: { label: 'Ver análisis', href: '/analisis' },

@@ -17,9 +17,9 @@ function ProviderLabel({ providerId }: { providerId: string }) {
   );
 }
 
-function buildBriefAnalysis(match: Match, context: RealMatchContext | null): string {
+function buildDataSummary(match: Match, context: RealMatchContext | null): string {
   if (!context || context.headToHead.matches.length === 0) {
-    return `${match.homeTeam.name} recibe a ${match.awayTeam.name} en ${match.competition}. La fuente confirma la programación del encuentro, pero no aporta un historial directo finalizado para añadir contexto comparativo.`;
+    return `El proveedor confirma ${match.homeTeam.name} vs ${match.awayTeam.name} en ${match.competition}. No hay historial directo finalizado disponible en la fuente actual.`;
   }
 
   const { homeWins, draws, awayWins, matches } = context.headToHead;
@@ -29,11 +29,11 @@ function buildBriefAnalysis(match: Match, context: RealMatchContext | null): str
       ? `${match.homeTeam.name} tiene una ventaja histórica en la muestra: ${homeWins} triunfo${homeWins === 1 ? '' : 's'}, ${draws} empate${draws === 1 ? '' : 's'} y ${awayWins} victoria${awayWins === 1 ? '' : 's'} de ${match.awayTeam.name}.`
       : `${match.awayTeam.name} llega con mejor registro directo en la muestra: ${awayWins} triunfo${awayWins === 1 ? '' : 's'}, ${draws} empate${draws === 1 ? '' : 's'} y ${homeWins} victoria${homeWins === 1 ? '' : 's'} de ${match.homeTeam.name}.`;
 
-  return `${match.homeTeam.name} recibe a ${match.awayTeam.name} por ${context.fixture.round ?? 'una nueva jornada'} de ${match.competition}. ${balance} Es una referencia breve: el proveedor actual no entrega la clasificación ni la forma completa de temporada para extender la lectura.`;
+  return `${match.homeTeam.name} vs ${match.awayTeam.name}, ${context.fixture.round ?? 'jornada no informada'} de ${match.competition}. ${balance}`;
 }
 
 export default function DatosPartidoDirectos({ match, providerId, realContext }: DatosPartidoDirectosProps) {
-  const briefAnalysis = buildBriefAnalysis(match, realContext);
+  const dataSummary = buildDataSummary(match, realContext);
   const directFacts = [
     { label: 'Competicion', value: match.competition },
     { label: 'Estado', value: match.status },
@@ -50,8 +50,8 @@ export default function DatosPartidoDirectos({ match, providerId, realContext }:
             <ProviderLabel providerId={providerId} />
             <span className="text-xs text-slate-400">Información confirmada del partido</span>
           </div>
-          <h2 className="mt-3 font-editorial text-2xl md:text-3xl text-white">Lectura breve del encuentro</h2>
-          <p className="mt-3 max-w-4xl text-sm md:text-base leading-7 text-slate-200">{briefAnalysis}</p>
+          <h2 className="mt-3 font-editorial text-2xl md:text-3xl text-white">Datos disponibles del partido</h2>
+          <p className="mt-3 max-w-4xl text-sm md:text-base leading-7 text-slate-200">{dataSummary}</p>
         </div>
 
         <div className="px-5 py-5 md:px-7 md:py-6">

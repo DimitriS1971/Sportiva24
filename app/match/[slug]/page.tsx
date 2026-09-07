@@ -1,13 +1,12 @@
 import { matchesData } from '@/app/data/matches';
 import Image from 'next/image';
 
+import DatosPartidoDirectos from '@/app/components/DatosPartidoDirectos';
 import Footer from '@/app/components/Footer';
-import InformeS24 from '@/app/components/InformeS24';
 import Navbar from '@/app/components/Navbar';
 import { buildEditorialMatchPreview, editorialMatchPreviews } from '@/app/data/editorialMatchPreviews';
 import { sportsDataService } from '@/lib/data';
 import type { Match } from '@/lib/data/types/domain';
-import { buildInformeS24V1 } from '@/lib/intelligence-s24/informeS24V1';
 import { getRealMatchContext } from '@/lib/intelligence-s24/realMatchContext';
 
 interface MatchHeaderData {
@@ -173,13 +172,6 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
   const editorialDate = editorialPreview
     ? 'Fecha por confirmar'
     : formatEditorialDate(matchData.dateTimeUtc ?? matchData.time);
-  const informeS24 = buildInformeS24V1({
-    match: matchData,
-    providerId,
-    usedFailover: serviceResult?.usedFallback ?? true,
-    realContext,
-  });
-
   const statusStyle = matchData.status === 'EN VIVO'
     ? 'text-emerald-200 border-emerald-400/40 bg-emerald-500/15'
     : 'text-slate-200 border-slate-500/55 bg-slate-800/45';
@@ -238,7 +230,7 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
           <div className="mt-5 border-t border-slate-700/60" />
         </header>
 
-        <InformeS24 informe={informeS24} />
+        <DatosPartidoDirectos match={matchData} providerId={providerId} realContext={realContext} />
       </div>
 
       <Footer />

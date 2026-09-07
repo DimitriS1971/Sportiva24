@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 import SportHubCard from '@/app/components/SportHubCard';
@@ -110,6 +111,14 @@ export default function TodosPage() {
             <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300 md:text-xl">
               Un índice central para entrar a cada deporte desde su tarjeta principal, manteniendo la misma lógica visual y editorial del ecosistema Sportiva24.
             </p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Link href="/analisis" className="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 px-6 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(14,165,233,0.32)] transition-all hover:from-sky-400 hover:to-blue-500">
+                Ver análisis
+              </Link>
+              <Link href="/noticias" className="inline-flex h-12 items-center justify-center rounded-xl border border-slate-700 bg-slate-950/60 px-6 text-sm font-semibold text-slate-100 transition-all hover:border-sky-500/35 hover:text-sky-200">
+                Últimas noticias
+              </Link>
+            </div>
           </div>
           <div className="relative mx-auto w-full max-w-[620px] overflow-hidden rounded-[28px] border border-sky-500/25 bg-slate-950/80 shadow-[0_28px_90px_rgba(2,6,23,0.7)]">
             <Image

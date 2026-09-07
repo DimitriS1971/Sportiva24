@@ -83,7 +83,7 @@ export default async function Home() {
 
       <section className="relative z-20 bg-black px-4 md:px-12 pt-1 pb-6 md:pb-7 pointer-events-auto">
         <div className="relative z-20 max-w-7xl mx-auto rounded-2xl border border-blue-900/40 bg-gradient-to-br from-gray-950/95 to-gray-900/75 p-2.5 overflow-x-auto shadow-[0_18px_45px_rgba(2,6,23,0.6)] pointer-events-auto">
-          <div className="flex min-w-max md:min-w-0 md:grid md:grid-cols-9 gap-2 w-full">
+          <div className="flex min-w-max justify-center gap-2 md:min-w-0 md:flex-wrap md:justify-center">
             {visibleSports.map((sport, index) => (
               <Link
                 key={sport.label}

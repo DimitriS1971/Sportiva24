@@ -243,7 +243,7 @@ export function generateS24Narrative(
     ),
     createParagraph(
       'estado-2',
-      `El S24 Index de referencia es ${input.summary.s24Index}: rating ${input.summary.s24Rating}, confianza ${input.summary.s24Confianza}, riesgo ${input.summary.s24Riesgo} y tendencia ${input.summary.s24Tendencia}.`,
+      `En corto: ${scenario.winnerTeamName} llega mejor en la lectura del modelo. Su S24 es ${input.summary.s24Index}, con confianza ${input.summary.s24Confianza.toLowerCase()} y riesgo ${input.summary.s24Riesgo.toLowerCase()}. Antes de elegir, revisa la cuota y las alineaciones.`,
       ['indicadores', 'confianza', 'riesgo'],
     ),
   ]);

@@ -90,7 +90,7 @@ function TeamBadge({ team, crestUrl }: { team: string; crestUrl?: string }) {
 
   return (
     <div className="flex-shrink-0 w-[86px] h-[86px] md:w-[122px] md:h-[122px] rounded-2xl border border-slate-600/55 bg-slate-900/60 flex items-center justify-center">
-      <span className="text-base md:text-lg font-semibold text-white">{team.split(' ').map((part) => part[0]).join('').slice(0, 3)}</span>
+      <span className="px-2 text-center text-xs font-semibold leading-tight text-white md:px-3 md:text-sm">{team}</span>
     </div>
   );
 }

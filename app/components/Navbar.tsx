@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import type { SportCode } from '@/lib/domain/entities';
 import { isSportActive } from '@/lib/data/config/activeSports';
-import BrandLogo from './BrandLogo';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -27,7 +26,9 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2 group">
-              <BrandLogo className="h-9 w-[174px] md:h-11 md:w-[220px]" />
+              <div className="text-3xl md:text-4xl font-bold text-white">
+                SPORTIVA<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">24</span>
+              </div>
             </Link>
           </div>
 

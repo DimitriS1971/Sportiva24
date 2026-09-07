@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import BrandLogo from './BrandLogo';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -36,7 +35,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-14 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-12 mb-14">
           <div className="space-y-4">
-            <BrandLogo className="h-10 w-[190px]" />
+            <h3 className="text-2xl font-bold text-white">
+              SPORTIVA<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">24</span>
+            </h3>
             <p className="text-sm text-gray-400 font-normal leading-relaxed max-w-xs">
               Inteligencia deportiva basada en datos e inteligencia artificial.
             </p>

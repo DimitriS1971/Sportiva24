@@ -19,7 +19,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/85 backdrop-blur-xl border-b border-blue-950/40">
-      <div className="max-w-7xl mx-auto px-4 md:px-8">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <div className="flex shrink-0 items-center">
@@ -55,7 +55,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="relative z-10 mr-5 flex h-11 w-11 shrink-0 flex-col items-center justify-center space-y-1.5 rounded-md border border-slate-600 bg-black text-white shadow-lg shadow-black/40 md:hidden"
+            className="relative z-10 flex h-11 w-11 shrink-0 flex-col items-center justify-center space-y-1.5 rounded-md border border-slate-600 bg-black text-white shadow-lg shadow-black/40 md:hidden"
             aria-label="Abrir menú"
             aria-expanded={isMobileMenuOpen}
           >

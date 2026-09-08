@@ -5,7 +5,7 @@ import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 
 type Article = { id: string; title: string; category: string; published_at: string | null };
 
-type ArticleAction = 'unpublish' | 'archive';
+type ArticleAction = 'unpublish' | 'archive' | 'republish';
 
 const emptyForm = { title: '', excerpt: '', content: '', image: '', category: 'Fútbol', publish: true };
 
@@ -41,8 +41,9 @@ export default function AdminDashboard({ email }: { email: string }) {
   }
 
   async function updateArticle(id: string, action: ArticleAction) {
-    const label = action === 'archive' ? 'archivar' : 'despublicar';
-    if (!window.confirm(`¿Quieres ${label} este artículo? Dejará de aparecer en la web.`)) return;
+    const label = action === 'archive' ? 'archivar' : action === 'republish' ? 'republicar' : 'despublicar';
+    const detail = action === 'republish' ? 'Volverá a aparecer en la web.' : 'Dejará de aparecer en la web.';
+    if (!window.confirm(`¿Quieres ${label} este artículo? ${detail}`)) return;
 
     setBusyId(id);
     const response = await fetch('/api/admin/articles', {
@@ -51,7 +52,7 @@ export default function AdminDashboard({ email }: { email: string }) {
       body: JSON.stringify({ id, action }),
     });
     const result = await response.json();
-    setMessage(response.ok ? `Artículo ${action === 'archive' ? 'archivado' : 'despublicado'}.` : result.error);
+    setMessage(response.ok ? `Artículo ${action === 'archive' ? 'archivado' : action === 'republish' ? 'republicado' : 'despublicado'}.` : result.error);
     setBusyId(null);
     if (response.ok) await load();
   }
@@ -117,7 +118,7 @@ export default function AdminDashboard({ email }: { email: string }) {
                       </div>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {article.published_at ? <button disabled={isBusy} onClick={() => void updateArticle(article.id, 'unpublish')} className="rounded border border-amber-500/60 px-2 py-1 text-xs text-amber-200 disabled:opacity-50">Despublicar</button> : null}
+                      {article.published_at ? <button disabled={isBusy} onClick={() => void updateArticle(article.id, 'unpublish')} className="rounded border border-amber-500/60 px-2 py-1 text-xs text-amber-200 disabled:opacity-50">Despublicar</button> : <button disabled={isBusy} onClick={() => void updateArticle(article.id, 'republish')} className="rounded border border-cyan-500/60 px-2 py-1 text-xs text-cyan-200 disabled:opacity-50">Republicar</button>}
                       {article.published_at ? <button disabled={isBusy} onClick={() => void updateArticle(article.id, 'archive')} className="rounded border border-slate-600 px-2 py-1 text-xs text-slate-300 disabled:opacity-50">Archivar</button> : null}
                       <button disabled={isBusy} onClick={() => void deleteArticle(article)} className="rounded border border-rose-500/60 px-2 py-1 text-xs text-rose-200 disabled:opacity-50">Eliminar</button>
                     </div>

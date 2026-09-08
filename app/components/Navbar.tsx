@@ -55,7 +55,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="relative z-10 flex h-11 w-11 shrink-0 flex-col items-center justify-center space-y-1.5 rounded-md border border-slate-700 bg-slate-950/80 md:hidden"
+            className="relative z-10 flex h-11 w-11 shrink-0 flex-col items-center justify-center space-y-1.5 rounded-md border border-slate-600 bg-black text-white shadow-lg shadow-black/40 md:hidden"
             aria-label="Abrir menú"
             aria-expanded={isMobileMenuOpen}
           >
@@ -67,7 +67,7 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden pb-4 space-y-1 border-t border-gray-800/50">
+          <div className="absolute left-0 right-0 top-full border-t border-slate-800 bg-black/95 px-4 pb-5 pt-3 shadow-2xl shadow-black/50 md:hidden">
             {visibleNavItems.map((item) => (
               <Link
                 key={item.label}

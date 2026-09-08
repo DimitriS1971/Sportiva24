@@ -55,16 +55,20 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   return (
     <main className="min-h-screen bg-black text-white">
       <Navbar />
-      <article className="mx-auto max-w-4xl px-6 pb-16 pt-12 md:pt-16">
+      <article className="mx-auto max-w-6xl px-6 pb-16 pt-12 md:pt-16">
         <Link href="/noticias" className="text-sm font-semibold text-cyan-300 hover:text-cyan-200">
           ← Volver a noticias
         </Link>
-        <p className="mt-10 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">{article.category}</p>
-        <h1 className="mt-4 text-4xl font-black leading-tight md:text-6xl">{article.title}</h1>
-        <p className="mt-5 text-sm uppercase tracking-wide text-slate-400">{article.date}</p>
-        <p className="mt-8 text-xl leading-relaxed text-slate-300">{article.excerpt}</p>
-        <div className="mt-10 overflow-hidden rounded-2xl bg-slate-900">
-          <img src={article.image} alt={article.title} className="max-h-[32rem] w-full object-cover" />
+        <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(22rem,1.1fr)] lg:gap-12">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">{article.category}</p>
+            <h1 className="mt-4 text-3xl font-black leading-[1.08] md:text-5xl">{article.title}</h1>
+            <p className="mt-5 text-sm uppercase tracking-wide text-slate-400">{article.date}</p>
+            <p className="mt-8 text-lg leading-relaxed text-slate-300">{article.excerpt}</p>
+          </div>
+          <div className="overflow-hidden rounded-2xl bg-slate-900">
+            <img src={article.image} alt={article.title} className="aspect-[4/3] w-full object-cover" />
+          </div>
         </div>
         <div className="prose prose-invert mt-10 max-w-none whitespace-pre-wrap text-lg leading-8 text-slate-200">
           {article.content}

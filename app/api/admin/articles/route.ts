@@ -28,12 +28,12 @@ export async function PATCH(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'No autorizado.' }, { status: 401 });
 
-  const body = await request.json() as { id?: string; action?: 'unpublish' | 'archive' };
+  const body = await request.json() as { id?: string; action?: 'unpublish' | 'archive' | 'republish' };
   if (!body.id || !body.action) return NextResponse.json({ error: 'Faltan datos de la acción.' }, { status: 400 });
 
   const { data, error } = await supabase
     .from('articles')
-    .update({ published_at: null, updated_at: new Date().toISOString() })
+    .update({ published_at: body.action === 'republish' ? new Date().toISOString() : null, updated_at: new Date().toISOString() })
     .eq('id', body.id)
     .select('id,title,category,published_at')
     .single();

@@ -22,3 +22,35 @@ export async function POST(request: Request) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data, { status: 201 });
 }
+
+export async function PATCH(request: Request) {
+  const supabase = await createSupabaseServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: 'No autorizado.' }, { status: 401 });
+
+  const body = await request.json() as { id?: string; action?: 'unpublish' | 'archive' };
+  if (!body.id || !body.action) return NextResponse.json({ error: 'Faltan datos de la acción.' }, { status: 400 });
+
+  const { data, error } = await supabase
+    .from('articles')
+    .update({ published_at: null, updated_at: new Date().toISOString() })
+    .eq('id', body.id)
+    .select('id,title,category,published_at')
+    .single();
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ ...data, action: body.action });
+}
+
+export async function DELETE(request: Request) {
+  const supabase = await createSupabaseServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: 'No autorizado.' }, { status: 401 });
+
+  const body = await request.json() as { id?: string };
+  if (!body.id) return NextResponse.json({ error: 'Falta el artículo.' }, { status: 400 });
+
+  const { error } = await supabase.from('articles').delete().eq('id', body.id);
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return new NextResponse(null, { status: 204 });
+}

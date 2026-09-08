@@ -22,7 +22,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex shrink-0 items-center">
             <Link href="/" className="flex items-center space-x-2 group">
               <div className="text-3xl md:text-4xl font-bold text-white">
                 SPORTIVA<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">24</span>
@@ -53,9 +53,11 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <button
+            type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden flex flex-col space-y-1.5 w-8 h-8 justify-center items-center"
+            className="relative z-10 flex h-11 w-11 shrink-0 flex-col items-center justify-center space-y-1.5 rounded-md border border-slate-700 bg-slate-950/80 md:hidden"
             aria-label="Abrir menú"
+            aria-expanded={isMobileMenuOpen}
           >
             <div className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'transform rotate-45 translate-y-2' : ''}`} />
             <div className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''}`} />

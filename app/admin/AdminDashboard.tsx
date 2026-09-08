@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 
-type Article = { id: string; title: string; excerpt: string; content: string; image: string; category: string; published_at: string | null };
+type Article = { id: string; title: string; excerpt: string; content: string; image: string; category: string; published_at: string | null; featured: boolean };
 
 type ArticleAction = 'unpublish' | 'archive' | 'republish';
 
@@ -70,6 +70,19 @@ export default function AdminDashboard({ email }: { email: string }) {
     if (response.ok) await load();
   }
 
+  async function toggleFeatured(article: Article) {
+    setBusyId(article.id);
+    const response = await fetch('/api/admin/articles', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: article.id, action: article.featured ? 'unfeature' : 'feature' }),
+    });
+    const result = await response.json();
+    setMessage(response.ok ? (article.featured ? 'Artículo quitado de destacados.' : 'Artículo marcado como destacado.') : result.error);
+    setBusyId(null);
+    if (response.ok) await load();
+  }
+
   async function deleteArticle(article: Article) {
     if (!window.confirm(`¿Eliminar definitivamente "${article.title}"? Esta acción no se puede deshacer.`)) return;
 
@@ -127,11 +140,12 @@ export default function AdminDashboard({ email }: { email: string }) {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <h3 className="font-semibold">{article.title}</h3>
-                        <p className="mt-1 text-xs text-slate-400">{article.category} · {article.published_at ? 'Publicado' : 'Archivado / no publicado'}</p>
+                        <p className="mt-1 text-xs text-slate-400">{article.category} · {article.published_at ? 'Publicado' : 'Archivado / no publicado'}{article.featured ? ' · Destacado' : ''}</p>
                       </div>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
                       <button disabled={isBusy} onClick={() => editArticle(article)} className="rounded border border-blue-500/60 px-2 py-1 text-xs text-blue-200 disabled:opacity-50">Editar</button>
+                      <button disabled={isBusy} onClick={() => void toggleFeatured(article)} className="rounded border border-yellow-500/60 px-2 py-1 text-xs text-yellow-200 disabled:opacity-50">{article.featured ? 'Quitar destacado' : 'Destacar'}</button>
                       {article.published_at ? <button disabled={isBusy} onClick={() => void updateArticle(article.id, 'unpublish')} className="rounded border border-amber-500/60 px-2 py-1 text-xs text-amber-200 disabled:opacity-50">Despublicar</button> : <button disabled={isBusy} onClick={() => void updateArticle(article.id, 'republish')} className="rounded border border-cyan-500/60 px-2 py-1 text-xs text-cyan-200 disabled:opacity-50">Republicar</button>}
                       {article.published_at ? <button disabled={isBusy} onClick={() => void updateArticle(article.id, 'archive')} className="rounded border border-slate-600 px-2 py-1 text-xs text-slate-300 disabled:opacity-50">Archivar</button> : null}
                       <button disabled={isBusy} onClick={() => void deleteArticle(article)} className="rounded border border-rose-500/60 px-2 py-1 text-xs text-rose-200 disabled:opacity-50">Eliminar</button>

@@ -7,7 +7,7 @@ export async function GET() {
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'No autorizado.' }, { status: 401 });
-  const { data, error } = await supabase.from('articles').select('id,title,category,published_at').order('created_at', { ascending: false });
+  const { data, error } = await supabase.from('articles').select('id,title,excerpt,content,image,category,published_at').order('created_at', { ascending: false });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
 }
@@ -28,8 +28,20 @@ export async function PATCH(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'No autorizado.' }, { status: 401 });
 
-  const body = await request.json() as { id?: string; action?: 'unpublish' | 'archive' | 'republish' };
-  if (!body.id || !body.action) return NextResponse.json({ error: 'Faltan datos de la acción.' }, { status: 400 });
+  const body = await request.json() as { id?: string; action?: 'unpublish' | 'archive' | 'republish'; title?: string; excerpt?: string; content?: string; image?: string; category?: string };
+  if (!body.id) return NextResponse.json({ error: 'Falta el artículo.' }, { status: 400 });
+
+  if (!body.action) {
+    if (!body.title || !body.excerpt || !body.content) return NextResponse.json({ error: 'Título, resumen y contenido son obligatorios.' }, { status: 400 });
+    const { data, error } = await supabase
+      .from('articles')
+      .update({ title: body.title, excerpt: body.excerpt, content: body.content, image: body.image || '/hero/hero-sportiva24.svg', category: body.category || 'Fútbol', updated_at: new Date().toISOString() })
+      .eq('id', body.id)
+      .select('id,title,excerpt,content,image,category,published_at')
+      .single();
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(data);
+  }
 
   const { data, error } = await supabase
     .from('articles')

@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 
-type Article = { id: string; title: string; category: string; published_at: string | null };
+type Article = { id: string; title: string; excerpt: string; content: string; image: string; category: string; published_at: string | null };
 
 type ArticleAction = 'unpublish' | 'archive' | 'republish';
 
@@ -14,6 +14,7 @@ export default function AdminDashboard({ email }: { email: string }) {
   const [form, setForm] = useState(emptyForm);
   const [message, setMessage] = useState('');
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   async function load() {
     const response = await fetch('/api/admin/articles');
@@ -28,16 +29,28 @@ export default function AdminDashboard({ email }: { email: string }) {
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const response = await fetch('/api/admin/articles', {
-      method: 'POST',
+      method: editingId ? 'PATCH' : 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
+      body: JSON.stringify(editingId ? { id: editingId, ...form } : form),
     });
     const result = await response.json();
-    setMessage(response.ok ? 'Artículo guardado.' : result.error);
+    setMessage(response.ok ? (editingId ? 'Artículo actualizado.' : 'Artículo guardado.') : result.error);
     if (response.ok) {
       setForm(emptyForm);
+      setEditingId(null);
       await load();
     }
+  }
+
+  function editArticle(article: Article) {
+    setEditingId(article.id);
+    setForm({ title: article.title, excerpt: article.excerpt, content: article.content, image: article.image, category: article.category, publish: Boolean(article.published_at) });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
+    setForm(emptyForm);
   }
 
   async function updateArticle(id: string, action: ArticleAction) {
@@ -91,7 +104,7 @@ export default function AdminDashboard({ email }: { email: string }) {
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <form onSubmit={save} className="rounded-2xl border border-slate-800 bg-black/30 p-5 md:p-7">
-            <h2 className="text-xl font-semibold">Nuevo artículo</h2>
+            <div className="flex items-center justify-between gap-3"><h2 className="text-xl font-semibold">{editingId ? 'Editar artículo' : 'Nuevo artículo'}</h2>{editingId ? <button type="button" onClick={cancelEdit} className="text-sm text-slate-400 hover:text-white">Cancelar</button> : null}</div>
             <input required placeholder="Título" value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} className="mt-5 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-3" />
             <input placeholder="Imagen (URL opcional)" value={form.image} onChange={(event) => setForm({ ...form, image: event.target.value })} className="mt-3 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-3" />
             <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto]">
@@ -101,7 +114,7 @@ export default function AdminDashboard({ email }: { email: string }) {
             <textarea required placeholder="Contenido" value={form.content} onChange={(event) => setForm({ ...form, content: event.target.value })} rows={10} className="mt-3 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-3" />
             <label className="mt-4 flex items-center gap-2 text-sm text-slate-300"><input type="checkbox" checked={form.publish} onChange={(event) => setForm({ ...form, publish: event.target.checked })} /> Publicar inmediatamente</label>
             {message ? <p className="mt-4 text-sm text-cyan-300">{message}</p> : null}
-            <button className="mt-4 rounded-lg bg-cyan-500 px-4 py-3 font-semibold text-slate-950">Guardar artículo</button>
+            <button className="mt-4 rounded-lg bg-cyan-500 px-4 py-3 font-semibold text-slate-950">{editingId ? 'Guardar cambios' : 'Guardar artículo'}</button>
           </form>
 
           <section className="rounded-2xl border border-slate-800 bg-black/30 p-5 md:p-7">
@@ -118,6 +131,7 @@ export default function AdminDashboard({ email }: { email: string }) {
                       </div>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
+                      <button disabled={isBusy} onClick={() => editArticle(article)} className="rounded border border-blue-500/60 px-2 py-1 text-xs text-blue-200 disabled:opacity-50">Editar</button>
                       {article.published_at ? <button disabled={isBusy} onClick={() => void updateArticle(article.id, 'unpublish')} className="rounded border border-amber-500/60 px-2 py-1 text-xs text-amber-200 disabled:opacity-50">Despublicar</button> : <button disabled={isBusy} onClick={() => void updateArticle(article.id, 'republish')} className="rounded border border-cyan-500/60 px-2 py-1 text-xs text-cyan-200 disabled:opacity-50">Republicar</button>}
                       {article.published_at ? <button disabled={isBusy} onClick={() => void updateArticle(article.id, 'archive')} className="rounded border border-slate-600 px-2 py-1 text-xs text-slate-300 disabled:opacity-50">Archivar</button> : null}
                       <button disabled={isBusy} onClick={() => void deleteArticle(article)} className="rounded border border-rose-500/60 px-2 py-1 text-xs text-rose-200 disabled:opacity-50">Eliminar</button>

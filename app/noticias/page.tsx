@@ -1,18 +1,52 @@
-"use client";
-
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
 import NewsCardPremium from "@/app/components/NewsCardPremium";
-import { newsData } from "@/app/data/news";
+import { newsData, type NewsArticle } from "@/app/data/news";
 import Link from "next/link";
 import AdSlot from "@/app/components/AdSlot";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export default function Noticias() {
+async function getPublishedArticles(): Promise<NewsArticle[]> {
+  const fallbackArticles = newsData.map((article) => ({ ...article }));
+
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { data, error } = await supabase
+      .from("articles")
+      .select("id,slug,title,excerpt,content,image,category,published_at,featured")
+      .not("published_at", "is", null)
+      .lte("published_at", new Date().toISOString())
+      .order("published_at", { ascending: false });
+
+    if (error || !data?.length) return fallbackArticles;
+
+    return data.map((article) => ({
+      id: article.id,
+      slug: article.slug,
+      title: article.title,
+      excerpt: article.excerpt,
+      content: article.content,
+      image: article.image,
+      category: article.category,
+      date: new Date(article.published_at as string).toLocaleDateString("es-CR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }),
+      featured: article.featured,
+    }));
+  } catch {
+    return fallbackArticles;
+  }
+}
+
+export default async function Noticias() {
+  const articles = await getPublishedArticles();
   // Get featured article
-  const featuredArticle = newsData.find((article) => article.featured) || newsData[0];
+  const featuredArticle = articles.find((article) => article.featured) || articles[0];
   
   // Get remaining articles for grid
-  const gridArticles = newsData.filter((article) => !article.featured).slice(0, 6);
+  const gridArticles = articles.filter((article) => article.id !== featuredArticle.id).slice(0, 6);
 
   return (
     <main className="min-h-screen bg-black text-white">

@@ -15,8 +15,13 @@ export default function AdminLoginPage() {
     event.preventDefault();
     setLoading(true);
     setError('');
-    const { error: signInError } = await createSupabaseBrowserClient().auth.signInWithPassword({ email, password });
-    if (signInError) setError('Correo o contraseña incorrectos.');
+    const { error: signInError } = await createSupabaseBrowserClient().auth.signInWithPassword({ email: email.trim(), password });
+    if (signInError) {
+      const message = signInError.message.toLowerCase();
+      setError(message.includes('email not confirmed')
+        ? 'Este correo todavía no está confirmado en Supabase.'
+        : `Supabase rechazó el acceso: ${signInError.message}`);
+    }
     else { router.push('/admin'); router.refresh(); }
     setLoading(false);
   }

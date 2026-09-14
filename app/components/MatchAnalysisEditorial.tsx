@@ -45,11 +45,10 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
           <span className="rounded-full border border-cyan-300/35 bg-cyan-400/10 px-3 py-1">Análisis S24</span>
           <span className="rounded-full border border-slate-600/60 bg-slate-900/60 px-3 py-1">Previa editorial</span>
         </div>
-        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Fecha</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.scheduledAt ? <LocalizedMatchDateTime dateTimeUtc={context.fixture.scheduledAt} fallback="Fecha por confirmar" dateOnly /> : 'No informada'}</p></div>
-          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Hora</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.scheduledAt ? <LocalizedMatchDateTime dateTimeUtc={context.fixture.scheduledAt} fallback={informe.match.time} /> : informe.match.time}</p></div>
-          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Estadio</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.venue ?? 'No informado por el proveedor'}</p></div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Fecha y hora</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.scheduledAt ? <LocalizedMatchDateTime dateTimeUtc={context.fixture.scheduledAt} fallback={informe.match.time} /> : informe.match.time}</p></div>
           <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Competición</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.competition ?? informe.match.competition}</p></div>
+          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Estadio</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.venue ?? 'No informado por el proveedor'}</p></div>
         </div>
         {context?.lineups.length ? (
           <div className="mt-4 grid gap-3 md:grid-cols-2">
@@ -63,10 +62,10 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
           </div>
         ) : null}
         <h1 className="mt-5 max-w-4xl font-editorial text-4xl leading-tight text-white md:text-6xl">{homeTeam} vs {awayTeam}: ventaja local con margen de respuesta</h1>
-        <p className="mt-4 max-w-4xl text-base leading-7 text-slate-200 md:text-lg">La lectura combina el modelo S24 con forma reciente, posición competitiva, historial directo y contexto de localía. Inter llega con una base más estable, pero Udinese conserva una vía clara para incomodar si sostiene el bloque y convierte sus transiciones.</p>
+        <p className="mt-4 max-w-4xl text-base leading-7 text-slate-200 md:text-lg">La lectura combina el modelo S24 con forma reciente, posición competitiva, historial directo y contexto de localía. {homeTeam} llega con la señal local del modelo, pero {awayTeam} conserva una vía clara para incomodar si sostiene el bloque y convierte sus transiciones.</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-cyan-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Señal principal</p><p className="mt-2 text-xl font-semibold text-cyan-100">{homeTeam}</p><p className="mt-1 text-sm text-slate-300">Mejor combinación de forma, tabla y localía.</p></div>
-          <div className="rounded-2xl border border-amber-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Riesgo clave</p><p className="mt-2 text-xl font-semibold text-amber-100">Partido cerrado</p><p className="mt-1 text-sm text-slate-300">Udinese puede reducir espacios y llevarlo al detalle.</p></div>
+          <div className="rounded-2xl border border-amber-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Riesgo clave</p><p className="mt-2 text-xl font-semibold text-amber-100">Partido cerrado</p><p className="mt-1 text-sm text-slate-300">{awayTeam} puede reducir espacios y llevarlo al detalle.</p></div>
           <div className="rounded-2xl border border-emerald-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Confianza</p><p className="mt-2 text-xl font-semibold text-emerald-100">Media-alta</p><p className="mt-1 text-sm text-slate-300">La diferencia existe, pero no elimina la varianza.</p></div>
         </div>
       </section>
@@ -91,9 +90,9 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">02 · Diferencial competitivo</p>
           <h2 className="mt-2 font-editorial text-3xl text-white">Qué inclina la previa</h2>
           <div className="mt-5 space-y-3">
-            <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-4"><p className="font-semibold text-emerald-100">Inter controla mejor el punto de partida</p><p className="mt-1 text-sm leading-6 text-slate-300">Llega 3.º con {homeStanding?.points ?? 9} puntos y una secuencia reciente de {recentSummary(context, 'home')}.</p></div>
-            <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-4"><p className="font-semibold text-amber-100">Udinese necesita sobrevivir al primer tramo</p><p className="mt-1 text-sm leading-6 text-slate-300">Está 13.º con {awayStanding?.points ?? 4} puntos; su mejor escenario es mantener el partido corto y atacar tras recuperación.</p></div>
-            <div className="rounded-xl border border-slate-700 bg-black/25 p-4"><p className="font-semibold text-white">El historial respalda al local, pero no decide solo</p><p className="mt-1 text-sm leading-6 text-slate-300">En la muestra disponible: {h2h?.homeWins ?? 4} victorias de Inter, {h2h?.draws ?? 0} empates y {h2h?.awayWins ?? 1} de Udinese.</p></div>
+            <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-4"><p className="font-semibold text-emerald-100">{homeTeam} controla mejor el punto de partida</p><p className="mt-1 text-sm leading-6 text-slate-300">Ocupa la posición {homeStanding?.position ?? 'no informada'} con {homeStanding?.points ?? 'puntos no informados'} y una secuencia reciente de {recentSummary(context, 'home')}.</p></div>
+            <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-4"><p className="font-semibold text-amber-100">{awayTeam} necesita sobrevivir al primer tramo</p><p className="mt-1 text-sm leading-6 text-slate-300">Ocupa la posición {awayStanding?.position ?? 'no informada'} con {awayStanding?.points ?? 'puntos no informados'}; su mejor escenario es mantener el partido corto y atacar tras recuperación.</p></div>
+            <div className="rounded-xl border border-slate-700 bg-black/25 p-4"><p className="font-semibold text-white">El historial respalda al local, pero no decide solo</p><p className="mt-1 text-sm leading-6 text-slate-300">En la muestra disponible: {h2h?.homeWins ?? 0} victorias de {homeTeam}, {h2h?.draws ?? 0} empates y {h2h?.awayWins ?? 0} de {awayTeam}.</p></div>
           </div>
         </article>
       </section>
@@ -102,29 +101,29 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">03 · Lectura táctica</p>
         <h2 className="mt-2 font-editorial text-3xl text-white">Dónde puede romperse el partido</h2>
         <div className="mt-5 grid gap-4 md:grid-cols-3">
-          <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-cyan-100">Salida de Inter</p><p className="mt-2 text-sm leading-6 text-slate-300">El local debería buscar amplitud, mover el bloque visitante y atacar el intervalo entre lateral y central. Si encuentra ventaja temprano, el partido puede abrirse.</p></div>
-          <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-amber-100">Bloque de Udinese</p><p className="mt-2 text-sm leading-6 text-slate-300">La prioridad visitante será proteger el carril central, negar recepciones limpias y obligar a Inter a finalizar desde posiciones menos cómodas.</p></div>
-          <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-rose-100">Transiciones</p><p className="mt-2 text-sm leading-6 text-slate-300">La principal vía de sorpresa es la espalda de los laterales locales después de pérdida. El balance defensivo de Inter será más importante que la posesión total.</p></div>
+          <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-cyan-100">Salida de {homeTeam}</p><p className="mt-2 text-sm leading-6 text-slate-300">El local debería buscar amplitud, mover el bloque visitante y atacar el intervalo entre lateral y central. Si encuentra ventaja temprano, el partido puede abrirse.</p></div>
+          <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-amber-100">Bloque de {awayTeam}</p><p className="mt-2 text-sm leading-6 text-slate-300">La prioridad visitante será proteger el carril central, negar recepciones limpias y obligar a {homeTeam} a finalizar desde posiciones menos cómodas.</p></div>
+          <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-rose-100">Transiciones</p><p className="mt-2 text-sm leading-6 text-slate-300">La principal vía de sorpresa es la espalda de los laterales locales después de pérdida. El balance defensivo de {homeTeam} será más importante que la posesión total.</p></div>
         </div>
       </section>
 
       <section className="grid gap-5 lg:grid-cols-2">
-        <article className="rounded-2xl border border-emerald-400/25 bg-emerald-500/5 p-5 md:p-7"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-300">04 · Escenario favorable</p><h2 className="mt-2 font-editorial text-2xl text-white">Inter marca primero</h2><p className="mt-3 text-sm leading-7 text-slate-200">Si Inter convierte su dominio territorial en ventaja antes del descanso, Udinese tendrá que adelantar líneas y dejará más espacios para el segundo golpe. En ese escenario, la probabilidad local gana fuerza y el 2-0 aparece como desenlace coherente.</p></article>
-        <article className="rounded-2xl border border-amber-400/25 bg-amber-500/5 p-5 md:p-7"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-300">05 · Escenario de riesgo</p><h2 className="mt-2 font-editorial text-2xl text-white">Udinese resiste 60 minutos</h2><p className="mt-3 text-sm leading-7 text-slate-200">Un 0-0 prolongado reduce la ventaja estructural de Inter y aumenta el peso de una pelota parada o una transición. En ese contexto, el empate deja de ser secundario y la lectura debe actualizarse con el volumen real de ocasiones.</p></article>
+        <article className="rounded-2xl border border-emerald-400/25 bg-emerald-500/5 p-5 md:p-7"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-300">04 · Escenario favorable</p><h2 className="mt-2 font-editorial text-2xl text-white">{homeTeam} marca primero</h2><p className="mt-3 text-sm leading-7 text-slate-200">Si {homeTeam} convierte su dominio territorial en ventaja antes del descanso, {awayTeam} tendrá que adelantar líneas y dejará más espacios para el segundo golpe. En ese escenario, la probabilidad local gana fuerza.</p></article>
+        <article className="rounded-2xl border border-amber-400/25 bg-amber-500/5 p-5 md:p-7"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-300">05 · Escenario de riesgo</p><h2 className="mt-2 font-editorial text-2xl text-white">{awayTeam} resiste 60 minutos</h2><p className="mt-3 text-sm leading-7 text-slate-200">Un 0-0 prolongado reduce la ventaja estructural de {homeTeam} y aumenta el peso de una pelota parada o una transición. En ese contexto, el empate deja de ser secundario y la lectura debe actualizarse con el volumen real de ocasiones.</p></article>
       </section>
 
       <section className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 md:p-7">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">06 · Checklist de seguimiento</p>
         <h2 className="mt-2 font-editorial text-3xl text-white">Qué mirar antes del saque inicial</h2>
         <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {['Alineación y disponibilidad del mediocampo de Inter', 'Altura del bloque inicial de Udinese', 'Primeros 15 minutos y recuperaciones en campo rival', 'Balón parado y defensa de centros laterales'].map((item) => <div key={item} className="rounded-xl border border-slate-800 bg-black/25 p-4 text-sm leading-6 text-slate-200">{item}</div>)}
+          {[`Alineación y disponibilidad del mediocampo de ${homeTeam}`, `Altura del bloque inicial de ${awayTeam}`, 'Primeros 15 minutos y recuperaciones en campo rival', 'Balón parado y defensa de centros laterales'].map((item) => <div key={item} className="rounded-xl border border-slate-800 bg-black/25 p-4 text-sm leading-6 text-slate-200">{item}</div>)}
         </div>
       </section>
 
       <section className="rounded-2xl border border-cyan-400/25 bg-[linear-gradient(135deg,rgba(8,47,73,0.65),rgba(2,6,23,0.96))] p-5 md:p-7">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan-200">Conclusión editorial</p>
-        <h2 className="mt-2 font-editorial text-3xl text-white">Inter parte arriba, pero la clave es la paciencia</h2>
-        <p className="mt-4 max-w-5xl text-base leading-8 text-slate-200">La combinación de localía, posición, forma reciente y diferencial histórico coloca a Inter como favorito claro, aunque no absoluto. La probabilidad central es 64% para el local, 21% para el empate y 15% para Udinese. La lectura pierde solidez si Inter no genera ocasiones claras o si Udinese convierte una transición temprana. Es una previa informativa: las alineaciones, el ritmo inicial y la calidad de las ocasiones deben validar o rebajar esta ventaja.</p>
+        <h2 className="mt-2 font-editorial text-3xl text-white">{homeTeam} parte arriba, pero la clave es la paciencia</h2>
+        <p className="mt-4 max-w-5xl text-base leading-8 text-slate-200">La combinación de localía, posición, forma reciente y diferencial histórico coloca a {homeTeam} como favorito claro, aunque no absoluto. La probabilidad central es {probabilities.home}% para el local, {probabilities.draw}% para el empate y {probabilities.away}% para {awayTeam}. La lectura pierde solidez si {homeTeam} no genera ocasiones claras o si {awayTeam} convierte una transición temprana. Es una previa informativa: las alineaciones, el ritmo inicial y la calidad de las ocasiones deben validar o rebajar esta ventaja.</p>
       </section>
     </section>
   );

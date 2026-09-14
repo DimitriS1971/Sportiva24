@@ -103,17 +103,21 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
           <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Competición</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.competition ?? informe.match.competition}</p></div>
           <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Estadio</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.venue ?? 'No informado por el proveedor'}</p></div>
         </div>
-        {context?.lineups.length ? (
-          <div className="mx-auto mt-4 grid max-w-5xl gap-3 text-center md:grid-cols-2">
-            {context.lineups.map((lineup) => (
-              <div key={lineup.teamName} className="rounded-xl border border-slate-700/60 bg-black/25 p-4">
-                <div className="flex items-center justify-center gap-3"><p className="font-semibold text-white">{lineup.teamName}</p>{lineup.formation ? <span className="text-xs text-cyan-200">{lineup.formation}</span> : null}</div>
-                <p className="mt-2 text-[10px] uppercase tracking-[0.13em] text-slate-500">Alineación confirmada</p>
-                <p className="mt-1 text-sm leading-6 text-slate-200">{lineup.starters.join(' · ') || 'Titulares no informados'}</p>
-              </div>
-            ))}
-          </div>
-        ) : null}
+        <div className="mx-auto mt-4 max-w-5xl rounded-2xl border border-slate-700/60 bg-black/25 p-4 text-center md:p-5">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-cyan-200">Alineaciones</p>
+          {context?.lineups.length ? (
+            <div className="mt-3 grid gap-3 md:grid-cols-2">
+              {context.lineups.map((lineup) => (
+                <div key={lineup.teamName} className="rounded-xl border border-slate-700/60 bg-slate-950/60 p-4">
+                  <div className="flex items-center justify-center gap-3"><p className="font-semibold text-white">{lineup.teamName}</p>{lineup.formation ? <span className="text-xs text-cyan-200">{lineup.formation}</span> : null}</div>
+                  <p className="mt-2 text-[10px] uppercase tracking-[0.13em] text-slate-500">Titulares confirmados</p>
+                  <p className="mt-1 text-sm leading-6 text-slate-200">{lineup.starters.join(' · ') || 'No informados'}</p>
+                  {lineup.substitutes.length > 0 ? <><p className="mt-3 text-[10px] uppercase tracking-[0.13em] text-slate-500">Suplentes</p><p className="mt-1 text-sm leading-6 text-slate-300">{lineup.substitutes.join(' · ')}</p></> : null}
+                </div>
+              ))}
+            </div>
+          ) : <p className="mt-2 text-sm text-slate-400">Las alineaciones todavía no fueron confirmadas por el proveedor.</p>}
+        </div>
         <h1 className="mx-auto mt-5 max-w-4xl font-editorial text-4xl leading-tight text-white md:text-6xl">{homeTeam} vs {awayTeam}: {favoredTeam} parte como favorito</h1>
         <p className="mx-auto mt-4 max-w-4xl text-base leading-7 text-slate-200 md:text-lg">{copy.intro}</p>
         <div className="mx-auto mt-6 grid max-w-5xl gap-3 text-center sm:grid-cols-3">

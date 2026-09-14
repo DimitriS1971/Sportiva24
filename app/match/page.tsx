@@ -7,7 +7,7 @@ import MatchExplorer from '../components/MatchExplorer';
 export const revalidate = 30;
 
 export default async function MatchesPage() {
-  const matches = await getTodayFootballMatches(12);
+  const matches = await getTodayFootballMatches(200);
 
   return (
     <main className="min-h-screen bg-black text-white">

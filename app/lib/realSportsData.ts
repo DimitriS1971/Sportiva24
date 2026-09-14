@@ -69,7 +69,6 @@ function envFlag(value: string | undefined, fallback: boolean): boolean {
   return fallback;
 }
 
-const topLeaguesOnly = envFlag(process.env.NEXT_PUBLIC_TOP_LEAGUES_ONLY, true);
 const strictFreeMode = envFlag(process.env.NEXT_PUBLIC_FREE_STRICT_MODE, false);
 
 function mapToIntelligenceMatch(match: Awaited<ReturnType<typeof sportsDataService.getTodayMatches>>[number]): IntelligenceMatch {
@@ -98,10 +97,10 @@ function mapToIntelligenceMatch(match: Awaited<ReturnType<typeof sportsDataServi
   };
 }
 
-function applyQualityFilters(matches: IntelligenceMatch[], limit: number): IntelligenceMatch[] {
+function applyQualityFilters(matches: IntelligenceMatch[], limit: number, onlyTopLeagues = false): IntelligenceMatch[] {
   let filtered = matches;
 
-  if (topLeaguesOnly) {
+  if (onlyTopLeagues) {
     filtered = filtered.filter((match) => isTopCompetition(match.competition));
   }
 
@@ -119,6 +118,7 @@ export async function getFeaturedFootballMatches(limit = 4): Promise<Intelligenc
       .map(mapToIntelligenceMatch)
       .filter((match) => match.status !== 'FINALIZADO'),
     limit,
+    true,
   );
 }
 

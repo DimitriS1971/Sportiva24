@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import type { IntelligenceMatch } from '@/lib/domain/intelligenceCenter';
 import { displayLabel } from '@/app/lib/displayLabel';
+import { sortMatchesByImportance } from '@/app/lib/footballMatchPriority';
 import { getTeamCrest } from '@/app/lib/teamCrests';
 import LocalizedMatchTime from './LocalizedMatchTime';
 
@@ -35,7 +36,12 @@ export default function MatchExplorer({ matches }: { matches: IntelligenceMatch[
   const router = useRouter();
   const [country, setCountry] = useState('Todos los países');
   const countries = ['Todos los países', ...Array.from(new Set(matches.map(getMatchCountry))).sort()];
-  const visibleMatches = matches.filter((match) => country === 'Todos los países' || getMatchCountry(match) === country);
+  const filteredMatches = matches.filter((match) => country === 'Todos los países' || getMatchCountry(match) === country);
+  const visibleMatches = [
+    ...sortMatchesByImportance(filteredMatches.filter((match) => match.status === 'EN VIVO')),
+    ...sortMatchesByImportance(filteredMatches.filter((match) => match.status === 'PROXIMO')),
+    ...sortMatchesByImportance(filteredMatches.filter((match) => match.status === 'FINALIZADO')),
+  ];
 
   useEffect(() => {
     const refreshInterval = window.setInterval(() => router.refresh(), 30_000);
@@ -58,7 +64,7 @@ export default function MatchExplorer({ matches }: { matches: IntelligenceMatch[
 
       {visibleMatches.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {visibleMatches.map((match) => {
+          {visibleMatches.map((match, index) => {
             const statusColor = match.status === 'EN VIVO'
               ? 'text-green-300 border-green-500/35 bg-green-500/10'
               : 'text-gray-300 border-gray-700/60 bg-gray-800/40';
@@ -68,38 +74,52 @@ export default function MatchExplorer({ matches }: { matches: IntelligenceMatch[
               : match.status === 'FINALIZADO'
                 ? `Final${match.elapsedMinutes ? ` · ${match.elapsedMinutes}'` : ''}`
                 : match.status;
+            const previousStatus = visibleMatches[index - 1]?.status;
+            const sectionTitle = match.status === 'EN VIVO'
+              ? 'En vivo'
+              : match.status === 'PROXIMO'
+                ? 'Próximos partidos'
+                : 'Partidos finalizados';
 
             return (
-              <article key={match.slug} className="rounded-2xl border border-gray-800/75 bg-gradient-to-br from-gray-950/90 via-gray-950/80 to-black p-5 md:p-6">
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <div className="flex min-w-0 items-center gap-2">
-                    <p className="truncate text-[11px] text-gray-500">{displayLabel(match.competition)}</p>
-                    {match.sourceLabel ? <span className="rounded-full border border-sky-500/40 bg-sky-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-sky-300">{match.sourceTier === 'paid' ? 'Fuente API' : 'Fuente gratis'}</span> : null}
+              <div key={match.slug} className="contents">
+                {previousStatus !== match.status ? (
+                  <div className="col-span-full mt-4 flex items-center justify-between border-b border-slate-800 pb-3 first:mt-0">
+                    <h2 className="text-2xl font-semibold text-white">{sectionTitle}</h2>
+                    <span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">{match.status === 'EN VIVO' ? 'Prioridad en tiempo real' : 'Por importancia'}</span>
                   </div>
-                  <span className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold ${statusColor}`}>{matchClock}</span>
-                </div>
-
-                <div className="mb-5 flex items-center justify-between gap-4">
-                  <div className="flex flex-1 flex-col items-center">
-                    <Image src={getTeamCrest(match.team1, match.team1Logo)} alt={`Escudo de ${match.team1}`} width={64} height={64} className="h-16 w-16 object-contain" />
-                    <p className="mt-2 text-center text-sm font-semibold text-white">{match.team1}</p>
+                ) : null}
+                <article className="rounded-2xl border border-gray-800/75 bg-gradient-to-br from-gray-950/90 via-gray-950/80 to-black p-5 md:p-6">
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <p className="truncate text-[11px] text-gray-500">{displayLabel(match.competition)}</p>
+                      {match.sourceLabel ? <span className="rounded-full border border-sky-500/40 bg-sky-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-sky-300">{match.sourceTier === 'paid' ? 'Fuente API' : 'Fuente gratis'}</span> : null}
+                    </div>
+                    <span className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold ${statusColor}`}>{matchClock}</span>
                   </div>
-                  <span className="text-lg font-bold text-blue-200">{hasScore ? `${match.homeScore} - ${match.awayScore}` : 'VS'}</span>
-                  <div className="flex flex-1 flex-col items-center">
-                    <Image src={getTeamCrest(match.team2, match.team2Logo)} alt={`Escudo de ${match.team2}`} width={64} height={64} className="h-16 w-16 object-contain" />
-                    <p className="mt-2 text-center text-sm font-semibold text-white">{match.team2}</p>
+
+                  <div className="mb-5 flex items-center justify-between gap-4">
+                    <div className="flex flex-1 flex-col items-center">
+                      <Image src={getTeamCrest(match.team1, match.team1Logo)} alt={`Escudo de ${match.team1}`} width={64} height={64} className="h-16 w-16 object-contain" />
+                      <p className="mt-2 text-center text-sm font-semibold text-white">{match.team1}</p>
+                    </div>
+                    <span className="text-lg font-bold text-blue-200">{hasScore ? `${match.homeScore} - ${match.awayScore}` : 'VS'}</span>
+                    <div className="flex flex-1 flex-col items-center">
+                      <Image src={getTeamCrest(match.team2, match.team2Logo)} alt={`Escudo de ${match.team2}`} width={64} height={64} className="h-16 w-16 object-contain" />
+                      <p className="mt-2 text-center text-sm font-semibold text-white">{match.team2}</p>
+                    </div>
                   </div>
-                </div>
 
-                <div className="mb-5 grid grid-cols-3 gap-3 rounded-xl border border-gray-800/70 bg-gray-900/45 p-3">
-                  <div className="text-center"><p className="text-[11px] text-gray-500">S24</p><p className="text-xl font-bold text-blue-300">{match.s24Index}</p></div>
-                  <div className="text-center"><p className="text-[11px] text-gray-500">Confianza</p><p className="text-sm font-semibold text-emerald-300">{match.confidence}</p></div>
-                  <div className="text-center"><p className="text-[11px] text-gray-500">Prob.</p><p className="text-xl font-bold text-orange-300">{match.probability}%</p></div>
-                </div>
+                  <div className="mb-5 grid grid-cols-3 gap-3 rounded-xl border border-gray-800/70 bg-gray-900/45 p-3">
+                    <div className="text-center"><p className="text-[11px] text-gray-500">S24</p><p className="text-xl font-bold text-blue-300">{match.s24Index}</p></div>
+                    <div className="text-center"><p className="text-[11px] text-gray-500">Confianza</p><p className="text-sm font-semibold text-emerald-300">{match.confidence}</p></div>
+                    <div className="text-center"><p className="text-[11px] text-gray-500">Prob.</p><p className="text-xl font-bold text-orange-300">{match.probability}%</p></div>
+                  </div>
 
-                <p className="mb-4 text-xs text-gray-500"><LocalizedMatchTime dateTimeUtc={match.dateTimeUtc} fallback={match.time} /></p>
-                <Link href={`/match/${match.slug}`} className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-3 text-sm font-semibold text-white transition-all hover:from-blue-500 hover:to-blue-400">Ver análisis completo</Link>
-              </article>
+                  <p className="mb-4 text-xs text-gray-500"><LocalizedMatchTime dateTimeUtc={match.dateTimeUtc} fallback={match.time} /></p>
+                  <Link href={`/match/${match.slug}`} className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-3 text-sm font-semibold text-white transition-all hover:from-blue-500 hover:to-blue-400">Ver análisis completo</Link>
+                </article>
+              </div>
             );
           })}
         </div>

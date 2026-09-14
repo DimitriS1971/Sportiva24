@@ -28,14 +28,22 @@ function getMatchCountry(match: IntelligenceMatch): string {
   return countryByCompetition.find(({ pattern }) => pattern.test(competition))?.country ?? 'Internacional';
 }
 
-export default function FeaturedMatches({ matches }: { matches: IntelligenceMatch[] }) {
+interface FeaturedMatchesProps {
+  upcomingMatches: IntelligenceMatch[];
+  activeMatches: IntelligenceMatch[];
+}
+
+export default function FeaturedMatches({ upcomingMatches, activeMatches }: FeaturedMatchesProps) {
   const router = useRouter();
   const [country, setCountry] = useState('Todos los países');
+  const matches = [...upcomingMatches, ...activeMatches];
   const countries = ['Todos los países', ...Array.from(new Set(matches.map(getMatchCountry))).sort()];
-  const visibleMatches = matches
-    .filter((match) => match.status !== 'FINALIZADO')
+  const visibleUpcomingMatches = upcomingMatches
     .filter((match) => country === 'Todos los países' || getMatchCountry(match) === country)
-    .slice(0, 6);
+    .slice(0, 3);
+  const visibleActiveMatches = activeMatches
+    .filter((match) => country === 'Todos los países' || getMatchCountry(match) === country)
+    .slice(0, 3);
 
   useEffect(() => {
     const refreshInterval = window.setInterval(() => router.refresh(), 30_000);
@@ -59,33 +67,54 @@ export default function FeaturedMatches({ matches }: { matches: IntelligenceMatc
         </Link>
       </div>
 
-      {visibleMatches.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {visibleMatches.map((match) => (
-            <EditorialMatchCard
-              key={match.slug}
-              competition={match.competition}
-              time={match.time}
-              dateTimeUtc={match.dateTimeUtc}
-              status={match.status === 'PROXIMO' ? 'PRÓXIMO' : match.status}
-              homeTeam={match.team1}
-              homeCrestUrl={match.team1Logo}
-              awayTeam={match.team2}
-              awayCrestUrl={match.team2Logo}
-              slug={match.slug}
-              href={match.href}
-              sourceLabel={match.sourceLabel}
-              homeScore={match.homeScore}
-              awayScore={match.awayScore}
-              elapsedMinutes={match.elapsedMinutes}
-            />
-          ))}
+      <section>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h3 className="text-xl font-semibold text-white">Próximos destacados</h3>
+          <span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">Top 3 del día</span>
         </div>
-      ) : (
-        <div className="rounded-2xl border border-amber-500/35 bg-amber-500/10 px-5 py-4 text-sm text-amber-200">
-          No hay partidos confiables para mostrar con este filtro.
+        {visibleUpcomingMatches.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {visibleUpcomingMatches.map((match) => <FeaturedMatchCard key={match.slug} match={match} />)}
+          </div>
+        ) : (
+          <p className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-sm text-slate-400">No hay próximos partidos destacados con este filtro.</p>
+        )}
+      </section>
+
+      <section className="mt-10">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h3 className="text-xl font-semibold text-white">En vivo</h3>
+          <span className="rounded-full border border-emerald-400/35 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-emerald-200">Top 3 en juego</span>
         </div>
-      )}
+        {visibleActiveMatches.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {visibleActiveMatches.map((match) => <FeaturedMatchCard key={match.slug} match={match} />)}
+          </div>
+        ) : (
+          <p className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-sm text-slate-400">No hay partidos en vivo con este filtro.</p>
+        )}
+      </section>
     </>
+  );
+}
+
+function FeaturedMatchCard({ match }: { match: IntelligenceMatch }) {
+  return (
+    <EditorialMatchCard
+      competition={match.competition}
+      time={match.time}
+      dateTimeUtc={match.dateTimeUtc}
+      status={match.status === 'PROXIMO' ? 'PRÓXIMO' : match.status}
+      homeTeam={match.team1}
+      homeCrestUrl={match.team1Logo}
+      awayTeam={match.team2}
+      awayCrestUrl={match.team2Logo}
+      slug={match.slug}
+      href={match.href}
+      sourceLabel={match.sourceLabel}
+      homeScore={match.homeScore}
+      awayScore={match.awayScore}
+      elapsedMinutes={match.elapsedMinutes}
+    />
   );
 }

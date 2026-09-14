@@ -8,6 +8,7 @@ import HeroCropIcon from './components/HeroCropIcon';
 import AdSlot from './components/AdSlot';
 import Footer from './components/Footer';
 import { getTodayFootballMatches, getTodayFootballMatchesCount } from './lib/realSportsData';
+import { selectHomeMatches } from './lib/footballMatchPriority';
 
 export const revalidate = 30;
 
@@ -24,10 +25,11 @@ const heroBySport = {
 } as const;
 
 export default async function Home() {
-  const [featuredMatches, footballTodayCount] = await Promise.all([
-    getTodayFootballMatches(48),
+  const [todayMatches, footballTodayCount] = await Promise.all([
+    getTodayFootballMatches(200),
     getTodayFootballMatchesCount(),
   ]);
+  const { activeMatches, upcomingMatches } = selectHomeMatches(todayMatches);
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-black text-white">
@@ -52,11 +54,11 @@ export default async function Home() {
           <div className="mb-8 flex flex-col items-center gap-4 text-center md:mb-10">
             <div>
               <h2 className="text-3xl md:text-5xl font-bold text-white mb-2 tracking-tight">Partidos destacados</h2>
-              <p className="text-gray-400 text-base md:text-lg">Análisis en tiempo real de los encuentros más importantes</p>
+              <p className="text-gray-400 text-base md:text-lg">Los encuentros de mayor relevancia del día</p>
             </div>
           </div>
 
-          <FeaturedMatches matches={featuredMatches} />
+          <FeaturedMatches upcomingMatches={upcomingMatches} activeMatches={activeMatches} />
 
           <div className="mt-9 rounded-2xl border border-blue-900/50 bg-gradient-to-r from-gray-950 via-gray-900/80 to-gray-950 p-5 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
             <div>

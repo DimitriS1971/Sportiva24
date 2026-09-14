@@ -112,7 +112,7 @@ export default function MatchExplorer({ matches }: { matches: IntelligenceMatch[
                     <span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">{match.status === 'EN VIVO' ? 'Prioridad en tiempo real' : 'Por importancia'}</span>
                   </div>
                 ) : null}
-                <article className="rounded-2xl border border-gray-800/75 bg-gradient-to-br from-gray-950/90 via-gray-950/80 to-black p-5 md:p-6">
+                <article className="flex h-full min-h-[368px] flex-col rounded-2xl border border-gray-800/75 bg-gradient-to-br from-gray-950/90 via-gray-950/80 to-black p-5 md:p-6">
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-2">
                       <p className="truncate text-[11px] text-gray-500">{displayLabel(match.competition)}</p>
@@ -121,7 +121,7 @@ export default function MatchExplorer({ matches }: { matches: IntelligenceMatch[
                     <span className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold ${statusColor}`}>{matchClock}</span>
                   </div>
 
-                  <div className="mb-5 flex items-center justify-between gap-4">
+                  <div className="mb-5 flex min-h-[112px] items-center justify-between gap-4">
                     <div className="flex flex-1 flex-col items-center">
                       <Image src={getTeamCrest(match.team1, match.team1Logo)} alt={`Escudo de ${match.team1}`} width={64} height={64} className="h-16 w-16 object-contain" />
                       <p className="mt-2 text-center text-sm font-semibold text-white">{match.team1}</p>
@@ -140,7 +140,7 @@ export default function MatchExplorer({ matches }: { matches: IntelligenceMatch[
                   </div>
 
                   <p className="mb-4 text-xs text-gray-500"><LocalizedMatchTime dateTimeUtc={match.dateTimeUtc} fallback={match.time} /></p>
-                  <Link href={`/match/${match.slug}`} className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-3 text-sm font-semibold text-white transition-all hover:from-blue-500 hover:to-blue-400">Ver análisis completo</Link>
+                  <Link href={`/match/${match.slug}`} className="mt-auto inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-3 text-sm font-semibold text-white transition-all hover:from-blue-500 hover:to-blue-400">Ver análisis completo</Link>
                 </article>
               </div>
             );

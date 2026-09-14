@@ -82,6 +82,7 @@ function mapToIntelligenceMatch(match: Awaited<ReturnType<typeof sportsDataServi
 
   return {
     competition: match.competition,
+    country: match.country,
     time: match.time,
     status,
     team1: match.homeTeam.name,

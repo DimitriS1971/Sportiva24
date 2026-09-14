@@ -18,15 +18,20 @@ const countryByCompetition: Array<{ country: string; pattern: RegExp }> = [
   { country: 'Estados Unidos', pattern: /mls|usa|united states/i },
 ];
 
-function getMatchCountry(competition: string): string {
+function getMatchCountry(match: IntelligenceMatch): string {
+  if (match.country) {
+    return match.country;
+  }
+
+  const { competition } = match;
   return countryByCompetition.find(({ pattern }) => pattern.test(competition))?.country ?? 'Internacional';
 }
 
 export default function FeaturedMatches({ matches }: { matches: IntelligenceMatch[] }) {
   const [country, setCountry] = useState('Todos los países');
-  const countries = ['Todos los países', ...Array.from(new Set(matches.map((match) => getMatchCountry(match.competition)))).sort()];
+  const countries = ['Todos los países', ...Array.from(new Set(matches.map(getMatchCountry))).sort()];
   const visibleMatches = matches
-    .filter((match) => country === 'Todos los países' || getMatchCountry(match.competition) === country)
+    .filter((match) => country === 'Todos los países' || getMatchCountry(match) === country)
     .slice(0, 6);
 
   return (

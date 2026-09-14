@@ -34,6 +34,7 @@ export interface LegacyMatch {
   slug: string;
   sport: LegacySport;
   competition: string;
+  country?: string;
   time: string;
   dateTimeUtc?: string;
   status: 'EN VIVO' | 'PRÓXIMO' | 'FINALIZADO';

@@ -20,14 +20,19 @@ const countryByCompetition: Array<{ country: string; pattern: RegExp }> = [
   { country: 'Estados Unidos', pattern: /mls|usa|united states/i },
 ];
 
-function getMatchCountry(competition: string): string {
+function getMatchCountry(match: IntelligenceMatch): string {
+  if (match.country) {
+    return match.country;
+  }
+
+  const { competition } = match;
   return countryByCompetition.find(({ pattern }) => pattern.test(competition))?.country ?? 'Internacional';
 }
 
 export default function MatchExplorer({ matches }: { matches: IntelligenceMatch[] }) {
   const [country, setCountry] = useState('Todos los países');
-  const countries = ['Todos los países', ...Array.from(new Set(matches.map((match) => getMatchCountry(match.competition)))).sort()];
-  const visibleMatches = matches.filter((match) => country === 'Todos los países' || getMatchCountry(match.competition) === country);
+  const countries = ['Todos los países', ...Array.from(new Set(matches.map(getMatchCountry))).sort()];
+  const visibleMatches = matches.filter((match) => country === 'Todos los países' || getMatchCountry(match) === country);
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -55,7 +60,7 @@ export default function MatchExplorer({ matches }: { matches: IntelligenceMatch[
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-2">
                     <p className="truncate text-[11px] text-gray-500">{displayLabel(match.competition)}</p>
-                    {match.sourceLabel ? <span className="rounded-full border border-sky-500/40 bg-sky-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-sky-300">Fuente gratis</span> : null}
+                    {match.sourceLabel ? <span className="rounded-full border border-sky-500/40 bg-sky-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-sky-300">{match.sourceTier === 'paid' ? 'Fuente API' : 'Fuente gratis'}</span> : null}
                   </div>
                   <span className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold ${statusColor}`}>{match.status}</span>
                 </div>

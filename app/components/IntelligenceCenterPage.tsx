@@ -230,6 +230,8 @@ export default function IntelligenceCenterPage({ content }: { content: Intellige
                 probability={match.probability}
                 slug={match.slug}
                 href={match.href}
+                sourceLabel={match.sourceLabel}
+                sourceTier={match.sourceTier}
               />
             ))}
           </div>

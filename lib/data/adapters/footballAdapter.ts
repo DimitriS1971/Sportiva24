@@ -68,6 +68,7 @@ export class FootballAdapter implements SportAdapter {
         slug: `af-match-${fixtureId}`,
         sport: 'football',
         competition: normalizeLeagueName((fixture.league?.name ?? 'Liga').toUpperCase()),
+        country: fixture.league?.country,
         time: normalizeDateToLabel(fixture.fixture?.date ?? new Date().toISOString()),
         dateTimeUtc: fixture.fixture?.date,
         status: mapApiFootballStatus(fixture.fixture?.status?.short),
@@ -81,9 +82,9 @@ export class FootballAdapter implements SportAdapter {
           name: awayName,
           badgeUrl: fixture.teams?.away?.logo,
         },
-        indexScore: 83 + index * 2,
+        indexScore: Math.min(100, 83 + index * 2),
         confidence: index % 2 === 0 ? 'Alta' : 'Media',
-        probabilityHomeWin: 51 + index * 2,
+        probabilityHomeWin: Math.min(100, 51 + index * 2),
       };
     });
   }

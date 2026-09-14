@@ -10,6 +10,7 @@ export interface IntelligenceLeague {
 
 export interface IntelligenceMatch {
   competition: string;
+  country?: string;
   time: string;
   status: MatchStatus;
   team1: string;

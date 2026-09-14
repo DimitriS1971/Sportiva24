@@ -19,6 +19,7 @@ interface MatchCardNewProps {
   slug: string;
   href?: string;
   sourceLabel?: string;
+  sourceTier?: 'free' | 'paid' | 'mock';
 }
 
 export default function MatchCardNew({
@@ -35,6 +36,7 @@ export default function MatchCardNew({
   slug,
   href,
   sourceLabel,
+  sourceTier,
 }: MatchCardNewProps) {
   const resolvedTeam1Logo = getTeamCrest(team1, team1Logo);
   const resolvedTeam2Logo = getTeamCrest(team2, team2Logo);
@@ -61,7 +63,7 @@ export default function MatchCardNew({
             </span>
             {sourceLabel ? (
               <span className="rounded-full border border-sky-500/40 bg-sky-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-sky-300">
-                Fuente gratis
+                {sourceTier === 'paid' ? 'Fuente API' : 'Fuente gratis'}
               </span>
             ) : null}
           </div>

@@ -26,64 +26,9 @@ function ProviderLabel({ providerId }: { providerId: string }) {
   );
 }
 
-function buildDataSummary(match: Match, context: RealMatchContext | null): string {
-  if (!context || context.headToHead.matches.length === 0) {
-    return `El proveedor confirma ${match.homeTeam.name} vs ${match.awayTeam.name} en ${match.competition}. No hay historial directo finalizado disponible en la fuente actual.`;
-  }
-
-  const { homeWins, draws, awayWins } = context.headToHead;
-  const balance = homeWins === awayWins
-    ? `El historial disponible está equilibrado: ${homeWins} triunfo${homeWins === 1 ? '' : 's'} por lado y ${draws} empate${draws === 1 ? '' : 's'}.`
-    : homeWins > awayWins
-      ? `${match.homeTeam.name} tiene una ventaja histórica en la muestra: ${homeWins} triunfo${homeWins === 1 ? '' : 's'}, ${draws} empate${draws === 1 ? '' : 's'} y ${awayWins} victoria${awayWins === 1 ? '' : 's'} de ${match.awayTeam.name}.`
-      : `${match.awayTeam.name} llega con mejor registro directo en la muestra: ${awayWins} triunfo${awayWins === 1 ? '' : 's'}, ${draws} empate${draws === 1 ? '' : 's'} y ${homeWins} victoria${homeWins === 1 ? '' : 's'} de ${match.homeTeam.name}.`;
-
-  return `${match.homeTeam.name} vs ${match.awayTeam.name}, ${context.fixture.round ?? 'jornada no informada'} de ${match.competition}. ${balance}`;
-}
-
 export default function DatosPartidoDirectos({ match, providerId, realContext, scheduleDateTimeUtc, scheduleLabel }: DatosPartidoDirectosProps) {
-  const dataSummary = buildDataSummary(match, realContext);
-  const directFacts = [
-    { label: 'Competicion', value: match.competition },
-    { label: 'Estado', value: match.status },
-    { label: 'Horario', value: scheduleDateTimeUtc ? <LocalizedMatchDateTime dateTimeUtc={scheduleDateTimeUtc} fallback={scheduleLabel ?? match.time} /> : scheduleLabel ?? match.time },
-    { label: 'Local', value: match.homeTeam.name },
-    { label: 'Visitante', value: match.awayTeam.name },
-  ];
-
   return (
     <section className="space-y-5 md:space-y-6">
-      <article className="overflow-hidden rounded-2xl border border-slate-700/60 bg-slate-950 shadow-xl shadow-black/25">
-        <div className="border-b border-slate-700/60 bg-slate-900/70 px-5 py-4 md:px-7 md:py-5">
-          <div className="flex flex-wrap items-center gap-2">
-            <ProviderLabel providerId={providerId} />
-            <span className="text-xs text-slate-400">Información confirmada del partido</span>
-          </div>
-          <h2 className="mt-3 font-editorial text-2xl md:text-3xl text-white">Datos disponibles del partido</h2>
-          <p className="mt-3 max-w-4xl text-sm md:text-base leading-7 text-slate-200">{dataSummary}</p>
-        </div>
-
-        <div className="px-5 py-5 md:px-7 md:py-6">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Ficha del partido</p>
-          <dl className="mt-3 divide-y divide-slate-800 rounded-xl border border-slate-800 bg-black/20">
-            {directFacts.map((fact) => (
-              <div key={fact.label} className="grid grid-cols-[8rem_1fr] gap-3 px-4 py-3 text-sm md:grid-cols-[11rem_1fr]">
-                <dt className="text-slate-500">{fact.label}</dt>
-                <dd className="font-medium text-slate-100">{fact.value}</dd>
-              </div>
-            ))}
-            <div className="grid grid-cols-[8rem_1fr] gap-3 px-4 py-3 text-sm md:grid-cols-[11rem_1fr]">
-              <dt className="text-slate-500">Sede</dt>
-              <dd className="font-medium text-slate-100">{realContext?.fixture.venue ?? 'No informada por el proveedor'}</dd>
-            </div>
-            <div className="grid grid-cols-[8rem_1fr] gap-3 px-4 py-3 text-sm md:grid-cols-[11rem_1fr]">
-              <dt className="text-slate-500">Arbitro</dt>
-              <dd className="font-medium text-slate-100">{realContext?.fixture.referee ?? 'No informado por el proveedor'}</dd>
-            </div>
-          </dl>
-        </div>
-      </article>
-
       {match.status === 'EN VIVO' && realContext && realContext.liveStatistics.length > 0 ? (
         <article className="rounded-2xl border border-emerald-400/25 bg-slate-950 p-5 shadow-xl shadow-black/20 md:p-7">
           <div className="flex flex-wrap items-center justify-between gap-3">

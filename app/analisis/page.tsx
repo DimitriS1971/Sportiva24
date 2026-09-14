@@ -5,10 +5,11 @@ import AdSlot from '../components/AdSlot';
 import { getTodayFootballMatches } from '@/app/lib/realSportsData';
 
 export const revalidate = 120;
+export const dynamic = 'force-dynamic';
 
 export default async function AnalysisPage() {
   const todayMatches = await getTodayFootballMatches(50);
-  const analysisData = todayMatches.filter((match) => match.status === 'PROXIMO');
+  const analysisData = todayMatches.filter((match) => match.status === 'PROXIMO' && match.sourceTier !== 'mock');
 
   return (
     <main className="min-h-screen bg-black text-white">

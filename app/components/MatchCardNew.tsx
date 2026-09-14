@@ -124,19 +124,19 @@ export default function MatchCardNew({
 
         <div className="bg-gray-900/45 rounded-xl p-3.5 mb-5 border border-gray-800/50 backdrop-blur-sm">
           <div className="grid grid-cols-3 gap-3">
-            <div className="flex flex-col items-center">
+            <div className="flex cursor-help flex-col items-center" title="Índice S24: evaluación global del modelo sobre el rendimiento competitivo del partido, en una escala de 0 a 100.">
               <span className="text-xs text-gray-500 font-medium mb-1.5">S24</span>
               <span className="text-2xl font-bold text-blue-300">{s24Index}</span>
             </div>
 
-            <div className="flex flex-col items-center">
+            <div className="flex cursor-help flex-col items-center" title="Confianza: nivel de robustez de la lectura según la cobertura, consistencia y calidad de los datos disponibles.">
               <span className="text-xs text-gray-500 font-medium mb-1.5">CONFIANZA</span>
               <span className={`text-sm md:text-base font-bold ${confidenceColor[confidence]}`}>
                 {confidence}
               </span>
             </div>
 
-            <div className="flex flex-col items-center">
+            <div className="flex cursor-help flex-col items-center" title="Prob.: probabilidad estimada de victoria del equipo local en este partido; no es una cuota ni una garantía.">
               <span className="text-xs text-gray-500 font-medium mb-1.5">PROB.</span>
               <span className="text-2xl font-bold text-emerald-400">{probability}%</span>
             </div>

@@ -29,6 +29,20 @@ function mapSportsDbStatus(status?: string): Match['status'] {
   return 'PRÓXIMO';
 }
 
+function shouldHideApiFootballFixture(fixture: ApiFootballFixture): boolean {
+  const status = fixture.fixture?.status?.short;
+  if (new Set(['TBD', 'PST', 'CANC', 'ABD', 'AWD', 'WO']).has(status ?? '')) {
+    return true;
+  }
+
+  if (status !== 'NS' || !fixture.fixture?.date) {
+    return false;
+  }
+
+  const scheduledAt = new Date(fixture.fixture.date).getTime();
+  return Number.isFinite(scheduledAt) && scheduledAt < Date.now() - 15 * 60 * 1000;
+}
+
 export class FootballAdapter implements SportAdapter {
   sport = 'football' as const;
 
@@ -58,7 +72,7 @@ export class FootballAdapter implements SportAdapter {
   }
 
   adaptApiFootballFeaturedMatches(input: ApiFootballFixture[], limit: number): Match[] {
-    return input.slice(0, limit).map((fixture, index) => {
+    return input.filter((fixture) => !shouldHideApiFootballFixture(fixture)).slice(0, limit).map((fixture, index) => {
       const fixtureId = fixture.fixture?.id ?? `api-${index}`;
       const homeName = normalizeTeamName(fixture.teams?.home?.name ?? 'Equipo local');
       const awayName = normalizeTeamName(fixture.teams?.away?.name ?? 'Equipo visitante');

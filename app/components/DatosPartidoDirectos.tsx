@@ -29,7 +29,7 @@ function ProviderLabel({ providerId }: { providerId: string }) {
 export default function DatosPartidoDirectos({ match, providerId, realContext, scheduleDateTimeUtc, scheduleLabel }: DatosPartidoDirectosProps) {
   return (
     <section className="space-y-5 md:space-y-6">
-      {match.status === 'EN VIVO' && realContext && realContext.liveStatistics.length > 0 ? (
+      {match.status === 'EN VIVO' && realContext ? (
         <article className="rounded-2xl border border-emerald-400/25 bg-slate-950 p-5 shadow-xl shadow-black/20 md:p-7">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
@@ -38,7 +38,7 @@ export default function DatosPartidoDirectos({ match, providerId, realContext, s
             </div>
             <ProviderLabel providerId={providerId} />
           </div>
-          <div className="mt-5 overflow-hidden rounded-xl border border-slate-800">
+          {realContext.liveStatistics.length > 0 ? <div className="mt-5 overflow-hidden rounded-xl border border-slate-800">
             <div className="grid grid-cols-[1fr_5rem_5rem] border-b border-slate-800 bg-black/30 px-4 py-3 text-xs font-semibold uppercase tracking-[0.1em] text-slate-500 md:grid-cols-[1fr_8rem_8rem]">
               <span>Estadística</span>
               {realContext.liveStatistics.map((team) => <span key={team.teamName} className="truncate text-center text-slate-300">{team.teamName}</span>)}
@@ -55,7 +55,7 @@ export default function DatosPartidoDirectos({ match, providerId, realContext, s
                 {realContext.liveStatistics.map((team) => <span key={team.teamName} className="text-center font-semibold text-white">{statistic.value(team) ?? '-'}</span>)}
               </div>
             ))}
-          </div>
+          </div> : <p className="mt-5 rounded-xl border border-amber-400/25 bg-amber-500/10 p-4 text-sm leading-6 text-amber-100">El partido está en juego, pero API-Football todavía no entrega estadísticas detalladas para esta competición. El marcador y el minuto continúan actualizándose.</p>}
         </article>
       ) : null}
 

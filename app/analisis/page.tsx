@@ -1,5 +1,5 @@
 import Navbar from '../components/Navbar';
-import MatchCardNew from '../components/MatchCardNew';
+import AnalysisMatchList from '../components/AnalysisMatchList';
 import Footer from '../components/Footer';
 import AdSlot from '../components/AdSlot';
 import { getFeaturedFootballMatches, getTodayFootballMatches, getUpcomingFootballMatches } from '@/app/lib/realSportsData';
@@ -32,33 +32,7 @@ export default async function AnalysisPage() {
             <p className="mt-5 text-sm text-gray-500">{analysisData.length} análisis disponibles · Datos actualizados cada 2 minutos</p>
           </div>
 
-          {analysisData.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {analysisData.map((analysis) => (
-                <MatchCardNew
-                  key={analysis.slug}
-                  competition={analysis.competition}
-                  time={analysis.time}
-                  dateTimeUtc={analysis.dateTimeUtc}
-                  status={analysis.status === 'PROXIMO' ? 'PRÓXIMO' : analysis.status}
-                  team1={analysis.team1}
-                  team1Logo={analysis.team1Logo}
-                  team2={analysis.team2}
-                  team2Logo={analysis.team2Logo}
-                  s24Index={analysis.s24Index}
-                  confidence={analysis.confidence}
-                  probability={analysis.probability}
-                  slug={analysis.slug}
-                  href={`/analisis/${analysis.slug}`}
-                  sourceLabel={analysis.sourceLabel}
-                  sourceTier={analysis.sourceTier}
-                  homeScore={analysis.homeScore}
-                  awayScore={analysis.awayScore}
-                  elapsedMinutes={analysis.elapsedMinutes}
-                />
-              ))}
-            </div>
-          ) : (
+          {analysisData.length > 0 ? <AnalysisMatchList matches={analysisData} /> : (
             <section className="rounded-2xl border border-gray-800 bg-gray-950/70 p-8 text-center">
               <h2 className="text-2xl font-semibold text-white">No hay partidos disponibles</h2>
               <p className="mt-2 text-gray-400">El proveedor no devolvió partidos de fútbol para la fecha actual.</p>

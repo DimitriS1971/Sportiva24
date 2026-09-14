@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import EditorialMatchCard from './EditorialMatchCard';
 import type { IntelligenceMatch } from '@/lib/domain/intelligenceCenter';
@@ -28,12 +29,18 @@ function getMatchCountry(match: IntelligenceMatch): string {
 }
 
 export default function FeaturedMatches({ matches }: { matches: IntelligenceMatch[] }) {
+  const router = useRouter();
   const [country, setCountry] = useState('Todos los países');
   const countries = ['Todos los países', ...Array.from(new Set(matches.map(getMatchCountry))).sort()];
   const visibleMatches = matches
     .filter((match) => match.status !== 'FINALIZADO')
     .filter((match) => country === 'Todos los países' || getMatchCountry(match) === country)
     .slice(0, 6);
+
+  useEffect(() => {
+    const refreshInterval = window.setInterval(() => router.refresh(), 30_000);
+    return () => window.clearInterval(refreshInterval);
+  }, [router]);
 
   return (
     <>

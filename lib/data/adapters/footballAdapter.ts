@@ -17,8 +17,8 @@ function mapStatus(status: string): Match['status'] {
 
 function mapApiFootballStatus(statusShort?: string): Match['status'] {
   if (!statusShort) return 'PRÓXIMO';
-  if (new Set(['1H', '2H', 'HT', 'LIVE', 'P']).has(statusShort)) return 'EN VIVO';
-  if (new Set(['FT', 'AET', 'PEN', 'CANC']).has(statusShort)) return 'FINALIZADO';
+  if (new Set(['1H', '2H', 'HT', 'ET', 'BT', 'P', 'PEN', 'LIVE']).has(statusShort)) return 'EN VIVO';
+  if (new Set(['FT', 'AET', 'CANC']).has(statusShort)) return 'FINALIZADO';
   return 'PRÓXIMO';
 }
 

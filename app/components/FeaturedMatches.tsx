@@ -29,16 +29,16 @@ function getMatchCountry(match: IntelligenceMatch): string {
 }
 
 interface FeaturedMatchesProps {
-  upcomingMatches: IntelligenceMatch[];
+  featuredMatches: IntelligenceMatch[];
   activeMatches: IntelligenceMatch[];
 }
 
-export default function FeaturedMatches({ upcomingMatches, activeMatches }: FeaturedMatchesProps) {
+export default function FeaturedMatches({ featuredMatches, activeMatches }: FeaturedMatchesProps) {
   const router = useRouter();
   const [country, setCountry] = useState('Todos los países');
-  const matches = [...upcomingMatches, ...activeMatches];
+  const matches = [...featuredMatches, ...activeMatches];
   const countries = ['Todos los países', ...Array.from(new Set(matches.map(getMatchCountry))).sort()];
-  const visibleUpcomingMatches = upcomingMatches
+  const visibleFeaturedMatches = featuredMatches
     .filter((match) => country === 'Todos los países' || getMatchCountry(match) === country)
     .slice(0, 3);
   const visibleActiveMatches = activeMatches
@@ -69,15 +69,15 @@ export default function FeaturedMatches({ upcomingMatches, activeMatches }: Feat
 
       <section>
         <div className="mb-4 flex items-center justify-between gap-3">
-          <h3 className="text-xl font-semibold text-white">Próximos destacados</h3>
-          <span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">Top 3 del día</span>
+          <h3 className="text-xl font-semibold text-white">Destacados del día</h3>
+          <span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">Top 3 por competición</span>
         </div>
-        {visibleUpcomingMatches.length > 0 ? (
+        {visibleFeaturedMatches.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {visibleUpcomingMatches.map((match) => <FeaturedMatchCard key={match.slug} match={match} />)}
+            {visibleFeaturedMatches.map((match) => <FeaturedMatchCard key={match.slug} match={match} />)}
           </div>
         ) : (
-          <p className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-sm text-slate-400">No hay próximos partidos destacados con este filtro.</p>
+          <p className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-sm text-slate-400">No hay partidos destacados disponibles con este filtro.</p>
         )}
       </section>
 

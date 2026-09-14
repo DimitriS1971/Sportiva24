@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 import Navbar from './components/Navbar';
 import HeroNew from './components/HeroNew';
 import StatCardNew from './components/StatCardNew';
@@ -29,7 +27,7 @@ export default async function Home() {
     getTodayFootballMatches(200),
     getTodayFootballMatchesCount(),
   ]);
-  const { activeMatches, upcomingMatches } = selectHomeMatches(todayMatches);
+  const { activeMatches, featuredMatches } = selectHomeMatches(todayMatches);
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-black text-white">
@@ -58,7 +56,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <FeaturedMatches upcomingMatches={upcomingMatches} activeMatches={activeMatches} />
+          <FeaturedMatches featuredMatches={featuredMatches} activeMatches={activeMatches} />
 
           <div className="mt-9 rounded-2xl border border-blue-900/50 bg-gradient-to-r from-gray-950 via-gray-900/80 to-gray-950 p-5 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
             <div>

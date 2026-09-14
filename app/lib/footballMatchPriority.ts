@@ -35,7 +35,7 @@ export function sortMatchesByImportance(matches: IntelligenceMatch[]): Intellige
 
 export function selectHomeMatches(matches: IntelligenceMatch[]) {
   const activeMatches = sortMatchesByImportance(matches.filter((match) => match.status === 'EN VIVO')).slice(0, 3);
-  const upcomingMatches = sortMatchesByImportance(matches.filter((match) => match.status === 'PROXIMO')).slice(0, 3);
+  const featuredMatches = sortMatchesByImportance(matches.filter((match) => match.status === 'PROXIMO')).slice(0, 3);
 
-  return { activeMatches, upcomingMatches };
+  return { activeMatches, featuredMatches };
 }

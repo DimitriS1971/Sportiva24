@@ -39,6 +39,14 @@ const matchStatusFilters = [
   { value: 'PROXIMO', label: 'Próximos juegos' },
 ] as const;
 
+function sortUpcomingMatchesByKickoff(matches: IntelligenceMatch[]): IntelligenceMatch[] {
+  return [...matches].sort((first, second) => {
+    const firstTime = first.dateTimeUtc ? new Date(first.dateTimeUtc).getTime() : Number.MAX_SAFE_INTEGER;
+    const secondTime = second.dateTimeUtc ? new Date(second.dateTimeUtc).getTime() : Number.MAX_SAFE_INTEGER;
+    return firstTime - secondTime;
+  });
+}
+
 export default function MatchExplorer({ matches }: { matches: IntelligenceMatch[] }) {
   const router = useRouter();
   const [statusFilter, setStatusFilter] = useState<(typeof matchStatusFilters)[number]['value']>('all');
@@ -49,7 +57,7 @@ export default function MatchExplorer({ matches }: { matches: IntelligenceMatch[
     .filter((match) => country === 'Todos los países' || getMatchCountry(match) === country);
   const visibleMatches = [
     ...sortMatchesByImportance(filteredMatches.filter((match) => match.status === 'EN VIVO')),
-    ...sortMatchesByImportance(filteredMatches.filter((match) => match.status === 'PROXIMO')),
+    ...sortUpcomingMatchesByKickoff(filteredMatches.filter((match) => match.status === 'PROXIMO')),
     ...sortMatchesByImportance(filteredMatches.filter((match) => match.status === 'FINALIZADO')),
   ];
 
@@ -131,12 +139,6 @@ export default function MatchExplorer({ matches }: { matches: IntelligenceMatch[
                       <Image src={getTeamCrest(match.team2, match.team2Logo)} alt={`Escudo de ${match.team2}`} width={64} height={64} className="h-16 w-16 object-contain" />
                       <p className="mt-2 text-center text-sm font-semibold text-white">{match.team2}</p>
                     </div>
-                  </div>
-
-                  <div className="mb-5 grid grid-cols-3 gap-3 rounded-xl border border-gray-800/70 bg-gray-900/45 p-3">
-                    <div className="text-center"><p className="text-[11px] text-gray-500">S24</p><p className="text-xl font-bold text-blue-300">{match.s24Index}</p></div>
-                    <div className="text-center"><p className="text-[11px] text-gray-500">Confianza</p><p className="text-sm font-semibold text-emerald-300">{match.confidence}</p></div>
-                    <div className="text-center"><p className="text-[11px] text-gray-500">Prob.</p><p className="text-xl font-bold text-orange-300">{match.probability}%</p></div>
                   </div>
 
                   <p className="mb-4 text-xs text-gray-500"><LocalizedMatchTime dateTimeUtc={match.dateTimeUtc} fallback={match.time} /></p>

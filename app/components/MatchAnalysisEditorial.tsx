@@ -100,8 +100,8 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
 
   return (
     <section className="space-y-6 md:space-y-8">
-      <section className="overflow-hidden rounded-3xl border border-cyan-400/25 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.2),transparent_38%),linear-gradient(145deg,rgba(8,47,73,0.9),rgba(2,6,23,0.98))] p-5 md:p-8">
-        <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.15em] text-cyan-200">
+      <section className="overflow-hidden rounded-3xl border border-cyan-400/25 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.2),transparent_38%),linear-gradient(145deg,rgba(8,47,73,0.9),rgba(2,6,23,0.98))] p-5 text-center md:p-8">
+        <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-[0.15em] text-cyan-200">
           <span className="rounded-full border border-cyan-300/35 bg-cyan-400/10 px-3 py-1">Análisis S24</span>
           <span className="rounded-full border border-slate-600/60 bg-slate-900/60 px-3 py-1">Previa editorial</span>
         </div>
@@ -111,19 +111,19 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
           <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Estadio</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.venue ?? 'No informado por el proveedor'}</p></div>
         </div>
         {context?.lineups.length ? (
-          <div className="mt-4 grid gap-3 md:grid-cols-2">
+          <div className="mx-auto mt-4 grid max-w-5xl gap-3 text-center md:grid-cols-2">
             {context.lineups.map((lineup) => (
               <div key={lineup.teamName} className="rounded-xl border border-slate-700/60 bg-black/25 p-4">
-                <div className="flex items-center justify-between gap-3"><p className="font-semibold text-white">{lineup.teamName}</p>{lineup.formation ? <span className="text-xs text-cyan-200">{lineup.formation}</span> : null}</div>
+                <div className="flex items-center justify-center gap-3"><p className="font-semibold text-white">{lineup.teamName}</p>{lineup.formation ? <span className="text-xs text-cyan-200">{lineup.formation}</span> : null}</div>
                 <p className="mt-2 text-[10px] uppercase tracking-[0.13em] text-slate-500">Alineación confirmada</p>
                 <p className="mt-1 text-sm leading-6 text-slate-200">{lineup.starters.join(' · ') || 'Titulares no informados'}</p>
               </div>
             ))}
           </div>
         ) : null}
-        <h1 className="mt-5 max-w-4xl font-editorial text-4xl leading-tight text-white md:text-6xl">{homeTeam} vs {awayTeam}: {favoredTeam} parte como favorito</h1>
-        <p className="mt-4 max-w-4xl text-base leading-7 text-slate-200 md:text-lg">{copy.intro}</p>
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        <h1 className="mx-auto mt-5 max-w-4xl font-editorial text-4xl leading-tight text-white md:text-6xl">{homeTeam} vs {awayTeam}: {favoredTeam} parte como favorito</h1>
+        <p className="mx-auto mt-4 max-w-4xl text-base leading-7 text-slate-200 md:text-lg">{copy.intro}</p>
+        <div className="mx-auto mt-6 grid max-w-5xl gap-3 text-center sm:grid-cols-3">
           <div className="rounded-2xl border border-cyan-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Señal principal</p><p className="mt-2 text-xl font-semibold text-cyan-100">{favoredTeam}</p><p className="mt-1 text-sm text-slate-300">La señal principal coincide con el favorito del modelo.</p></div>
           <div className="rounded-2xl border border-amber-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Riesgo clave</p><p className="mt-2 text-xl font-semibold text-amber-100">Variación de ritmo</p><p className="mt-1 text-sm text-slate-300">{copy.risk}</p></div>
           <div className="rounded-2xl border border-emerald-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Confianza</p><p className="mt-2 text-xl font-semibold text-emerald-100">Media-alta</p><p className="mt-1 text-sm text-slate-300">La diferencia existe, pero no elimina la varianza.</p></div>

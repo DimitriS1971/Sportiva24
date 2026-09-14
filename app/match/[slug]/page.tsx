@@ -3,6 +3,7 @@ import Image from 'next/image';
 
 import DatosPartidoDirectos from '@/app/components/DatosPartidoDirectos';
 import Footer from '@/app/components/Footer';
+import LiveMatchRefresh from '@/app/components/LiveMatchRefresh';
 import LocalizedMatchDateTime from '@/app/components/LocalizedMatchDateTime';
 import Navbar from '@/app/components/Navbar';
 import { buildEditorialMatchPreview, editorialMatchPreviews } from '@/app/data/editorialMatchPreviews';
@@ -22,6 +23,7 @@ interface MatchHeaderData {
 }
 
 export const revalidate = 120;
+export const dynamic = 'force-dynamic';
 
 function buildLegacyMatch(slug: string): Match | null {
   const legacy = matchesData[slug];
@@ -182,6 +184,7 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
   return (
     <main className="min-h-screen bg-black text-white">
       <Navbar />
+      <LiveMatchRefresh enabled={matchData.status === 'EN VIVO'} />
 
       <div className="px-4 md:px-12 pt-20 md:pt-24 pb-12 md:pb-16 max-w-6xl mx-auto">
         <header className="premium-grid-pattern mb-8 rounded-3xl border border-slate-700/45 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.16),transparent_45%),linear-gradient(165deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))] px-4 py-5 md:px-7 md:py-7">

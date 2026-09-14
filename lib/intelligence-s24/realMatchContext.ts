@@ -8,6 +8,28 @@ export interface RealHeadToHeadMatch {
   score: string;
 }
 
+export interface RealRecentMatch {
+  date: string;
+  opponent: string;
+  score: string;
+  result: 'V' | 'E' | 'D';
+}
+
+export interface RealTeamStanding {
+  teamId: number;
+  teamName: string;
+  position: number;
+  points?: number;
+  played?: number;
+}
+
+export interface RealLineup {
+  teamName: string;
+  formation?: string;
+  starters: string[];
+  substitutes: string[];
+}
+
 export interface RealMatchContext {
   source: 'api-football';
   fixture: {
@@ -24,6 +46,12 @@ export interface RealMatchContext {
     draws: number;
     awayWins: number;
   };
+  recentForm: {
+    home: RealRecentMatch[];
+    away: RealRecentMatch[];
+  };
+  standings: RealTeamStanding[];
+  lineups: RealLineup[];
   summary: string;
   unavailableData: string[];
 }
@@ -68,6 +96,33 @@ function toHeadToHeadMatch(fixture: ApiFootballFixture): RealHeadToHeadMatch | n
   };
 }
 
+function toRecentMatch(fixture: ApiFootballFixture, teamId: number): RealRecentMatch | null {
+  const home = fixture.teams?.home;
+  const away = fixture.teams?.away;
+  const homeGoals = fixture.goals?.home;
+  const awayGoals = fixture.goals?.away;
+  if (!home?.id || !away?.name || !home?.name || homeGoals === null || homeGoals === undefined || awayGoals === null || awayGoals === undefined) return null;
+
+  const isHome = home.id === teamId;
+  const teamGoals = isHome ? homeGoals : awayGoals;
+  const opponentGoals = isHome ? awayGoals : homeGoals;
+  const result = teamGoals > opponentGoals ? 'V' : teamGoals === opponentGoals ? 'E' : 'D';
+  return {
+    date: formatDate(fixture.fixture?.date),
+    opponent: isHome ? away.name : home.name,
+    score: `${teamGoals}-${opponentGoals}`,
+    result,
+  };
+}
+
+function sortNewestFirst(fixtures: ApiFootballFixture[]): ApiFootballFixture[] {
+  return [...fixtures].sort((left, right) => {
+    const leftTime = left.fixture?.date ? Date.parse(left.fixture.date) : 0;
+    const rightTime = right.fixture?.date ? Date.parse(right.fixture.date) : 0;
+    return rightTime - leftTime;
+  });
+}
+
 export async function getRealMatchContext(slug: string, providerId: string): Promise<RealMatchContext | null> {
   if (providerId !== 'api-football') {
     return null;
@@ -89,7 +144,13 @@ export async function getRealMatchContext(slug: string, providerId: string): Pro
   }
 
   const history = await apiFootballProvider.getHeadToHead(homeTeamId, awayTeamId);
-  const headToHeadMatches = history
+  const [homeRecent, awayRecent, standings, lineups] = await Promise.all([
+    apiFootballProvider.getRecentFixtures(homeTeamId),
+    apiFootballProvider.getRecentFixtures(awayTeamId),
+    apiFootballProvider.getStandings(fixture.league?.id ?? 0, fixture.league?.season),
+    fixtureId ? apiFootballProvider.getLineups(fixtureId) : Promise.resolve([]),
+  ]);
+  const headToHeadMatches = sortNewestFirst(history)
     .filter((item) => item.fixture?.id !== fixtureId)
     .map(toHeadToHeadMatch)
     .filter((item): item is RealHeadToHeadMatch => item !== null)
@@ -113,6 +174,32 @@ export async function getRealMatchContext(slug: string, providerId: string): Pro
     ? `${fixture.fixture.venue.name}${fixture.fixture.venue.city ? `, ${fixture.fixture.venue.city}` : ''}`
     : undefined;
 
+  const toStanding = standings.filter((entry) => entry.team?.id && entry.team.name && entry.rank).map((entry) => ({
+    teamId: entry.team!.id!,
+    teamName: entry.team!.name!,
+    position: entry.rank!,
+    points: entry.points,
+    played: entry.all?.played,
+  }));
+  const recentForm = {
+    home: sortNewestFirst(homeRecent)
+      .filter((item) => item.fixture?.id !== fixtureId)
+      .map((item) => toRecentMatch(item, homeTeamId))
+      .filter((item): item is RealRecentMatch => item !== null)
+      .slice(0, 5),
+    away: sortNewestFirst(awayRecent)
+      .filter((item) => item.fixture?.id !== fixtureId)
+      .map((item) => toRecentMatch(item, awayTeamId))
+      .filter((item): item is RealRecentMatch => item !== null)
+      .slice(0, 5),
+  };
+  const realLineups = (lineups ?? []).filter((lineup) => lineup.team?.name).map((lineup) => ({
+    teamName: lineup.team!.name!,
+    formation: lineup.formation ?? undefined,
+    starters: (lineup.startXI ?? []).map((item) => item.player?.name).filter((name): name is string => Boolean(name)),
+    substitutes: (lineup.substitutes ?? []).map((item) => item.player?.name).filter((name): name is string => Boolean(name)),
+  }));
+
   return {
     source: 'api-football',
     fixture: {
@@ -129,10 +216,14 @@ export async function getRealMatchContext(slug: string, providerId: string): Pro
       draws,
       awayWins,
     },
+    recentForm,
+    standings: toStanding.filter((entry) => entry.teamId === homeTeamId || entry.teamId === awayTeamId),
+    lineups: realLineups,
     summary: `${homeTeamName} vs ${awayTeamName} se juega el ${formatDate(fixture.fixture?.date)} en ${fixture.league?.name ?? 'la competicion informada'}. ${h2hSummary}`,
     unavailableData: [
-      'Clasificacion y puntos de la temporada',
-      'Forma reciente completa por equipo',
+      ...(toStanding.length === 0 ? ['Clasificacion y puntos de la temporada'] : []),
+      ...(recentForm.home.length === 0 || recentForm.away.length === 0 ? ['Forma reciente completa por equipo'] : []),
+      ...(realLineups.length === 0 ? ['Alineaciones confirmadas del partido'] : []),
       'Estadisticas agregadas de goles y rendimiento por temporada',
     ],
   };

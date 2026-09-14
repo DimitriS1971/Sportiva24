@@ -16,5 +16,8 @@ export function getTeamCrest(teamName: string, providedCrest?: string): string {
     return providedCrest;
   }
 
-  return localTeamCrests[teamName] ?? '/icons/football-premium.svg';
+  const normalizedName = teamName.trim().toLowerCase();
+  const localEntry = Object.entries(localTeamCrests).find(([name]) => name.toLowerCase() === normalizedName);
+
+  return localEntry?.[1] ?? '/icons/football-premium.svg';
 }

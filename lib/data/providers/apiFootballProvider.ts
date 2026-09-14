@@ -1,5 +1,11 @@
 import { dataEnv } from '@/lib/data/config/env';
-import type { ApiFootballFixture, ApiFootballFixturesResponse } from '@/lib/data/providers/providerTypes';
+import type {
+  ApiFootballFixture,
+  ApiFootballFixturesResponse,
+  ApiFootballLineupsResponse,
+  ApiFootballStandingsEntry,
+  ApiFootballStandingsResponse,
+} from '@/lib/data/providers/providerTypes';
 
 function toYmd(date: Date): string {
   const y = date.getUTCFullYear();
@@ -96,6 +102,57 @@ export class ApiFootballProvider {
     }
 
     const payload = (await response.json()) as ApiFootballFixturesResponse;
+    return payload.response ?? [];
+  }
+
+  async getRecentFixtures(teamId: number, limit = 5): Promise<ApiFootballFixture[]> {
+    const apiKey = dataEnv.apiFootballApiKey;
+    if (!apiKey) return [];
+
+    const fetchRecent = async (requestedLimit: number): Promise<ApiFootballFixture[]> => {
+      const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures?team=${teamId}&last=${requestedLimit}`;
+      const response = await fetch(endpoint, {
+        headers: { 'x-apisports-key': apiKey },
+        next: { revalidate: 120 },
+      });
+
+      if (!response.ok) return [];
+      const payload = (await response.json()) as ApiFootballFixturesResponse;
+      return payload.response ?? [];
+    };
+
+    const fixtures = await fetchRecent(limit);
+    if (fixtures.length > 0) return fixtures;
+
+    // Some provider responses omit a team's recent window; retry with a wider one.
+    return fetchRecent(Math.max(limit * 2, 10));
+  }
+
+  async getStandings(leagueId: number, season?: number): Promise<ApiFootballStandingsEntry[]> {
+    if (!dataEnv.apiFootballApiKey || !season) return [];
+
+    const endpoint = `${dataEnv.apiFootballBaseUrl}/standings?league=${leagueId}&season=${season}`;
+    const response = await fetch(endpoint, {
+      headers: { 'x-apisports-key': dataEnv.apiFootballApiKey },
+      next: { revalidate: 300 },
+    });
+
+    if (!response.ok) return [];
+    const payload = (await response.json()) as ApiFootballStandingsResponse;
+    return payload.response?.[0]?.league?.standings?.flat() ?? [];
+  }
+
+  async getLineups(fixtureId: number): Promise<ApiFootballLineupsResponse['response']> {
+    if (!dataEnv.apiFootballApiKey) return [];
+
+    const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures/lineups?fixture=${fixtureId}`;
+    const response = await fetch(endpoint, {
+      headers: { 'x-apisports-key': dataEnv.apiFootballApiKey },
+      next: { revalidate: 60 },
+    });
+
+    if (!response.ok) return [];
+    const payload = (await response.json()) as ApiFootballLineupsResponse;
     return payload.response ?? [];
   }
 }

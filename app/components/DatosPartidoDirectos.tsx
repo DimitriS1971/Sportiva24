@@ -5,6 +5,7 @@ interface DatosPartidoDirectosProps {
   match: Match;
   providerId: string;
   realContext: RealMatchContext | null;
+  scheduleLabel?: string;
 }
 
 function ProviderLabel({ providerId }: { providerId: string }) {
@@ -38,12 +39,12 @@ function buildDataSummary(match: Match, context: RealMatchContext | null): strin
   return `${match.homeTeam.name} vs ${match.awayTeam.name}, ${context.fixture.round ?? 'jornada no informada'} de ${match.competition}. ${balance}`;
 }
 
-export default function DatosPartidoDirectos({ match, providerId, realContext }: DatosPartidoDirectosProps) {
+export default function DatosPartidoDirectos({ match, providerId, realContext, scheduleLabel }: DatosPartidoDirectosProps) {
   const dataSummary = buildDataSummary(match, realContext);
   const directFacts = [
     { label: 'Competicion', value: match.competition },
     { label: 'Estado', value: match.status },
-    { label: 'Horario', value: match.time },
+    { label: 'Horario', value: scheduleLabel ?? match.time },
     { label: 'Local', value: match.homeTeam.name },
     { label: 'Visitante', value: match.awayTeam.name },
   ];
@@ -81,19 +82,86 @@ export default function DatosPartidoDirectos({ match, providerId, realContext }:
         </div>
       </article>
 
-      <article className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 shadow-xl shadow-black/20 md:p-7">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Cobertura de la fuente</p>
-            <h2 className="mt-2 font-editorial text-2xl text-white">Qué está confirmado</h2>
+      {realContext && (realContext.recentForm.home.length > 0 || realContext.recentForm.away.length > 0) ? (
+        <article className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 shadow-xl shadow-black/20 md:p-7">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Rendimiento reciente</p>
+              <h2 className="mt-2 font-editorial text-2xl text-white">Últimos partidos jugados</h2>
+            </div>
+            <ProviderLabel providerId={providerId} />
           </div>
-          <ProviderLabel providerId={providerId} />
-        </div>
-        <div className="mt-5 grid gap-3 md:grid-cols-2">
-          <p className="rounded-xl border border-emerald-400/25 bg-emerald-500/10 p-4 text-sm leading-6 text-emerald-50">Equipos, competición, fecha, hora, estado y datos del encuentro que la fuente entregue.</p>
-          <p className="rounded-xl border border-amber-400/25 bg-amber-500/10 p-4 text-sm leading-6 text-amber-50">Esta fuente no aporta aquí clasificación, forma reciente, lesiones, alineaciones ni cuotas verificadas.</p>
-        </div>
-      </article>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            {[
+              { name: match.homeTeam.name, matches: realContext.recentForm.home },
+              { name: match.awayTeam.name, matches: realContext.recentForm.away },
+            ].map((team) => (
+              <div key={team.name} className="rounded-xl border border-slate-800 bg-black/20 p-4">
+                <h3 className="font-semibold text-white">{team.name}</h3>
+                <div className="mt-3 space-y-2">
+                  {team.matches.length > 0 ? team.matches.map((recent) => (
+                    <div key={`${recent.date}-${recent.opponent}`} className="grid grid-cols-[5.5rem_1fr_auto] items-center gap-2 text-sm">
+                      <time className="text-xs text-slate-500">{recent.date}</time>
+                      <span className="truncate text-slate-200">vs {recent.opponent}</span>
+                      <span className={`font-semibold ${recent.result === 'V' ? 'text-emerald-300' : recent.result === 'D' ? 'text-rose-300' : 'text-amber-200'}`}>
+                        {recent.result} {recent.score}
+                      </span>
+                    </div>
+                  )) : <p className="text-sm text-slate-500">El proveedor no devolvió partidos recientes para este equipo.</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </article>
+      ) : null}
+
+      {realContext && realContext.standings.length > 0 ? (
+        <article className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 shadow-xl shadow-black/20 md:p-7">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Competición</p>
+              <h2 className="mt-2 font-editorial text-2xl text-white">Posición en la tabla</h2>
+            </div>
+            <ProviderLabel providerId={providerId} />
+          </div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            {realContext.standings.map((standing) => (
+              <div key={standing.teamId} className="flex items-center justify-between rounded-xl border border-slate-800 bg-black/20 px-4 py-3">
+                <div>
+                  <p className="font-semibold text-white">{standing.teamName}</p>
+                  <p className="mt-1 text-xs text-slate-400">{standing.played ?? '-'} partidos · {standing.points ?? '-'} puntos</p>
+                </div>
+                <span className="text-2xl font-semibold text-cyan-200">{standing.position}º</span>
+              </div>
+            ))}
+          </div>
+        </article>
+      ) : null}
+
+      {realContext && realContext.lineups.length > 0 ? (
+        <article className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 shadow-xl shadow-black/20 md:p-7">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Datos del encuentro</p>
+              <h2 className="mt-2 font-editorial text-2xl text-white">Alineaciones</h2>
+            </div>
+            <ProviderLabel providerId={providerId} />
+          </div>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            {realContext.lineups.map((lineup) => (
+              <div key={lineup.teamName} className="rounded-xl border border-slate-800 bg-black/20 p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="font-semibold text-white">{lineup.teamName}</h3>
+                  {lineup.formation ? <span className="text-xs text-cyan-200">{lineup.formation}</span> : null}
+                </div>
+                <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Titulares</p>
+                <p className="mt-1 text-sm leading-6 text-slate-200">{lineup.starters.join(' · ') || 'No informados'}</p>
+                {lineup.substitutes.length > 0 ? <><p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Suplentes</p><p className="mt-1 text-sm leading-6 text-slate-300">{lineup.substitutes.join(' · ')}</p></> : null}
+              </div>
+            ))}
+          </div>
+        </article>
+      ) : null}
 
       {realContext ? (
         <article className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 shadow-xl shadow-black/20 md:p-7">
@@ -114,7 +182,8 @@ export default function DatosPartidoDirectos({ match, providerId, realContext }:
           {realContext.headToHead.matches.length > 0 ? (
             <div className="mt-4 overflow-hidden rounded-xl border border-slate-800">
               {realContext.headToHead.matches.map((history) => (
-                <div key={`${history.date}-${history.homeTeam}-${history.awayTeam}`} className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 border-b border-slate-800 bg-black/20 px-4 py-3 last:border-b-0 text-sm">
+                <div key={`${history.date}-${history.homeTeam}-${history.awayTeam}`} className="grid grid-cols-[4.5rem_1fr_auto_1fr] items-center gap-2 border-b border-slate-800 bg-black/20 px-3 py-3 last:border-b-0 text-sm md:grid-cols-[6.5rem_1fr_auto_1fr] md:gap-3 md:px-4">
+                  <time dateTime={history.date} className="text-xs text-slate-500">{history.date}</time>
                   <span className="text-right text-slate-200">{history.homeTeam}</span>
                   <span className="rounded-md bg-slate-800 px-2 py-1 font-semibold text-white">{history.score}</span>
                   <span className="text-slate-200">{history.awayTeam}</span>

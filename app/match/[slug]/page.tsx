@@ -71,9 +71,10 @@ const BallIcon = () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" 
 const CalendarIcon = () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>;
 
 function TeamBadge({ team, crestUrl }: { team: string; crestUrl?: string }) {
-  const crest = getTeamCrest(team, crestUrl?.startsWith('/') ? crestUrl : undefined);
+  const isRemoteCrest = Boolean(crestUrl && !crestUrl.startsWith('/'));
+  const crest = isRemoteCrest ? undefined : getTeamCrest(team, crestUrl);
 
-  if (crest || crestUrl) {
+  if (crest || isRemoteCrest) {
     return (
       <div className="flex flex-col items-center">
         <div className="flex h-[86px] w-[86px] shrink-0 items-center justify-center rounded-2xl border border-slate-600/45 bg-slate-900/45 md:h-[122px] md:w-[122px]">
@@ -174,6 +175,8 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
   const statusStyle = matchData.status === 'EN VIVO'
     ? 'text-emerald-200 border-emerald-400/40 bg-emerald-500/15'
     : 'text-slate-200 border-slate-500/55 bg-slate-800/45';
+  const isLive = matchData.status === 'EN VIVO';
+  const hasLiveScore = isLive && matchData.homeScore !== undefined && matchData.awayScore !== undefined;
 
   return (
     <main className="min-h-screen bg-black text-white">
@@ -187,7 +190,12 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
             </div>
 
             <div className="flex min-w-[4.8rem] flex-col items-center gap-2 px-0 md:min-w-0 md:px-3 flex-shrink-0">
-              <span className="text-sm md:text-2xl font-light text-slate-400 leading-none">VS</span>
+              <span className={`leading-none font-semibold ${hasLiveScore ? 'text-2xl md:text-4xl text-white' : 'text-sm md:text-2xl font-light text-slate-400'}`}>
+                {hasLiveScore ? `${matchData.homeScore} - ${matchData.awayScore}` : 'VS'}
+              </span>
+              {isLive && matchData.elapsedMinutes !== undefined ? (
+                <span className="text-xs font-semibold text-emerald-300">{matchData.elapsedMinutes}&apos;</span>
+              ) : null}
               <div className={`px-3 py-1 border rounded-full ${statusStyle}`}>
                 <span className="text-[10px] md:text-xs font-semibold uppercase tracking-[0.12em]">{matchData.status}</span>
               </div>
@@ -198,7 +206,7 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
             </div>
           </div>
 
-          <div className="mt-6 grid gap-2.5 md:grid-cols-4">
+          <div className="mt-6 grid gap-2.5 md:grid-cols-3">
             <div className="flex items-center gap-2 rounded-xl border border-slate-700/55 bg-black/30 px-3 py-2 text-xs md:text-sm text-slate-300">
               <BallIcon />
               <span>{cleanMatch.competition}</span>
@@ -214,16 +222,17 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
               <span>{editorialDate}</span>
             </div>
 
-            <div className="rounded-xl border border-slate-700/55 bg-black/30 px-3 py-2 text-xs md:text-sm text-slate-300">
-              <p className="text-[10px] uppercase tracking-[0.12em] text-slate-500">Programacion</p>
-              <p className="mt-0.5">{cleanMatch.time}</p>
-            </div>
           </div>
 
           <div className="mt-5 border-t border-slate-700/60" />
         </header>
 
-        <DatosPartidoDirectos match={matchData} providerId={providerId} realContext={realContext} />
+        <DatosPartidoDirectos
+          match={matchData}
+          providerId={providerId}
+          realContext={realContext}
+          scheduleLabel={editorialDate}
+        />
       </div>
 
       <Footer />

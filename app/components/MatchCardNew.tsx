@@ -93,7 +93,11 @@ export default function MatchCardNew({
         <div className="grid grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] items-start gap-1 mb-5 min-h-[132px] sm:flex sm:justify-between sm:gap-3">
           <div className="flex min-w-0 flex-col items-center sm:flex-1">
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border border-gray-700/70 bg-gradient-to-br from-gray-900/80 to-gray-950/80 p-2 mb-3 shadow-inner shadow-blue-500/5 flex items-center justify-center">
-              <Image src={resolvedTeam1Logo} alt={`Escudo de ${team1}`} width={72} height={72} className="rounded-xl object-contain" />
+              {resolvedTeam1Logo.startsWith('/') ? (
+                <Image src={resolvedTeam1Logo} alt={`Escudo de ${team1}`} width={72} height={72} className="rounded-xl object-contain" />
+              ) : (
+                <img src={resolvedTeam1Logo} alt={`Escudo de ${team1}`} width={72} height={72} className="rounded-xl object-contain" />
+              )}
             </div>
             <span className="w-full break-words text-sm md:text-base text-white font-semibold text-center leading-tight min-h-[40px] flex items-start justify-center">
               {team1}
@@ -106,7 +110,11 @@ export default function MatchCardNew({
 
           <div className="flex min-w-0 flex-col items-center sm:flex-1">
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border border-gray-700/70 bg-gradient-to-br from-gray-900/80 to-gray-950/80 p-2 mb-3 shadow-inner shadow-blue-500/5 flex items-center justify-center">
-              <Image src={resolvedTeam2Logo} alt={`Escudo de ${team2}`} width={72} height={72} className="rounded-xl object-contain" />
+              {resolvedTeam2Logo.startsWith('/') ? (
+                <Image src={resolvedTeam2Logo} alt={`Escudo de ${team2}`} width={72} height={72} className="rounded-xl object-contain" />
+              ) : (
+                <img src={resolvedTeam2Logo} alt={`Escudo de ${team2}`} width={72} height={72} className="rounded-xl object-contain" />
+              )}
             </div>
             <span className="w-full break-words text-sm md:text-base text-white font-semibold text-center leading-tight min-h-[40px] flex items-start justify-center">
               {team2}

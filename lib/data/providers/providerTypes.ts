@@ -69,6 +69,37 @@ export interface ApiFootballFixturesResponse {
   response?: ApiFootballFixture[];
 }
 
+export interface ApiFootballStandingsEntry {
+  rank?: number;
+  team?: { id?: number; name?: string; logo?: string };
+  points?: number;
+  goalsDiff?: number;
+  form?: string;
+  all?: { played?: number; win?: number; draw?: number; lose?: number };
+}
+
+export interface ApiFootballStandingsResponse {
+  response?: Array<{
+    league?: { standings?: ApiFootballStandingsEntry[][] };
+  }>;
+}
+
+export interface ApiFootballLineupPlayer {
+  player?: { id?: number; name?: string; number?: number; pos?: string; grid?: string | null };
+  statistics?: Array<{ games?: { position?: string; number?: number; grid?: string | null } }>;
+}
+
+export interface ApiFootballLineup {
+  team?: { id?: number; name?: string; logo?: string };
+  formation?: string | null;
+  startXI?: ApiFootballLineupPlayer[];
+  substitutes?: ApiFootballLineupPlayer[];
+}
+
+export interface ApiFootballLineupsResponse {
+  response?: ApiFootballLineup[];
+}
+
 export interface TheSportsDbEvent {
   idEvent?: string;
   strLeague?: string;

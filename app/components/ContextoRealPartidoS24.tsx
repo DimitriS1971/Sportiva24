@@ -22,7 +22,7 @@ export default function ContextoRealPartidoS24({ context }: ContextoRealPartidoS
       <div className="mt-5 grid gap-3 md:grid-cols-3">
         <article className="rounded-xl border border-emerald-300/20 bg-black/25 p-3">
           <p className="text-[10px] uppercase tracking-[0.13em] text-emerald-200/70">Competicion</p>
-          <p className="mt-1 text-sm font-semibold text-white">{context.fixture.competition}</p>
+          <p className="mt-1 text-sm font-semibold text-white">{context.fixture.competition.toLocaleUpperCase('es-ES')}</p>
           {context.fixture.round ? <p className="mt-1 text-xs text-slate-300">{context.fixture.round}</p> : null}
         </article>
         <article className="rounded-xl border border-emerald-300/20 bg-black/25 p-3">

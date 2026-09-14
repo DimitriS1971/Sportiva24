@@ -100,7 +100,7 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
         </div>
         <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Fecha y hora</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.scheduledAt ? <LocalizedMatchDateTime dateTimeUtc={context.fixture.scheduledAt} fallback={informe.match.time} /> : informe.match.time}</p></div>
-          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Competición</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.competition ?? informe.match.competition}</p></div>
+          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Competición</p><p className="mt-1 text-sm font-semibold text-white">{(context?.fixture.competition ?? informe.match.competition).toLocaleUpperCase('es-ES')}</p></div>
           <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Estadio</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.venue ?? 'No informado por el proveedor'}</p></div>
         </div>
         <div className="mx-auto mt-4 max-w-5xl rounded-2xl border border-slate-700/60 bg-black/25 p-4 text-center md:p-5">

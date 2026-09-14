@@ -8,6 +8,20 @@ import AdSlot from '../components/AdSlot';
 export default function AnalisysPage() {
   const analysisData = [
     {
+      competition: 'SERIE A',
+      time: '14 de septiembre de 2026, 18:45',
+      status: 'PRÓXIMO' as const,
+      team1: 'Inter',
+      team1Logo: 'https://media.api-sports.io/football/teams/505.png',
+      team2: 'Udinese',
+      team2Logo: 'https://media.api-sports.io/football/teams/494.png',
+      s24Index: 84,
+      confidence: 'Alta' as const,
+      probability: 64,
+      slug: 'af-match-1550120',
+      href: '/analisis/af-match-1550120',
+    },
+    {
       competition: 'Uefa champions league',
       time: 'Hoy, 21:00',
       status: 'PRÓXIMO' as const,
@@ -19,6 +33,7 @@ export default function AnalisysPage() {
       confidence: 'Alta' as const,
       probability: 72,
       slug: 'real-madrid-barcelona',
+      href: undefined,
     },
     {
       competition: 'NBA',
@@ -32,6 +47,7 @@ export default function AnalisysPage() {
       confidence: 'Alta' as const,
       probability: 68,
       slug: 'lakers-celtics',
+      href: undefined,
     },
     {
       competition: 'Premier league',
@@ -45,6 +61,7 @@ export default function AnalisysPage() {
       confidence: 'Media' as const,
       probability: 55,
       slug: 'manchester-city-arsenal',
+      href: undefined,
     },
     {
       competition: 'EUROPA LEAGUE',
@@ -58,6 +75,7 @@ export default function AnalisysPage() {
       confidence: 'Media' as const,
       probability: 61,
       slug: 'barcelona-arsenal',
+      href: undefined,
     },
   ];
 
@@ -128,6 +146,7 @@ export default function AnalisysPage() {
                     confidence={analysis.confidence}
                     probability={analysis.probability}
                     slug={analysis.slug}
+                    href={analysis.href}
                   />
                 </div>
               </div>

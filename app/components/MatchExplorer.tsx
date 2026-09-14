@@ -32,11 +32,21 @@ function getMatchCountry(match: IntelligenceMatch): string {
   return countryByCompetition.find(({ pattern }) => pattern.test(competition))?.country ?? 'Internacional';
 }
 
+const matchStatusFilters = [
+  { value: 'all', label: 'Todos' },
+  { value: 'FINALIZADO', label: 'Finalizados' },
+  { value: 'EN VIVO', label: 'En juego' },
+  { value: 'PROXIMO', label: 'Próximos juegos' },
+] as const;
+
 export default function MatchExplorer({ matches }: { matches: IntelligenceMatch[] }) {
   const router = useRouter();
+  const [statusFilter, setStatusFilter] = useState<(typeof matchStatusFilters)[number]['value']>('all');
   const [country, setCountry] = useState('Todos los países');
   const countries = ['Todos los países', ...Array.from(new Set(matches.map(getMatchCountry))).sort()];
-  const filteredMatches = matches.filter((match) => country === 'Todos los países' || getMatchCountry(match) === country);
+  const filteredMatches = matches
+    .filter((match) => statusFilter === 'all' || match.status === statusFilter)
+    .filter((match) => country === 'Todos los países' || getMatchCountry(match) === country);
   const visibleMatches = [
     ...sortMatchesByImportance(filteredMatches.filter((match) => match.status === 'EN VIVO')),
     ...sortMatchesByImportance(filteredMatches.filter((match) => match.status === 'PROXIMO')),
@@ -50,16 +60,29 @@ export default function MatchExplorer({ matches }: { matches: IntelligenceMatch[
 
   return (
     <div className="mx-auto max-w-7xl">
-      <div className="mb-7 flex flex-col items-start gap-2 sm:flex-row sm:items-center">
-        <label className="text-sm font-semibold text-gray-300" htmlFor="match-country">Filtrar por país</label>
-        <select
-          id="match-country"
-          value={country}
-          onChange={(event) => setCountry(event.target.value)}
-          className="h-11 w-full rounded-lg border border-blue-500/50 bg-slate-950 px-3 text-sm font-semibold text-blue-200 outline-none transition-colors focus:border-blue-400 sm:w-56"
-        >
-          {countries.map((option) => <option key={option} value={option}>{option}</option>)}
-        </select>
+      <div className="mb-7 flex flex-col items-start gap-3 sm:flex-row sm:items-end">
+        <div className="w-full sm:w-52">
+          <label className="mb-2 block text-sm font-semibold text-gray-300" htmlFor="match-status">Estado</label>
+          <select
+            id="match-status"
+            value={statusFilter}
+            onChange={(event) => setStatusFilter(event.target.value as (typeof matchStatusFilters)[number]['value'])}
+            className="h-11 w-full rounded-lg border border-blue-500/50 bg-slate-950 px-3 text-sm font-semibold text-blue-200 outline-none transition-colors focus:border-blue-400"
+          >
+            {matchStatusFilters.map((filter) => <option key={filter.value} value={filter.value}>{filter.label}</option>)}
+          </select>
+        </div>
+        <div className="w-full sm:w-56">
+          <label className="mb-2 block text-sm font-semibold text-gray-300" htmlFor="match-country">País</label>
+          <select
+            id="match-country"
+            value={country}
+            onChange={(event) => setCountry(event.target.value)}
+            className="h-11 w-full rounded-lg border border-blue-500/50 bg-slate-950 px-3 text-sm font-semibold text-blue-200 outline-none transition-colors focus:border-blue-400"
+          >
+            {countries.map((option) => <option key={option} value={option}>{option}</option>)}
+          </select>
+        </div>
       </div>
 
       {visibleMatches.length > 0 ? (

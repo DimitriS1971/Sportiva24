@@ -1,4 +1,6 @@
 import type { IntelligenceMatch } from '@/lib/domain/intelligenceCenter';
+import { footballAdapter } from '@/lib/data/adapters/footballAdapter';
+import { apiFootballProvider } from '@/lib/data/providers/apiFootballProvider';
 import { sportsDataService } from '@/lib/data';
 import { getTeamCrest } from './teamCrests';
 
@@ -128,6 +130,15 @@ export async function getTodayFootballMatches(limit = 8): Promise<IntelligenceMa
     matches.map(mapToIntelligenceMatch),
     limit,
   );
+}
+
+export async function getUpcomingFootballMatches(limit = 50): Promise<IntelligenceMatch[]> {
+  const matches = footballAdapter
+    .adaptApiFootballFeaturedMatches(await apiFootballProvider.getNextFixtures(limit), limit)
+    .map(mapToIntelligenceMatch)
+    .filter((match) => match.status === 'PROXIMO');
+
+  return applyQualityFilters(matches, limit);
 }
 
 export async function getTodayFootballMatchesCount(): Promise<number> {

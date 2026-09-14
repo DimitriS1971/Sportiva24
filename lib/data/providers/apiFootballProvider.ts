@@ -51,6 +51,20 @@ export class ApiFootballProvider {
     return (payload.response ?? []).slice(0, Math.max(limit, 4));
   }
 
+  async getNextFixtures(limit: number): Promise<ApiFootballFixture[]> {
+    if (!dataEnv.apiFootballApiKey) return [];
+
+    const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures?next=${limit}`;
+    const response = await fetch(endpoint, {
+      headers: { 'x-apisports-key': dataEnv.apiFootballApiKey },
+      next: { revalidate: 60 },
+    });
+
+    if (!response.ok) return [];
+    const payload = (await response.json()) as ApiFootballFixturesResponse;
+    return payload.response ?? [];
+  }
+
   async getFixtureById(id: string): Promise<ApiFootballFixture | null> {
     if (!dataEnv.apiFootballApiKey) {
       return null;

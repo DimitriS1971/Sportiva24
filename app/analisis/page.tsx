@@ -2,7 +2,7 @@ import Navbar from '../components/Navbar';
 import MatchCardNew from '../components/MatchCardNew';
 import Footer from '../components/Footer';
 import AdSlot from '../components/AdSlot';
-import { getFeaturedFootballMatches, getTodayFootballMatches } from '@/app/lib/realSportsData';
+import { getFeaturedFootballMatches, getTodayFootballMatches, getUpcomingFootballMatches } from '@/app/lib/realSportsData';
 
 export const revalidate = 120;
 export const dynamic = 'force-dynamic';
@@ -14,6 +14,11 @@ export default async function AnalysisPage() {
   if (analysisData.length === 0) {
     const featuredMatches = await getFeaturedFootballMatches(50);
     analysisData = featuredMatches.filter((match) => match.status === 'PROXIMO' && match.sourceTier !== 'mock');
+  }
+
+  if (analysisData.length === 0) {
+    const upcomingMatches = await getUpcomingFootballMatches(50);
+    analysisData = upcomingMatches.filter((match) => match.status === 'PROXIMO' && match.sourceTier !== 'mock');
   }
 
   return (

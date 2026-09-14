@@ -1,16 +1,20 @@
 import type { IntelligenceMatch } from '@/lib/domain/intelligenceCenter';
 
 const competitionPriorities: Array<{ pattern: RegExp; priority: number }> = [
-  { pattern: /champions league/i, priority: 1 },
-  { pattern: /europa league|conference league/i, priority: 2 },
-  { pattern: /premier league/i, priority: 3 },
-  { pattern: /la ?liga/i, priority: 4 },
-  { pattern: /serie a/i, priority: 5 },
-  { pattern: /bundesliga/i, priority: 6 },
-  { pattern: /ligue 1/i, priority: 7 },
-  { pattern: /eredivisie|primeira liga/i, priority: 8 },
-  { pattern: /libertadores|sudamericana/i, priority: 9 },
-  { pattern: /brasileirao|liga profesional argentina|mls/i, priority: 10 },
+  { pattern: /world cup|copa del mundo/i, priority: 1 },
+  { pattern: /qualifiers|eliminatorias|qualification/i, priority: 2 },
+  { pattern: /copa america|euro|nations league|gold cup|africa cup|asian cup/i, priority: 3 },
+  { pattern: /champions league/i, priority: 4 },
+  { pattern: /europa league|conference league|uefa super cup/i, priority: 5 },
+  { pattern: /libertadores/i, priority: 6 },
+  { pattern: /sudamericana/i, priority: 7 },
+  { pattern: /premier league/i, priority: 8 },
+  { pattern: /serie a/i, priority: 9 },
+  { pattern: /la ?liga/i, priority: 10 },
+  { pattern: /bundesliga/i, priority: 11 },
+  { pattern: /ligue 1/i, priority: 12 },
+  { pattern: /brasileirao|liga profesional argentina|primera division argentina|liga 1 peru|primera a colombia|primera division uruguay/i, priority: 13 },
+  { pattern: /eredivisie|primeira liga|liga mx|mls/i, priority: 14 },
 ];
 
 function kickoffTimestamp(match: IntelligenceMatch): number {

@@ -8,10 +8,18 @@ import type {
   ApiFootballStandingsResponse,
 } from '@/lib/data/providers/providerTypes';
 
+const SPORTIVA_TIME_ZONE = 'America/Argentina/Buenos_Aires';
+
 function toYmd(date: Date): string {
-  const y = date.getUTCFullYear();
-  const m = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const d = String(date.getUTCDate()).padStart(2, '0');
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: SPORTIVA_TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(date);
+  const y = parts.find((part) => part.type === 'year')?.value;
+  const m = parts.find((part) => part.type === 'month')?.value;
+  const d = parts.find((part) => part.type === 'day')?.value;
   return `${y}-${m}-${d}`;
 }
 

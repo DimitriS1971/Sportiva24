@@ -42,16 +42,34 @@ function extractMatchIdFromSlug(slug: string): string {
   return slug;
 }
 
+const SPORTIVA_TIME_ZONE = 'America/Argentina/Buenos_Aires';
+
+function calendarParts(value: Date): { year: number; month: number; day: number } {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: SPORTIVA_TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(value);
+
+  return {
+    year: Number(parts.find((part) => part.type === 'year')?.value),
+    month: Number(parts.find((part) => part.type === 'month')?.value),
+    day: Number(parts.find((part) => part.type === 'day')?.value),
+  };
+}
+
 function isSameLocalDay(dateIso: string): boolean {
   const eventDate = new Date(dateIso);
   if (Number.isNaN(eventDate.getTime())) {
     return false;
   }
 
-  const now = new Date();
-  return eventDate.getFullYear() === now.getFullYear()
-    && eventDate.getMonth() === now.getMonth()
-    && eventDate.getDate() === now.getDate();
+  const eventParts = calendarParts(eventDate);
+  const nowParts = calendarParts(new Date());
+  return eventParts.year === nowParts.year
+    && eventParts.month === nowParts.month
+    && eventParts.day === nowParts.day;
 }
 
 function filterPlayableToday(matches: Match[], limit: number): Match[] {

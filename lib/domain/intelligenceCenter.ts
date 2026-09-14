@@ -30,6 +30,7 @@ export interface IntelligenceArticle {
   date: string;
   title: string;
   excerpt: string;
+  href?: string;
   teams: [
     { name: string; logo: string },
     { name: string; logo: string }

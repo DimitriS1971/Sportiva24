@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Navbar from './components/Navbar';
 import HeroNew from './components/HeroNew';
 import StatCardNew from './components/StatCardNew';
-import EditorialMatchCard from './components/EditorialMatchCard';
+import FeaturedMatches from './components/FeaturedMatches';
 import HeroCropIcon from './components/HeroCropIcon';
 import AdSlot from './components/AdSlot';
 import Footer from './components/Footer';
@@ -52,34 +52,9 @@ export default async function Home() {
               <h2 className="text-3xl md:text-5xl font-bold text-white mb-2 tracking-tight">Partidos destacados</h2>
               <p className="text-gray-400 text-base md:text-lg">Análisis en tiempo real de los encuentros más importantes</p>
             </div>
-            <button className="hidden md:inline-flex rounded-xl border border-blue-500/50 px-5 py-2.5 text-sm font-semibold text-blue-300 transition-colors hover:bg-blue-500/10">
-              Ver todos
-            </button>
           </div>
 
-          {featuredMatches.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {featuredMatches.map((match) => (
-                <EditorialMatchCard
-                  key={match.slug}
-                  competition={match.competition}
-                  time={match.time}
-                  status={match.status === 'PROXIMO' ? 'PRÓXIMO' : 'EN VIVO'}
-                  homeTeam={match.team1}
-                  homeCrestUrl={match.team1Logo}
-                  awayTeam={match.team2}
-                  awayCrestUrl={match.team2Logo}
-                  slug={match.slug}
-                  href={match.href}
-                  sourceLabel={match.sourceLabel}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-2xl border border-amber-500/35 bg-amber-500/10 px-5 py-4 text-amber-200 text-sm">
-              No hay partidos confiables para mostrar ahora con los filtros gratuitos activos.
-            </div>
-          )}
+          <FeaturedMatches matches={featuredMatches} />
 
           <div className="mt-9 rounded-2xl border border-blue-900/50 bg-gradient-to-r from-gray-950 via-gray-900/80 to-gray-950 p-5 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
             <div>
@@ -111,25 +86,6 @@ export default async function Home() {
             <p className="flex items-center gap-2 text-emerald-300 text-lg font-semibold"><HeroCropIcon source={heroBySport.all} alt="Cobertura global" className="h-7 w-7" />Cobertura global</p>
             <p className="text-gray-400 text-sm mt-1">Los principales eventos deportivos del mundo en un solo lugar.</p>
           </div>
-        </div>
-      </section>
-
-      <section className="bg-black px-4 md:px-12 pb-12 md:pb-14">
-        <div className="max-w-7xl mx-auto rounded-2xl border border-blue-900/45 bg-gradient-to-r from-gray-950 via-gray-900 to-gray-950 p-5 md:p-6 flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
-          <div className="max-w-xl">
-            <p className="text-white text-xl md:text-2xl font-semibold tracking-tight">Recibe análisis exclusivos cada día</p>
-            <p className="text-gray-400 mt-1 text-sm md:text-base">Suscríbete a nuestro newsletter y mejora tus decisiones.</p>
-          </div>
-          <form className="w-full lg:w-auto flex flex-col sm:flex-row gap-3">
-            <input
-              type="email"
-              placeholder="Tu email"
-              className="min-w-[240px] md:min-w-[320px] px-4 py-3 rounded-xl bg-black/45 border border-gray-700 text-gray-100 placeholder:text-gray-500 focus:outline-none focus:border-blue-500"
-            />
-            <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold transition-all">
-              Suscribirme
-            </button>
-          </form>
         </div>
       </section>
 

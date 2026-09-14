@@ -185,27 +185,6 @@ export default async function Noticias() {
             </div>
           </div>
 
-          {/* Newsletter CTA */}
-          <div className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 border border-blue-600/30 rounded-2xl p-8 md:p-12">
-            <div className="max-w-2xl">
-              <h3 className="text-2xl font-bold text-white mb-3">
-                Recibe análisis exclusivos
-              </h3>
-              <p className="text-gray-300 mb-6">
-                Suscríbete a nuestro boletín para recibir análisis deportivos profundos directamente en tu inbox.
-              </p>
-              <div className="flex gap-3">
-                <input
-                  type="email"
-                  placeholder="tu@email.com"
-                  className="flex-1 bg-black/50 border border-blue-800/30 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-600 transition-colors"
-                />
-                <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200">
-                  Suscribir
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 

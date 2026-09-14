@@ -112,6 +112,7 @@ const futbolContent: IntelligenceCenterContent = {
         title: 'El nuevo bloque medio del City reduce 18% las llegadas rivales',
         excerpt:
           'Cruce entre presión, altura de recuperación y pases progresivos para entender la superioridad territorial del equipo de Guardiola.',
+        href: '/match/real-madrid-manchester-city',
         teams: [
           { name: 'Manchester City', logo: '/teams-official/manchester-city.png' },
           { name: 'Real Madrid', logo: '/teams-official/real-madrid.png' },
@@ -123,6 +124,7 @@ const futbolContent: IntelligenceCenterContent = {
         title: 'Barcelona optimiza su once con perfiles de recepción interior',
         excerpt:
           'Una lectura del modelo S24 sobre cómo cambia la amenaza ofensiva cuando el extremo ataca por dentro y el lateral fija la amplitud.',
+        href: '/match/real-madrid-barcelona',
         teams: [
           { name: 'Barcelona', logo: '/teams-official/barcelona.png' },
           { name: 'Arsenal', logo: '/teams-official/arsenal.png' },
@@ -134,6 +136,7 @@ const futbolContent: IntelligenceCenterContent = {
         title: 'Inter y Juventus: dónde se decide el partido antes de llegar al área',
         excerpt:
           'Mapa de duelos, zonas de activación y volumen de pases verticales para detectar el punto exacto donde se rompe el equilibrio.',
+        href: '/match/inter-juventus',
         teams: [
           { name: 'Inter', logo: '/teams/inter.svg' },
           { name: 'Juventus', logo: '/teams/juventus.svg' },
@@ -145,6 +148,7 @@ const futbolContent: IntelligenceCenterContent = {
         title: 'Cómo le impacta al Atlético un partido con posesión larga del rival',
         excerpt:
           'El modelo combina secuencias sin balón, recuperaciones altas y xThreat para anticipar escenarios de partido de alta exigencia.',
+        href: '/match/barcelona-atletico-madrid',
         teams: [
           { name: 'Atlético Madrid', logo: '/teams/atletico.svg' },
           { name: 'Chelsea', logo: '/teams/chelsea.svg' },
@@ -231,13 +235,16 @@ const futbolContent: IntelligenceCenterContent = {
 };
 
 export default async function FutbolPage() {
-  const realMatches = await getFeaturedFootballMatches(4);
+  const realMatches = await getFeaturedFootballMatches(3);
+  const featuredMatches = realMatches.length > 0
+    ? realMatches
+    : futbolContent.matches.items.slice(0, 3);
 
   const content: IntelligenceCenterContent = {
     ...futbolContent,
     matches: {
       ...futbolContent.matches,
-      items: realMatches,
+      items: featuredMatches,
     },
   };
 

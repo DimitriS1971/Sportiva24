@@ -11,13 +11,10 @@ export default function Footer() {
       { label: 'Fútbol', href: '/futbol' },
       { label: 'Análisis', href: '/analisis' },
       { label: 'Noticias', href: '/noticias' },
-      { label: 'Premium', href: '/premium' },
     ],
     Empresa: [
       { label: 'Sobre nosotros', href: '/sobre-nosotros' },
       { label: 'Blog', href: '/blog' },
-      { label: 'Contacto', href: '/contacto' },
-      { label: 'Carreras', href: '/carreras' },
     ],
     Legal: [
       { label: 'Privacidad', href: '/privacidad' },
@@ -30,8 +27,8 @@ export default function Footer() {
   return (
     <footer className="bg-black border-t border-blue-950/45">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-14 md:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-12 mb-14">
-          <div className="space-y-4">
+        <div className="mb-14 grid grid-cols-3 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-12">
+          <div className="col-span-3 space-y-4 md:col-span-1">
             <h3 className="text-2xl font-bold text-white">
               SPORTIVA<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">24</span>
             </h3>
@@ -96,6 +93,9 @@ export default function Footer() {
             © {currentYear} Sportiva24. Todos los derechos reservados.
           </p>
           <div className="flex items-center space-x-6">
+            <a href="mailto:contacto@sportiva24.com" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <span className="text-sm">contacto@sportiva24.com</span>
+            </a>
             <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
               <span className="text-sm">Twitter</span>
             </a>

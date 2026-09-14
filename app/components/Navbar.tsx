@@ -31,7 +31,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-0.5">
+          <div className="ml-auto hidden items-center space-x-0.5 md:flex">
             {visibleNavItems.map((item) => (
               <Link
                 key={item.label}
@@ -43,19 +43,11 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Right Side - Desktop */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link href="/premium" className="px-3 py-2 text-sm text-gray-300 hover:text-white transition-colors duration-200 font-medium">Premium</Link>
-            <button className="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300">
-              Login
-            </button>
-          </div>
-
           {/* Mobile Menu Button */}
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="relative z-10 ml-auto flex h-11 w-11 shrink-0 flex-col items-center justify-center space-y-1.5 rounded-md border border-slate-600 bg-black text-white shadow-lg shadow-black/40 md:hidden"
+            className="relative z-10 ml-auto mr-3 flex h-11 w-11 shrink-0 flex-col items-center justify-center space-y-1.5 rounded-md border border-slate-600 bg-black text-white shadow-lg shadow-black/40 md:hidden"
             aria-label="Abrir menú"
             aria-expanded={isMobileMenuOpen}
           >
@@ -67,7 +59,7 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="absolute left-0 right-0 top-full border-t border-slate-800 bg-black/95 px-4 pb-5 pt-3 shadow-2xl shadow-black/50 md:hidden">
+          <div className="border-t border-slate-800 bg-black/95 px-4 pb-5 pt-3 shadow-2xl shadow-black/50 md:hidden">
             {visibleNavItems.map((item) => (
               <Link
                 key={item.label}
@@ -77,17 +69,6 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
-            <div className="px-4 py-2 border-t border-gray-800/50 mt-2 pt-2 space-y-2">
-              <Link
-                href="/premium"
-                className="block text-sm text-gray-300 hover:text-white transition-colors duration-200 font-medium py-2"
-              >
-                Premium
-              </Link>
-              <button className="w-full px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300">
-                Login
-              </button>
-            </div>
           </div>
         )}
       </div>

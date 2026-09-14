@@ -61,12 +61,6 @@ export default function AnalisysPage() {
     },
   ];
 
-  const primaryFilterButtons = [
-    { label: 'Fútbol', icon: '⚽' },
-    { label: 'Basketball', icon: '🏀' },
-    { label: 'Otros', icon: '◌' },
-  ];
-
   const secondaryFilterButtons = [
     { label: 'Hoy', icon: '📅' },
     { label: 'Mañana', icon: '🗓️' },
@@ -99,18 +93,6 @@ export default function AnalisysPage() {
               </div>
 
               <div className="space-y-3">
-                <div className="flex flex-wrap gap-3">
-                  {primaryFilterButtons.map((btn, idx) => (
-                    <button
-                      key={idx}
-                      className="px-4 md:px-5 py-2 md:py-2.5 bg-gray-900/60 border border-gray-800/80 hover:border-blue-500/40 rounded-lg text-sm text-gray-300 hover:text-white transition-all duration-200 flex items-center gap-2"
-                    >
-                      <span>{btn.icon}</span>
-                      <span>{btn.label}</span>
-                    </button>
-                  ))}
-                </div>
-
                 <div className="flex flex-wrap gap-3">
                   {secondaryFilterButtons.map((btn, idx) => (
                     <button

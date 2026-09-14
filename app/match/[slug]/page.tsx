@@ -75,15 +75,21 @@ function TeamBadge({ team, crestUrl }: { team: string; crestUrl?: string }) {
 
   if (crest || crestUrl) {
     return (
-      <div className="flex-shrink-0 w-[86px] h-[86px] md:w-[122px] md:h-[122px] flex items-center justify-center rounded-2xl border border-slate-600/45 bg-slate-900/45">
-        {crest ? <Image src={crest} alt={team} width={104} height={104} className="object-contain drop-shadow-2xl" /> : <img src={crestUrl} alt={`Escudo de ${team}`} className="h-[78px] w-[78px] object-contain md:h-[104px] md:w-[104px]" />}
+      <div className="flex flex-col items-center">
+        <div className="flex h-[86px] w-[86px] shrink-0 items-center justify-center rounded-2xl border border-slate-600/45 bg-slate-900/45 md:h-[122px] md:w-[122px]">
+          {crest ? <Image src={crest} alt={team} width={104} height={104} className="object-contain drop-shadow-2xl" /> : <img src={crestUrl} alt={`Escudo de ${team}`} className="h-[78px] w-[78px] object-contain md:h-[104px] md:w-[104px]" />}
+        </div>
+        <p className="mt-2 max-w-[8rem] text-center text-sm font-semibold leading-tight text-white md:max-w-[13rem] md:text-2xl">{team}</p>
       </div>
     );
   }
 
   return (
-    <div className="flex-shrink-0 w-[86px] h-[86px] md:w-[122px] md:h-[122px] rounded-2xl border border-slate-600/55 bg-slate-900/60 flex items-center justify-center">
-      <span className="px-2 text-center text-xs font-semibold leading-tight text-white md:px-3 md:text-sm">{team}</span>
+    <div className="flex flex-col items-center">
+      <div className="flex h-[86px] w-[86px] shrink-0 items-center justify-center rounded-2xl border border-slate-600/55 bg-slate-900/60 md:h-[122px] md:w-[122px]">
+        <span className="px-2 text-center text-xs font-semibold leading-tight text-white md:px-3 md:text-sm">{team}</span>
+      </div>
+      <p className="mt-2 max-w-[8rem] text-center text-sm font-semibold leading-tight text-white md:max-w-[13rem] md:text-2xl">{team}</p>
     </div>
   );
 }
@@ -138,7 +144,7 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
 
   const editorialPreview = editorialMatchPreviews[slug];
   const serviceResult = editorialPreview || !slug ? null : await sportsDataService.getMatchBySlugWithMeta(slug);
-  const matchData = buildEditorialDemoMatch(slug) ?? serviceResult?.match ?? buildLegacyMatch(slug);
+  const matchData = buildEditorialDemoMatch(slug) ?? buildLegacyMatch(slug) ?? serviceResult?.match;
   const providerId = serviceResult?.match ? serviceResult.providerId : 'editorial-demo';
 
   if (!matchData) {

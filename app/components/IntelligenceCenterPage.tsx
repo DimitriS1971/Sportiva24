@@ -56,9 +56,10 @@ function AnalysisCard({ article }: { article: IntelligenceArticle }) {
             <span>Sala de vídeo IA</span>
           </div>
           <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="text-3xl font-semibold tracking-tight text-white">{article.teams[0].name}</p>
-              <p className="mt-1 text-sm text-slate-400">vs {article.teams[1].name}</p>
+            <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+              <p className="text-2xl font-semibold leading-tight text-white">{article.teams[0].name}</p>
+              <span className="text-sm text-slate-400">vs</span>
+              <p className="text-2xl font-semibold leading-tight text-white">{article.teams[1].name}</p>
             </div>
             <div className="flex items-center gap-3">
               {article.teams.map((team) => (
@@ -77,7 +78,7 @@ function AnalysisCard({ article }: { article: IntelligenceArticle }) {
         </div>
         <h3 className="text-2xl font-semibold leading-tight text-white">{article.title}</h3>
         <p className="text-sm leading-7 text-slate-300">{article.excerpt}</p>
-        <Link href="/analisis" className="inline-flex items-center gap-2 text-sm font-semibold text-sky-300 transition-colors hover:text-sky-200">
+        <Link href={article.href ?? '/analisis'} className="inline-flex items-center gap-2 text-sm font-semibold text-sky-300 transition-colors hover:text-sky-200">
           Leer análisis
           <span className="transition-transform group-hover:translate-x-1">{'->'}</span>
         </Link>
@@ -344,30 +345,6 @@ export default function IntelligenceCenterPage({ content }: { content: Intellige
                 </article>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 pb-12 pt-2 md:px-12 md:pb-14">
-        <div className="mx-auto max-w-7xl rounded-[30px] border border-slate-800/80 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.12),transparent_28%),linear-gradient(135deg,#050816_0%,#020617_45%,#07111f_100%)] p-6 md:p-8 lg:p-10">
-          <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
-            <div className="max-w-2xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">{content.newsletter.intro}</p>
-              <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white md:text-4xl">{content.newsletter.title}</h2>
-              <p className="mt-3 text-sm leading-7 text-slate-400 md:text-base">
-                {content.newsletter.description}
-              </p>
-            </div>
-            <form className="flex w-full max-w-xl flex-col gap-3 sm:flex-row">
-              <input
-                type="email"
-                placeholder={content.newsletter.emailPlaceholder}
-                className="h-12 flex-1 rounded-xl border border-slate-700 bg-slate-950/80 px-4 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none"
-              />
-              <button className="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 px-6 text-sm font-semibold text-white transition-all hover:from-sky-400 hover:to-blue-500">
-                {content.newsletter.buttonLabel}
-              </button>
-            </form>
           </div>
         </div>
       </section>

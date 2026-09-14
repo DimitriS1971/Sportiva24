@@ -4,7 +4,7 @@ import { getTodayFootballMatches } from '../lib/realSportsData';
 import AdSlot from '../components/AdSlot';
 import MatchExplorer from '../components/MatchExplorer';
 
-export const revalidate = 120;
+export const revalidate = 30;
 
 export default async function MatchesPage() {
   const matches = await getTodayFootballMatches(12);

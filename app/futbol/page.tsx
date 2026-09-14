@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: 'Centro de Inteligencia Deportiva de fútbol en Sportiva24.',
 };
 
+export const revalidate = 30;
+
 const futbolContent: IntelligenceCenterContent = {
   hero: {
     badge: 'Centro de inteligencia Sportiva24',

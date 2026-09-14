@@ -25,7 +25,7 @@ export class ApiFootballProvider {
       headers: {
         'x-apisports-key': dataEnv.apiFootballApiKey,
       },
-      next: { revalidate: 300 },
+      next: { revalidate: 30 },
     });
 
     if (!response.ok) {
@@ -46,7 +46,7 @@ export class ApiFootballProvider {
       headers: {
         'x-apisports-key': dataEnv.apiFootballApiKey,
       },
-      next: { revalidate: 180 },
+      next: { revalidate: 30 },
     });
 
     if (!response.ok) {
@@ -67,7 +67,7 @@ export class ApiFootballProvider {
       headers: {
         'x-apisports-key': dataEnv.apiFootballApiKey,
       },
-      next: { revalidate: 300 },
+      next: { revalidate: 30 },
     });
 
     if (!response.ok) {
@@ -88,7 +88,7 @@ export class ApiFootballProvider {
       headers: {
         'x-apisports-key': dataEnv.apiFootballApiKey,
       },
-      next: { revalidate: 300 },
+      next: { revalidate: 30 },
     });
 
     if (!response.ok) {

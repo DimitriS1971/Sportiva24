@@ -221,6 +221,7 @@ export default function IntelligenceCenterPage({ content }: { content: Intellige
                 competition={match.competition}
                 time={match.time}
                 status={match.status === 'PROXIMO' ? 'PRÓXIMO' : match.status}
+                dateTimeUtc={match.dateTimeUtc}
                 team1={match.team1}
                 team1Logo={match.team1Logo}
                 team2={match.team2}
@@ -232,6 +233,9 @@ export default function IntelligenceCenterPage({ content }: { content: Intellige
                 href={match.href}
                 sourceLabel={match.sourceLabel}
                 sourceTier={match.sourceTier}
+                homeScore={match.homeScore}
+                awayScore={match.awayScore}
+                elapsedMinutes={match.elapsedMinutes}
               />
             ))}
           </div>

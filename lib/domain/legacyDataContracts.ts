@@ -40,6 +40,9 @@ export interface LegacyMatch {
   status: 'EN VIVO' | 'PRÓXIMO' | 'FINALIZADO';
   homeTeam: Team;
   awayTeam: Team;
+  homeScore?: number;
+  awayScore?: number;
+  elapsedMinutes?: number;
   probabilityHomeWin?: number;
   confidence?: 'Alta' | 'Media' | 'Baja';
   indexScore?: number;

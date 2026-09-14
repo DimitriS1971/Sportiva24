@@ -4,11 +4,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getTeamCrest } from '@/app/lib/teamCrests';
 import { displayLabel } from '@/app/lib/displayLabel';
+import LocalizedMatchTime from './LocalizedMatchTime';
 
 interface MatchCardNewProps {
   competition: string;
   time: string;
-  status: 'EN VIVO' | 'PRÓXIMO';
+  status: 'EN VIVO' | 'PRÓXIMO' | 'FINALIZADO';
+  dateTimeUtc?: string;
   team1: string;
   team1Logo: string;
   team2: string;
@@ -20,12 +22,16 @@ interface MatchCardNewProps {
   href?: string;
   sourceLabel?: string;
   sourceTier?: 'free' | 'paid' | 'mock';
+  homeScore?: number;
+  awayScore?: number;
+  elapsedMinutes?: number;
 }
 
 export default function MatchCardNew({
   competition,
   time,
   status,
+  dateTimeUtc,
   team1,
   team1Logo,
   team2,
@@ -37,6 +43,9 @@ export default function MatchCardNew({
   href,
   sourceLabel,
   sourceTier,
+  homeScore,
+  awayScore,
+  elapsedMinutes,
 }: MatchCardNewProps) {
   const resolvedTeam1Logo = getTeamCrest(team1, team1Logo);
   const resolvedTeam2Logo = getTeamCrest(team2, team2Logo);
@@ -48,6 +57,12 @@ export default function MatchCardNew({
 
   const statusColor = status === 'EN VIVO' ? 'text-green-400' : 'text-gray-400';
   const statusBg = status === 'EN VIVO' ? 'bg-green-500/15 border border-green-500/30' : 'bg-gray-800/30 border border-gray-700/60';
+  const hasScore = status !== 'PRÓXIMO' && homeScore !== undefined && awayScore !== undefined;
+  const matchClock = status === 'EN VIVO' && elapsedMinutes !== undefined
+    ? `${elapsedMinutes}'`
+    : status === 'FINALIZADO'
+      ? `Final${elapsedMinutes ? ` · ${elapsedMinutes}'` : ''}`
+      : status;
 
   return (
     <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-950/85 via-gray-950/90 to-black border border-gray-800/75 hover:border-blue-500/45 transition-all duration-300 backdrop-blur-md p-5 md:p-6 flex flex-col h-full shadow-lg hover:shadow-2xl hover:shadow-blue-500/15">
@@ -68,9 +83,9 @@ export default function MatchCardNew({
             ) : null}
           </div>
           <div className="flex items-center justify-between gap-3 text-xs sm:justify-end">
-            <span className="text-gray-600 text-xs">{time}</span>
+            <span className="text-gray-600 text-xs"><LocalizedMatchTime dateTimeUtc={dateTimeUtc} fallback={time} /></span>
             <span className={`px-2.5 py-1 rounded-full text-[11px] font-semibold ${statusBg} ${statusColor}`}>
-              {status}
+              {matchClock}
             </span>
           </div>
         </div>
@@ -86,7 +101,7 @@ export default function MatchCardNew({
           </div>
 
           <div className="flex min-w-0 flex-col items-center justify-center pt-8">
-            <span className="text-sm text-blue-300 font-bold tracking-wide">VS</span>
+            <span className="text-lg text-blue-200 font-bold tracking-wide">{hasScore ? `${homeScore} - ${awayScore}` : 'VS'}</span>
           </div>
 
           <div className="flex min-w-0 flex-col items-center sm:flex-1">

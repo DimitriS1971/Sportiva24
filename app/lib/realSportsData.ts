@@ -2,7 +2,7 @@ import type { IntelligenceMatch } from '@/lib/domain/intelligenceCenter';
 import { sportsDataService } from '@/lib/data';
 import { getTeamCrest } from './teamCrests';
 
-function toUiStatus(status: 'EN VIVO' | 'PRÓXIMO' | 'FINALIZADO'): IntelligenceMatch['status'] | null {
+function toUiStatus(status: 'EN VIVO' | 'PRÓXIMO' | 'FINALIZADO'): IntelligenceMatch['status'] {
   if (status === 'EN VIVO') {
     return 'EN VIVO';
   }
@@ -11,7 +11,7 @@ function toUiStatus(status: 'EN VIVO' | 'PRÓXIMO' | 'FINALIZADO'): Intelligence
     return 'PROXIMO';
   }
 
-  return null;
+  return 'FINALIZADO';
 }
 
 const topCompetitionMatchers = [
@@ -72,18 +72,15 @@ function envFlag(value: string | undefined, fallback: boolean): boolean {
 const topLeaguesOnly = envFlag(process.env.NEXT_PUBLIC_TOP_LEAGUES_ONLY, true);
 const strictFreeMode = envFlag(process.env.NEXT_PUBLIC_FREE_STRICT_MODE, false);
 
-function mapToIntelligenceMatch(match: Awaited<ReturnType<typeof sportsDataService.getTodayMatches>>[number]): IntelligenceMatch | null {
+function mapToIntelligenceMatch(match: Awaited<ReturnType<typeof sportsDataService.getTodayMatches>>[number]): IntelligenceMatch {
   const source = sourceFromSlug(match.slug);
   const status = toUiStatus(match.status);
-
-  if (!status) {
-    return null;
-  }
 
   return {
     competition: match.competition,
     country: match.country,
     time: match.time,
+    dateTimeUtc: match.dateTimeUtc,
     status,
     team1: match.homeTeam.name,
     team1Logo: getTeamCrest(match.homeTeam.name, match.homeTeam.badgeUrl),
@@ -95,6 +92,9 @@ function mapToIntelligenceMatch(match: Awaited<ReturnType<typeof sportsDataServi
     slug: match.slug,
     sourceLabel: source.sourceLabel,
     sourceTier: source.sourceTier,
+    homeScore: match.homeScore,
+    awayScore: match.awayScore,
+    elapsedMinutes: match.elapsedMinutes,
   };
 }
 
@@ -113,9 +113,11 @@ function applyQualityFilters(matches: IntelligenceMatch[], limit: number): Intel
 }
 
 export async function getFeaturedFootballMatches(limit = 4): Promise<IntelligenceMatch[]> {
-  const matches = await sportsDataService.getFeaturedMatches('football', limit);
+  const matches = await sportsDataService.getFeaturedMatches('football', limit * 4);
   return applyQualityFilters(
-    matches.map((match) => mapToIntelligenceMatch(match)).filter((match): match is IntelligenceMatch => match !== null),
+    matches
+      .map(mapToIntelligenceMatch)
+      .filter((match) => match.status !== 'FINALIZADO'),
     limit,
   );
 }
@@ -123,7 +125,7 @@ export async function getFeaturedFootballMatches(limit = 4): Promise<Intelligenc
 export async function getTodayFootballMatches(limit = 8): Promise<IntelligenceMatch[]> {
   const matches = await sportsDataService.getTodayMatches('football', limit);
   return applyQualityFilters(
-    matches.map((match) => mapToIntelligenceMatch(match)).filter((match): match is IntelligenceMatch => match !== null),
+    matches.map(mapToIntelligenceMatch),
     limit,
   );
 }

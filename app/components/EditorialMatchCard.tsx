@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import { getTeamCrest } from '@/app/lib/teamCrests';
 import { displayLabel } from '@/app/lib/displayLabel';
+import LocalizedMatchTime from './LocalizedMatchTime';
 
 interface EditorialMatchCardProps {
   competition: string;
   time: string;
-  status: 'EN VIVO' | 'PRÓXIMO';
+  status: 'EN VIVO' | 'PRÓXIMO' | 'FINALIZADO';
+  dateTimeUtc?: string;
   homeTeam: string;
   homeCrestUrl: string;
   awayTeam: string;
@@ -13,6 +15,9 @@ interface EditorialMatchCardProps {
   slug: string;
   href?: string;
   sourceLabel?: string;
+  homeScore?: number;
+  awayScore?: number;
+  elapsedMinutes?: number;
 }
 
 function Crest({ src, team }: { src: string; team: string }) {
@@ -29,6 +34,7 @@ export default function EditorialMatchCard({
   competition,
   time,
   status,
+  dateTimeUtc,
   homeTeam,
   homeCrestUrl,
   awayTeam,
@@ -36,20 +42,29 @@ export default function EditorialMatchCard({
   slug,
   href,
   sourceLabel,
+  homeScore,
+  awayScore,
+  elapsedMinutes,
 }: EditorialMatchCardProps) {
   const isLive = status === 'EN VIVO';
+  const hasScore = status !== 'PRÓXIMO' && homeScore !== undefined && awayScore !== undefined;
+  const matchClock = isLive && elapsedMinutes !== undefined
+    ? `${elapsedMinutes}'`
+    : status === 'FINALIZADO'
+      ? `Final${elapsedMinutes ? ` · ${elapsedMinutes}'` : ''}`
+      : null;
 
   return (
     <article className="overflow-hidden rounded-2xl border border-slate-700/60 bg-slate-950 shadow-lg shadow-black/25 transition-colors hover:border-cyan-400/45">
       <div className="flex items-center justify-between gap-3 border-b border-slate-800 bg-slate-900/65 px-4 py-3">
         <p className="min-w-0 truncate text-[11px] font-semibold text-slate-300">{displayLabel(competition)}</p>
-        <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] ${isLive ? 'border-emerald-400/40 bg-emerald-500/15 text-emerald-100' : 'border-slate-600 bg-slate-800 text-slate-300'}`}>{status}</span>
+        <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] ${isLive ? 'border-emerald-400/40 bg-emerald-500/15 text-emerald-100' : 'border-slate-600 bg-slate-800 text-slate-300'}`}>{matchClock ?? status}</span>
       </div>
 
       <div className="px-4 py-5">
         <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
           <div className="flex min-w-0 flex-col items-center gap-2 text-center"><Crest src={homeCrestUrl} team={homeTeam} /><p className="line-clamp-2 text-sm font-semibold leading-tight text-white">{homeTeam}</p></div>
-          <div className="pt-1 text-center"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-cyan-300">vs</p><p className="mt-2 whitespace-nowrap text-xs text-slate-400">{time}</p></div>
+          <div className="pt-1 text-center"><p className="text-lg font-semibold text-cyan-200">{hasScore ? `${homeScore} - ${awayScore}` : 'VS'}</p><p className="mt-2 whitespace-nowrap text-xs text-slate-400"><LocalizedMatchTime dateTimeUtc={dateTimeUtc} fallback={time} /></p></div>
           <div className="flex min-w-0 flex-col items-center gap-2 text-center"><Crest src={awayCrestUrl} team={awayTeam} /><p className="line-clamp-2 text-sm font-semibold leading-tight text-white">{awayTeam}</p></div>
         </div>
 

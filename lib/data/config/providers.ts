@@ -15,7 +15,7 @@ const providerConfigById: Record<string, ProviderConfigEntry> = {
     id: 'api-football',
     enabled: Boolean(dataEnv.apiFootballApiKey),
     timeoutMs: dataEnv.providerTimeoutMs,
-    ttlSeconds: dataEnv.dataCacheTtlSeconds,
+    ttlSeconds: 30,
   },
   'football-data': {
     id: 'football-data',

@@ -31,6 +31,7 @@ export default function FeaturedMatches({ matches }: { matches: IntelligenceMatc
   const [country, setCountry] = useState('Todos los países');
   const countries = ['Todos los países', ...Array.from(new Set(matches.map(getMatchCountry))).sort()];
   const visibleMatches = matches
+    .filter((match) => match.status !== 'FINALIZADO')
     .filter((match) => country === 'Todos los países' || getMatchCountry(match) === country)
     .slice(0, 6);
 
@@ -58,7 +59,8 @@ export default function FeaturedMatches({ matches }: { matches: IntelligenceMatc
               key={match.slug}
               competition={match.competition}
               time={match.time}
-              status={match.status === 'PROXIMO' ? 'PRÓXIMO' : 'EN VIVO'}
+              dateTimeUtc={match.dateTimeUtc}
+              status={match.status === 'PROXIMO' ? 'PRÓXIMO' : match.status}
               homeTeam={match.team1}
               homeCrestUrl={match.team1Logo}
               awayTeam={match.team2}
@@ -66,6 +68,9 @@ export default function FeaturedMatches({ matches }: { matches: IntelligenceMatc
               slug={match.slug}
               href={match.href}
               sourceLabel={match.sourceLabel}
+              homeScore={match.homeScore}
+              awayScore={match.awayScore}
+              elapsedMinutes={match.elapsedMinutes}
             />
           ))}
         </div>

@@ -56,7 +56,6 @@ function isSameLocalDay(dateIso: string): boolean {
 
 function filterPlayableToday(matches: Match[], limit: number): Match[] {
   return matches
-    .filter((match) => match.status !== 'FINALIZADO')
     .filter((match) => {
       if (!match.dateTimeUtc) {
         return true;

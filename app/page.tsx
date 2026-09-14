@@ -9,6 +9,8 @@ import AdSlot from './components/AdSlot';
 import Footer from './components/Footer';
 import { getTodayFootballMatches, getTodayFootballMatchesCount } from './lib/realSportsData';
 
+export const revalidate = 30;
+
 const heroBySport = {
   all: '/hero/hero-portada.png',
   football: '/hero/hero-football.png',

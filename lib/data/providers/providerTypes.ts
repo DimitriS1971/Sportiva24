@@ -37,6 +37,7 @@ export interface ApiFootballFixture {
     };
     status?: {
       short?: string;
+      elapsed?: number | null;
     };
   };
   league?: {

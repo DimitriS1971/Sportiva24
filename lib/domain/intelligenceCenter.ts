@@ -1,4 +1,4 @@
-export type MatchStatus = 'EN VIVO' | 'PROXIMO' | 'PRÓXIMO';
+export type MatchStatus = 'EN VIVO' | 'PROXIMO' | 'PRÓXIMO' | 'FINALIZADO';
 
 export type ConfidenceLevel = 'Alta' | 'Media' | 'Baja';
 
@@ -12,6 +12,7 @@ export interface IntelligenceMatch {
   competition: string;
   country?: string;
   time: string;
+  dateTimeUtc?: string;
   status: MatchStatus;
   team1: string;
   team1Logo: string;
@@ -24,6 +25,9 @@ export interface IntelligenceMatch {
   href?: string;
   sourceLabel?: string;
   sourceTier?: 'free' | 'paid' | 'mock';
+  homeScore?: number;
+  awayScore?: number;
+  elapsedMinutes?: number;
 }
 
 export interface IntelligenceArticle {

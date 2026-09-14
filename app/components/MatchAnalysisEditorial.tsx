@@ -66,24 +66,18 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
       risk: `${awayTeam} puede convertir el partido en una disputa de detalles si logra cerrar los pasillos interiores.`,
       localTitle: `Cómo puede imponerse ${homeTeam}`,
       awayTitle: `La respuesta de ${awayTeam}`,
-      favorable: `${favoredTeam} encuentra el primer golpe y obliga al rival a modificar su plan.`,
-      danger: 'El partido se mantiene igualado hasta el tramo final y aumenta el peso de una acción aislada.',
     },
     {
       intro: `La diferencia entre ambos equipos no es lineal: ${homeTeam} tiene el contexto local, pero ${awayTeam} puede equilibrar el duelo con disciplina sin balón y transiciones rápidas.`,
       risk: `El principal riesgo para ${favoredTeam} es confundir control territorial con ocasiones realmente claras.`,
       localTitle: `La presión inicial de ${homeTeam}`,
       awayTitle: `El plan de ${awayTeam} sin balón`,
-      favorable: `${homeTeam} consigue instalarse arriba y transforma su volumen en una ventaja antes del descanso.`,
-      danger: `${awayTeam} resiste el primer tramo, gana confianza y lleva el encuentro a un escenario de baja anotación.`,
     },
     {
       intro: `Este cruce se perfila como una prueba de gestión: ${homeTeam} debe imponer ritmo sin desordenarse, mientras ${awayTeam} necesita elegir bien cuándo acelerar.`,
       risk: `Una pérdida en salida o una mala defensa de pelota parada puede alterar por completo la lectura previa.`,
       localTitle: `La construcción de ${homeTeam}`,
       awayTitle: `Las transiciones de ${awayTeam}`,
-      favorable: `${homeTeam} protege bien las pérdidas y consigue que el rival defienda demasiado cerca de su área.`,
-      danger: `${awayTeam} encuentra espacios a la espalda y convierte el encuentro en un intercambio mucho más abierto.`,
     },
   ][variant];
   const standings = context?.standings ?? [];
@@ -92,7 +86,6 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
   const h2h = context?.headToHead;
   const favoredStanding = favoredTeam === homeTeam ? homeStanding : awayStanding;
   const favoredSide = favoredTeam === homeTeam ? 'home' : 'away';
-  const opposingTeam = favoredTeam === homeTeam ? awayTeam : homeTeam;
   const homeWins = h2h?.homeWins ?? 0;
   const draws = h2h?.draws ?? 0;
   const awayWins = h2h?.awayWins ?? 0;
@@ -151,7 +144,7 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
           <h2 className="mt-2 font-editorial text-3xl text-white">Qué inclina la previa</h2>
           <div className="mt-5 space-y-3">
               <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-4"><p className="font-semibold text-emerald-100">{favoredTeam} controla mejor el punto de partida</p><p className="mt-1 text-sm leading-6 text-slate-300">Ocupa la posición {favoredStanding?.position ?? 'no informada'} con {favoredStanding?.points ?? 'puntos no informados'} y una secuencia reciente de {recentSummary(context, favoredSide)}.</p></div>
-              <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-4"><p className="font-semibold text-amber-100">{opposingTeam} necesita sobrevivir al primer tramo</p><p className="mt-1 text-sm leading-6 text-slate-300">Su mejor escenario es mantener el partido corto, proteger los espacios y atacar tras recuperación.</p></div>
+              <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-4"><p className="font-semibold text-amber-100">{favoredTeam === homeTeam ? awayTeam : homeTeam} necesita sobrevivir al primer tramo</p><p className="mt-1 text-sm leading-6 text-slate-300">Su mejor escenario es mantener el partido corto, proteger los espacios y atacar tras recuperación.</p></div>
             <div className="rounded-xl border border-slate-700 bg-black/25 p-4"><p className="font-semibold text-white">Historial directo</p><p className="mt-1 text-sm leading-6 text-slate-300">{historyReading} El historial aporta contexto, pero no determina por sí solo la previa.</p></div>
           </div>
         </article>
@@ -164,19 +157,6 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
           <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-cyan-100">{copy.localTitle}</p><p className="mt-2 text-sm leading-6 text-slate-300">El local debería buscar amplitud, mover el bloque visitante y atacar el intervalo entre lateral y central. Si encuentra ventaja temprano, el partido puede abrirse.</p></div>
           <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-amber-100">{copy.awayTitle}</p><p className="mt-2 text-sm leading-6 text-slate-300">La prioridad visitante será proteger el carril central, negar recepciones limpias y obligar a {homeTeam} a finalizar desde posiciones menos cómodas.</p></div>
           <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-rose-100">Transiciones</p><p className="mt-2 text-sm leading-6 text-slate-300">La principal vía de sorpresa es la espalda de los laterales locales después de pérdida. El balance defensivo de {homeTeam} será más importante que la posesión total.</p></div>
-        </div>
-      </section>
-
-      <section className="grid gap-5 lg:grid-cols-2">
-        <article className="rounded-2xl border border-emerald-400/25 bg-emerald-500/5 p-5 md:p-7"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-300">04 · Escenario favorable</p><h2 className="mt-2 font-editorial text-2xl text-white">Ventaja para {favoredTeam}</h2><p className="mt-3 text-sm leading-7 text-slate-200">{copy.favorable} Si sostiene la ventaja antes del descanso, el rival tendrá que adelantar líneas y dejará más espacios para el segundo golpe.</p></article>
-        <article className="rounded-2xl border border-amber-400/25 bg-amber-500/5 p-5 md:p-7"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-300">05 · Escenario de riesgo</p><h2 className="mt-2 font-editorial text-2xl text-white">Partido abierto o de detalle</h2><p className="mt-3 text-sm leading-7 text-slate-200">{copy.danger} En ese contexto, el empate gana peso y la lectura debe actualizarse con el volumen real de ocasiones.</p></article>
-      </section>
-
-      <section className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 md:p-7">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">06 · Checklist de seguimiento</p>
-        <h2 className="mt-2 font-editorial text-3xl text-white">Qué mirar antes del saque inicial</h2>
-        <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {[`Alineación y disponibilidad del mediocampo de ${homeTeam}`, `Altura del bloque inicial de ${awayTeam}`, 'Primeros 15 minutos y recuperaciones en campo rival', 'Balón parado y defensa de centros laterales'].map((item) => <div key={item} className="rounded-xl border border-slate-800 bg-black/25 p-4 text-sm leading-6 text-slate-200">{item}</div>)}
         </div>
       </section>
 

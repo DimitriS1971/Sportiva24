@@ -214,6 +214,11 @@ export async function getRealMatchContext(slug: string, providerId: string): Pro
     points: entry.points,
     played: entry.all?.played,
   }));
+  const matchStandings = [...new Map(
+    toStanding
+      .filter((entry) => entry.teamId === homeTeamId || entry.teamId === awayTeamId)
+      .map((entry) => [entry.teamId, entry] as const),
+  ).values()].slice(0, 2);
   const recentForm = {
     home: sortNewestFirst(homeRecent)
       .filter((item) => item.fixture?.id !== fixtureId)
@@ -261,7 +266,7 @@ export async function getRealMatchContext(slug: string, providerId: string): Pro
       awayWins,
     },
     recentForm,
-    standings: toStanding.filter((entry) => entry.teamId === homeTeamId || entry.teamId === awayTeamId),
+    standings: matchStandings,
     lineups: realLineups,
     liveStatistics: realLiveStatistics,
     summary: `${homeTeamName} vs ${awayTeamName} se juega el ${formatDate(fixture.fixture?.date)} en ${fixture.league?.name ?? 'la competicion informada'}. ${h2hSummary}`,

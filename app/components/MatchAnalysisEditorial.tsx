@@ -54,7 +54,6 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
   probabilities.draw = 100 - probabilities.home - probabilities.away;
   const variant = seed % 3;
   const favoredTeam = isTorqueLiverpool ? awayTeam : indexGap >= 0 ? homeTeam : awayTeam;
-  const signalTeam = isTorqueLiverpool ? homeTeam : favoredTeam;
   const copy = [
     {
       intro: `El modelo detecta una ventaja de ${favoredTeam}, aunque el partido todavía conserva zonas de incertidumbre. La forma reciente y la capacidad de administrar los momentos serán más importantes que la posesión aislada.`,
@@ -112,10 +111,10 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
             ))}
           </div>
         ) : null}
-        <h1 className="mt-5 max-w-4xl font-editorial text-4xl leading-tight text-white md:text-6xl">{homeTeam} vs {awayTeam}: {favoredTeam} parte con la señal principal</h1>
+        <h1 className="mt-5 max-w-4xl font-editorial text-4xl leading-tight text-white md:text-6xl">{homeTeam} vs {awayTeam}: {favoredTeam} parte como favorito</h1>
         <p className="mt-4 max-w-4xl text-base leading-7 text-slate-200 md:text-lg">{copy.intro}</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-2xl border border-cyan-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Señal principal</p><p className="mt-2 text-xl font-semibold text-cyan-100">{signalTeam}</p><p className="mt-1 text-sm text-slate-300">La vía competitiva que puede cambiar el guion del partido.</p></div>
+          <div className="rounded-2xl border border-cyan-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Señal principal</p><p className="mt-2 text-xl font-semibold text-cyan-100">{favoredTeam}</p><p className="mt-1 text-sm text-slate-300">La señal principal coincide con el favorito del modelo.</p></div>
           <div className="rounded-2xl border border-amber-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Riesgo clave</p><p className="mt-2 text-xl font-semibold text-amber-100">Variación de ritmo</p><p className="mt-1 text-sm text-slate-300">{copy.risk}</p></div>
           <div className="rounded-2xl border border-emerald-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Confianza</p><p className="mt-2 text-xl font-semibold text-emerald-100">Media-alta</p><p className="mt-1 text-sm text-slate-300">La diferencia existe, pero no elimina la varianza.</p></div>
         </div>
@@ -174,7 +173,7 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
       <section className="rounded-2xl border border-cyan-400/25 bg-[linear-gradient(135deg,rgba(8,47,73,0.65),rgba(2,6,23,0.96))] p-5 md:p-7">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan-200">Conclusión editorial</p>
         <h2 className="mt-2 font-editorial text-3xl text-white">{favoredTeam} parte arriba, pero la clave es la paciencia</h2>
-        <p className="mt-4 max-w-5xl text-base leading-8 text-slate-200">La combinación de localía, posición, forma reciente y diferencial histórico coloca a {favoredTeam} como favorito principal, aunque no absoluto. La probabilidad central es {probabilities.home}% para el local, {probabilities.draw}% para el empate y {probabilities.away}% para {awayTeam}. La señal de {signalTeam} puede alterar el desarrollo si encuentra su mejor escenario competitivo. Es una previa informativa: las alineaciones, el ritmo inicial y la calidad de las ocasiones deben validar o rebajar esta ventaja.</p>
+        <p className="mt-4 max-w-5xl text-base leading-8 text-slate-200">La combinación de localía, posición, forma reciente y diferencial histórico coloca a {favoredTeam} como favorito principal, aunque no absoluto. La probabilidad central es {probabilities.home}% para el local, {probabilities.draw}% para el empate y {probabilities.away}% para {awayTeam}. La señal principal de {favoredTeam} puede consolidarse si encuentra su mejor escenario competitivo. Es una previa informativa: las alineaciones, el ritmo inicial y la calidad de las ocasiones deben validar o rebajar esta ventaja.</p>
       </section>
     </section>
   );

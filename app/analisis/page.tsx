@@ -28,7 +28,7 @@ export default async function AnalysisPage() {
           <div className="mx-auto mb-10 mt-16 max-w-4xl text-center md:mt-20">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-300">Análisis del día</p>
             <h1 className="mt-3 text-5xl font-bold text-white md:text-6xl">Partidos de hoy</h1>
-            <p className="mt-3 max-w-3xl text-lg text-gray-400">Análisis actualizados a partir de los partidos reales programados para hoy. Cada ficha abre una lectura editorial con probabilidades, contexto y factores del encuentro.</p>
+            <p className="mt-3 max-w-3xl text-lg text-gray-400">Análisis actualizados a partir de los partidos programados para hoy. Cada ficha abre una lectura editorial con probabilidades, contexto y factores del encuentro.</p>
             <p className="mt-5 text-sm text-gray-500">{analysisData.length} análisis disponibles · Datos actualizados cada 2 minutos</p>
           </div>
 

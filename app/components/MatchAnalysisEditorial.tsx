@@ -29,10 +29,51 @@ function recentSummary(context: RealMatchContext | null, side: 'home' | 'away') 
   return `${wins}V · ${draws}E · ${losses}D`;
 }
 
+function textSeed(value: string): number {
+  return value.split('').reduce((total, character, index) => total + character.charCodeAt(0) * (index + 1), 0);
+}
+
 export default function MatchAnalysisEditorial({ informe, context }: MatchAnalysisEditorialProps) {
   const homeTeam = informe.match.homeTeam;
   const awayTeam = informe.match.awayTeam;
-  const probabilities = { home: 64, draw: 21, away: 15 };
+  const seed = textSeed(`${homeTeam}:${awayTeam}:${informe.match.competition}`);
+  const homeIndex = informe.indicadores.equipos.find((team) => team.side === 'local')?.s24Index ?? 50;
+  const awayIndex = informe.indicadores.equipos.find((team) => team.side === 'visitante')?.s24Index ?? 50;
+  const indexGap = homeIndex - awayIndex;
+  const probabilities = {
+    home: Math.max(25, Math.min(70, Math.round(48 + indexGap * 0.55 + 4))),
+    away: Math.max(12, Math.min(38, Math.round(27 - indexGap * 0.35))),
+    draw: 0,
+  };
+  probabilities.draw = 100 - probabilities.home - probabilities.away;
+  const variant = seed % 3;
+  const favoredTeam = indexGap >= 0 ? homeTeam : awayTeam;
+  const copy = [
+    {
+      intro: `El modelo detecta una ventaja de ${favoredTeam}, aunque el partido todavía conserva zonas de incertidumbre. La forma reciente y la capacidad de administrar los momentos serán más importantes que la posesión aislada.`,
+      risk: `${awayTeam} puede convertir el partido en una disputa de detalles si logra cerrar los pasillos interiores.`,
+      localTitle: `Cómo puede imponerse ${homeTeam}`,
+      awayTitle: `La respuesta de ${awayTeam}`,
+      favorable: `${favoredTeam} encuentra el primer golpe y obliga al rival a modificar su plan.`,
+      danger: 'El partido se mantiene igualado hasta el tramo final y aumenta el peso de una acción aislada.',
+    },
+    {
+      intro: `La diferencia entre ambos equipos no es lineal: ${homeTeam} tiene el contexto local, pero ${awayTeam} puede equilibrar el duelo con disciplina sin balón y transiciones rápidas.`,
+      risk: `El principal riesgo para ${favoredTeam} es confundir control territorial con ocasiones realmente claras.`,
+      localTitle: `La presión inicial de ${homeTeam}`,
+      awayTitle: `El plan de ${awayTeam} sin balón`,
+      favorable: `${homeTeam} consigue instalarse arriba y transforma su volumen en una ventaja antes del descanso.`,
+      danger: `${awayTeam} resiste el primer tramo, gana confianza y lleva el encuentro a un escenario de baja anotación.`,
+    },
+    {
+      intro: `Este cruce se perfila como una prueba de gestión: ${homeTeam} debe imponer ritmo sin desordenarse, mientras ${awayTeam} necesita elegir bien cuándo acelerar.`,
+      risk: `Una pérdida en salida o una mala defensa de pelota parada puede alterar por completo la lectura previa.`,
+      localTitle: `La construcción de ${homeTeam}`,
+      awayTitle: `Las transiciones de ${awayTeam}`,
+      favorable: `${homeTeam} protege bien las pérdidas y consigue que el rival defienda demasiado cerca de su área.`,
+      danger: `${awayTeam} encuentra espacios a la espalda y convierte el encuentro en un intercambio mucho más abierto.`,
+    },
+  ][variant];
   const standings = context?.standings ?? [];
   const homeStanding = standings.find((team) => team.teamName === homeTeam);
   const awayStanding = standings.find((team) => team.teamName === awayTeam);
@@ -61,11 +102,11 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
             ))}
           </div>
         ) : null}
-        <h1 className="mt-5 max-w-4xl font-editorial text-4xl leading-tight text-white md:text-6xl">{homeTeam} vs {awayTeam}: ventaja local con margen de respuesta</h1>
-        <p className="mt-4 max-w-4xl text-base leading-7 text-slate-200 md:text-lg">La lectura combina el modelo S24 con forma reciente, posición competitiva, historial directo y contexto de localía. {homeTeam} llega con la señal local del modelo, pero {awayTeam} conserva una vía clara para incomodar si sostiene el bloque y convierte sus transiciones.</p>
+        <h1 className="mt-5 max-w-4xl font-editorial text-4xl leading-tight text-white md:text-6xl">{homeTeam} vs {awayTeam}: {favoredTeam} parte con la señal principal</h1>
+        <p className="mt-4 max-w-4xl text-base leading-7 text-slate-200 md:text-lg">{copy.intro}</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-cyan-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Señal principal</p><p className="mt-2 text-xl font-semibold text-cyan-100">{homeTeam}</p><p className="mt-1 text-sm text-slate-300">Mejor combinación de forma, tabla y localía.</p></div>
-          <div className="rounded-2xl border border-amber-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Riesgo clave</p><p className="mt-2 text-xl font-semibold text-amber-100">Partido cerrado</p><p className="mt-1 text-sm text-slate-300">{awayTeam} puede reducir espacios y llevarlo al detalle.</p></div>
+          <div className="rounded-2xl border border-amber-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Riesgo clave</p><p className="mt-2 text-xl font-semibold text-amber-100">Variación de ritmo</p><p className="mt-1 text-sm text-slate-300">{copy.risk}</p></div>
           <div className="rounded-2xl border border-emerald-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Confianza</p><p className="mt-2 text-xl font-semibold text-emerald-100">Media-alta</p><p className="mt-1 text-sm text-slate-300">La diferencia existe, pero no elimina la varianza.</p></div>
         </div>
       </section>
@@ -90,7 +131,7 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">02 · Diferencial competitivo</p>
           <h2 className="mt-2 font-editorial text-3xl text-white">Qué inclina la previa</h2>
           <div className="mt-5 space-y-3">
-            <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-4"><p className="font-semibold text-emerald-100">{homeTeam} controla mejor el punto de partida</p><p className="mt-1 text-sm leading-6 text-slate-300">Ocupa la posición {homeStanding?.position ?? 'no informada'} con {homeStanding?.points ?? 'puntos no informados'} y una secuencia reciente de {recentSummary(context, 'home')}.</p></div>
+              <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-4"><p className="font-semibold text-emerald-100">{homeTeam} controla mejor el punto de partida</p><p className="mt-1 text-sm leading-6 text-slate-300">Ocupa la posición {homeStanding?.position ?? 'no informada'} con {homeStanding?.points ?? 'puntos no informados'} y una secuencia reciente de {recentSummary(context, 'home')}.</p></div>
             <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-4"><p className="font-semibold text-amber-100">{awayTeam} necesita sobrevivir al primer tramo</p><p className="mt-1 text-sm leading-6 text-slate-300">Ocupa la posición {awayStanding?.position ?? 'no informada'} con {awayStanding?.points ?? 'puntos no informados'}; su mejor escenario es mantener el partido corto y atacar tras recuperación.</p></div>
             <div className="rounded-xl border border-slate-700 bg-black/25 p-4"><p className="font-semibold text-white">El historial respalda al local, pero no decide solo</p><p className="mt-1 text-sm leading-6 text-slate-300">En la muestra disponible: {h2h?.homeWins ?? 0} victorias de {homeTeam}, {h2h?.draws ?? 0} empates y {h2h?.awayWins ?? 0} de {awayTeam}.</p></div>
           </div>
@@ -101,15 +142,15 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">03 · Lectura táctica</p>
         <h2 className="mt-2 font-editorial text-3xl text-white">Dónde puede romperse el partido</h2>
         <div className="mt-5 grid gap-4 md:grid-cols-3">
-          <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-cyan-100">Salida de {homeTeam}</p><p className="mt-2 text-sm leading-6 text-slate-300">El local debería buscar amplitud, mover el bloque visitante y atacar el intervalo entre lateral y central. Si encuentra ventaja temprano, el partido puede abrirse.</p></div>
-          <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-amber-100">Bloque de {awayTeam}</p><p className="mt-2 text-sm leading-6 text-slate-300">La prioridad visitante será proteger el carril central, negar recepciones limpias y obligar a {homeTeam} a finalizar desde posiciones menos cómodas.</p></div>
+          <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-cyan-100">{copy.localTitle}</p><p className="mt-2 text-sm leading-6 text-slate-300">El local debería buscar amplitud, mover el bloque visitante y atacar el intervalo entre lateral y central. Si encuentra ventaja temprano, el partido puede abrirse.</p></div>
+          <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-amber-100">{copy.awayTitle}</p><p className="mt-2 text-sm leading-6 text-slate-300">La prioridad visitante será proteger el carril central, negar recepciones limpias y obligar a {homeTeam} a finalizar desde posiciones menos cómodas.</p></div>
           <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="font-semibold text-rose-100">Transiciones</p><p className="mt-2 text-sm leading-6 text-slate-300">La principal vía de sorpresa es la espalda de los laterales locales después de pérdida. El balance defensivo de {homeTeam} será más importante que la posesión total.</p></div>
         </div>
       </section>
 
       <section className="grid gap-5 lg:grid-cols-2">
-        <article className="rounded-2xl border border-emerald-400/25 bg-emerald-500/5 p-5 md:p-7"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-300">04 · Escenario favorable</p><h2 className="mt-2 font-editorial text-2xl text-white">{homeTeam} marca primero</h2><p className="mt-3 text-sm leading-7 text-slate-200">Si {homeTeam} convierte su dominio territorial en ventaja antes del descanso, {awayTeam} tendrá que adelantar líneas y dejará más espacios para el segundo golpe. En ese escenario, la probabilidad local gana fuerza.</p></article>
-        <article className="rounded-2xl border border-amber-400/25 bg-amber-500/5 p-5 md:p-7"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-300">05 · Escenario de riesgo</p><h2 className="mt-2 font-editorial text-2xl text-white">{awayTeam} resiste 60 minutos</h2><p className="mt-3 text-sm leading-7 text-slate-200">Un 0-0 prolongado reduce la ventaja estructural de {homeTeam} y aumenta el peso de una pelota parada o una transición. En ese contexto, el empate deja de ser secundario y la lectura debe actualizarse con el volumen real de ocasiones.</p></article>
+        <article className="rounded-2xl border border-emerald-400/25 bg-emerald-500/5 p-5 md:p-7"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-300">04 · Escenario favorable</p><h2 className="mt-2 font-editorial text-2xl text-white">Ventaja para {favoredTeam}</h2><p className="mt-3 text-sm leading-7 text-slate-200">{copy.favorable} Si sostiene la ventaja antes del descanso, el rival tendrá que adelantar líneas y dejará más espacios para el segundo golpe.</p></article>
+        <article className="rounded-2xl border border-amber-400/25 bg-amber-500/5 p-5 md:p-7"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-300">05 · Escenario de riesgo</p><h2 className="mt-2 font-editorial text-2xl text-white">Partido abierto o de detalle</h2><p className="mt-3 text-sm leading-7 text-slate-200">{copy.danger} En ese contexto, el empate gana peso y la lectura debe actualizarse con el volumen real de ocasiones.</p></article>
       </section>
 
       <section className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 md:p-7">
@@ -122,7 +163,7 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
 
       <section className="rounded-2xl border border-cyan-400/25 bg-[linear-gradient(135deg,rgba(8,47,73,0.65),rgba(2,6,23,0.96))] p-5 md:p-7">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan-200">Conclusión editorial</p>
-        <h2 className="mt-2 font-editorial text-3xl text-white">{homeTeam} parte arriba, pero la clave es la paciencia</h2>
+        <h2 className="mt-2 font-editorial text-3xl text-white">{favoredTeam} parte arriba, pero la clave es la paciencia</h2>
         <p className="mt-4 max-w-5xl text-base leading-8 text-slate-200">La combinación de localía, posición, forma reciente y diferencial histórico coloca a {homeTeam} como favorito claro, aunque no absoluto. La probabilidad central es {probabilities.home}% para el local, {probabilities.draw}% para el empate y {probabilities.away}% para {awayTeam}. La lectura pierde solidez si {homeTeam} no genera ocasiones claras o si {awayTeam} convierte una transición temprana. Es una previa informativa: las alineaciones, el ritmo inicial y la calidad de las ocasiones deben validar o rebajar esta ventaja.</p>
       </section>
     </section>

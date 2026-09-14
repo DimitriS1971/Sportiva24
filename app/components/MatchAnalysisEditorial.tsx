@@ -43,8 +43,24 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
         <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.15em] text-cyan-200">
           <span className="rounded-full border border-cyan-300/35 bg-cyan-400/10 px-3 py-1">Análisis S24</span>
           <span className="rounded-full border border-slate-600/60 bg-slate-900/60 px-3 py-1">Previa editorial</span>
-          <span className="rounded-full border border-slate-600/60 bg-slate-900/60 px-3 py-1">No es la ficha del partido</span>
         </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Fecha</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.scheduledAt ? new Date(context.fixture.scheduledAt).toLocaleDateString('es-ES', { dateStyle: 'long' }) : 'No informada'}</p></div>
+          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Hora</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.scheduledAt ? new Date(context.fixture.scheduledAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' }) : informe.match.time}</p></div>
+          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Estadio</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.venue ?? 'No informado por el proveedor'}</p></div>
+          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Competición</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.competition ?? informe.match.competition}</p></div>
+        </div>
+        {context?.lineups.length ? (
+          <div className="mt-4 grid gap-3 md:grid-cols-2">
+            {context.lineups.map((lineup) => (
+              <div key={lineup.teamName} className="rounded-xl border border-slate-700/60 bg-black/25 p-4">
+                <div className="flex items-center justify-between gap-3"><p className="font-semibold text-white">{lineup.teamName}</p>{lineup.formation ? <span className="text-xs text-cyan-200">{lineup.formation}</span> : null}</div>
+                <p className="mt-2 text-[10px] uppercase tracking-[0.13em] text-slate-500">Alineación confirmada</p>
+                <p className="mt-1 text-sm leading-6 text-slate-200">{lineup.starters.join(' · ') || 'Titulares no informados'}</p>
+              </div>
+            ))}
+          </div>
+        ) : null}
         <h1 className="mt-5 max-w-4xl font-editorial text-4xl leading-tight text-white md:text-6xl">{homeTeam} vs {awayTeam}: ventaja local con margen de respuesta</h1>
         <p className="mt-4 max-w-4xl text-base leading-7 text-slate-200 md:text-lg">La lectura combina el modelo S24 con forma reciente, posición competitiva, historial directo y contexto de localía. Inter llega con una base más estable, pero Udinese conserva una vía clara para incomodar si sostiene el bloque y convierte sus transiciones.</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">

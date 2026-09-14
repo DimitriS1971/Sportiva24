@@ -3,6 +3,7 @@ import Image from 'next/image';
 
 import DatosPartidoDirectos from '@/app/components/DatosPartidoDirectos';
 import Footer from '@/app/components/Footer';
+import LocalizedMatchDateTime from '@/app/components/LocalizedMatchDateTime';
 import Navbar from '@/app/components/Navbar';
 import { buildEditorialMatchPreview, editorialMatchPreviews } from '@/app/data/editorialMatchPreviews';
 import { getTeamCrest } from '@/app/lib/teamCrests';
@@ -169,7 +170,7 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
     time: matchData.time,
   };
   const stadium = realContext?.fixture.venue ?? 'Estadio no informado por proveedor';
-  const editorialDate = editorialPreview
+  const editorialDateFallback = editorialPreview
     ? 'Fecha por confirmar'
     : formatEditorialDate(matchData.dateTimeUtc ?? matchData.time);
   const statusStyle = matchData.status === 'EN VIVO'
@@ -219,7 +220,7 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
 
             <div className="flex items-center gap-2 rounded-xl border border-slate-700/55 bg-black/30 px-3 py-2 text-xs md:text-sm text-slate-300">
               <CalendarIcon />
-              <span>{editorialDate}</span>
+              <span><LocalizedMatchDateTime dateTimeUtc={matchData.dateTimeUtc} fallback={editorialDateFallback} /></span>
             </div>
 
           </div>
@@ -231,7 +232,8 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
           match={matchData}
           providerId={providerId}
           realContext={realContext}
-          scheduleLabel={editorialDate}
+          scheduleDateTimeUtc={matchData.dateTimeUtc}
+          scheduleLabel={editorialDateFallback}
         />
       </div>
 

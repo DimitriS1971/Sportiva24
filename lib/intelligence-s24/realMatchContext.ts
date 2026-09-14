@@ -3,6 +3,7 @@ import type { ApiFootballFixture } from '@/lib/data/providers/providerTypes';
 
 export interface RealHeadToHeadMatch {
   date: string;
+  dateTimeUtc?: string;
   homeTeam: string;
   awayTeam: string;
   score: string;
@@ -10,6 +11,7 @@ export interface RealHeadToHeadMatch {
 
 export interface RealRecentMatch {
   date: string;
+  dateTimeUtc?: string;
   opponent: string;
   score: string;
   result: 'V' | 'E' | 'D';
@@ -101,6 +103,7 @@ function toHeadToHeadMatch(fixture: ApiFootballFixture): RealHeadToHeadMatch | n
 
   return {
     date: formatDate(fixture.fixture?.date),
+    dateTimeUtc: fixture.fixture?.date,
     homeTeam,
     awayTeam,
     score: `${homeGoals}-${awayGoals}`,
@@ -120,6 +123,7 @@ function toRecentMatch(fixture: ApiFootballFixture, teamId: number): RealRecentM
   const result = teamGoals > opponentGoals ? 'V' : teamGoals === opponentGoals ? 'E' : 'D';
   return {
     date: formatDate(fixture.fixture?.date),
+    dateTimeUtc: fixture.fixture?.date,
     opponent: isHome ? away.name : home.name,
     score: `${teamGoals}-${opponentGoals}`,
     result,

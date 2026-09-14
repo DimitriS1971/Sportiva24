@@ -1,5 +1,6 @@
 import type { InformeS24V1 } from '@/lib/intelligence-s24/informeS24V1';
 import type { RealMatchContext } from '@/lib/intelligence-s24/realMatchContext';
+import LocalizedMatchDateTime from '@/app/components/LocalizedMatchDateTime';
 
 interface MatchAnalysisEditorialProps {
   informe: InformeS24V1;
@@ -45,8 +46,8 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
           <span className="rounded-full border border-slate-600/60 bg-slate-900/60 px-3 py-1">Previa editorial</span>
         </div>
         <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Fecha</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.scheduledAt ? new Date(context.fixture.scheduledAt).toLocaleDateString('es-ES', { dateStyle: 'long' }) : 'No informada'}</p></div>
-          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Hora</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.scheduledAt ? new Date(context.fixture.scheduledAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' }) : informe.match.time}</p></div>
+          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Fecha</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.scheduledAt ? <LocalizedMatchDateTime dateTimeUtc={context.fixture.scheduledAt} fallback="Fecha por confirmar" dateOnly /> : 'No informada'}</p></div>
+          <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Hora</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.scheduledAt ? <LocalizedMatchDateTime dateTimeUtc={context.fixture.scheduledAt} fallback={informe.match.time} /> : informe.match.time}</p></div>
           <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Estadio</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.venue ?? 'No informado por el proveedor'}</p></div>
           <div className="rounded-xl border border-slate-700/60 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.13em] text-slate-500">Competición</p><p className="mt-1 text-sm font-semibold text-white">{context?.fixture.competition ?? informe.match.competition}</p></div>
         </div>

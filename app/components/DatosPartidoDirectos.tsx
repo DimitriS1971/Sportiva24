@@ -1,10 +1,12 @@
 import type { Match } from '@/lib/data/types/domain';
 import type { RealMatchContext } from '@/lib/intelligence-s24/realMatchContext';
+import LocalizedMatchDateTime from '@/app/components/LocalizedMatchDateTime';
 
 interface DatosPartidoDirectosProps {
   match: Match;
   providerId: string;
   realContext: RealMatchContext | null;
+  scheduleDateTimeUtc?: string;
   scheduleLabel?: string;
 }
 
@@ -39,12 +41,12 @@ function buildDataSummary(match: Match, context: RealMatchContext | null): strin
   return `${match.homeTeam.name} vs ${match.awayTeam.name}, ${context.fixture.round ?? 'jornada no informada'} de ${match.competition}. ${balance}`;
 }
 
-export default function DatosPartidoDirectos({ match, providerId, realContext, scheduleLabel }: DatosPartidoDirectosProps) {
+export default function DatosPartidoDirectos({ match, providerId, realContext, scheduleDateTimeUtc, scheduleLabel }: DatosPartidoDirectosProps) {
   const dataSummary = buildDataSummary(match, realContext);
   const directFacts = [
     { label: 'Competicion', value: match.competition },
     { label: 'Estado', value: match.status },
-    { label: 'Horario', value: scheduleLabel ?? match.time },
+    { label: 'Horario', value: scheduleDateTimeUtc ? <LocalizedMatchDateTime dateTimeUtc={scheduleDateTimeUtc} fallback={scheduleLabel ?? match.time} /> : scheduleLabel ?? match.time },
     { label: 'Local', value: match.homeTeam.name },
     { label: 'Visitante', value: match.awayTeam.name },
   ];
@@ -131,7 +133,7 @@ export default function DatosPartidoDirectos({ match, providerId, realContext, s
                 <div className="mt-3 space-y-2">
                   {team.matches.length > 0 ? team.matches.map((recent) => (
                     <div key={`${recent.date}-${recent.opponent}`} className="grid grid-cols-[5.5rem_1fr_auto] items-center gap-2 text-sm">
-                      <time className="text-xs text-slate-500">{recent.date}</time>
+                      <time className="text-xs text-slate-500"><LocalizedMatchDateTime dateTimeUtc={recent.dateTimeUtc} fallback={recent.date} /></time>
                       <span className="truncate text-slate-200">vs {recent.opponent}</span>
                       <span className={`font-semibold ${recent.result === 'V' ? 'text-emerald-300' : recent.result === 'D' ? 'text-rose-300' : 'text-amber-200'}`}>
                         {recent.result} {recent.score}
@@ -213,7 +215,7 @@ export default function DatosPartidoDirectos({ match, providerId, realContext, s
             <div className="mt-4 overflow-hidden rounded-xl border border-slate-800">
               {realContext.headToHead.matches.map((history) => (
                 <div key={`${history.date}-${history.homeTeam}-${history.awayTeam}`} className="grid grid-cols-[4.5rem_1fr_auto_1fr] items-center gap-2 border-b border-slate-800 bg-black/20 px-3 py-3 last:border-b-0 text-sm md:grid-cols-[6.5rem_1fr_auto_1fr] md:gap-3 md:px-4">
-                  <time dateTime={history.date} className="text-xs text-slate-500">{history.date}</time>
+                  <time dateTime={history.dateTimeUtc ?? history.date} className="text-xs text-slate-500"><LocalizedMatchDateTime dateTimeUtc={history.dateTimeUtc} fallback={history.date} /></time>
                   <span className="text-right text-slate-200">{history.homeTeam}</span>
                   <span className="rounded-md bg-slate-800 px-2 py-1 font-semibold text-white">{history.score}</span>
                   <span className="text-slate-200">{history.awayTeam}</span>

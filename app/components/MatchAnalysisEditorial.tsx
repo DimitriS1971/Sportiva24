@@ -33,6 +33,12 @@ function textSeed(value: string): number {
   return value.split('').reduce((total, character, index) => total + character.charCodeAt(0) * (index + 1), 0);
 }
 
+function headToHeadReading(homeTeam: string, awayTeam: string, homeWins: number, draws: number, awayWins: number): string {
+  if (homeWins > awayWins) return `La muestra favorece a ${homeTeam}: ${homeWins} victorias, ${draws} empates y ${awayWins} de ${awayTeam}.`;
+  if (awayWins > homeWins) return `La muestra favorece a ${awayTeam}: ${awayWins} victorias, ${draws} empates y ${homeWins} de ${homeTeam}.`;
+  return `La muestra está equilibrada: ${homeWins} victorias de ${homeTeam}, ${draws} empates y ${awayWins} de ${awayTeam}.`;
+}
+
 export default function MatchAnalysisEditorial({ informe, context }: MatchAnalysisEditorialProps) {
   const homeTeam = informe.match.homeTeam;
   const awayTeam = informe.match.awayTeam;
@@ -87,6 +93,10 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
   const favoredStanding = favoredTeam === homeTeam ? homeStanding : awayStanding;
   const favoredSide = favoredTeam === homeTeam ? 'home' : 'away';
   const opposingTeam = favoredTeam === homeTeam ? awayTeam : homeTeam;
+  const homeWins = h2h?.homeWins ?? 0;
+  const draws = h2h?.draws ?? 0;
+  const awayWins = h2h?.awayWins ?? 0;
+  const historyReading = headToHeadReading(homeTeam, awayTeam, homeWins, draws, awayWins);
 
   return (
     <section className="space-y-6 md:space-y-8">
@@ -142,7 +152,7 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
           <div className="mt-5 space-y-3">
               <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-4"><p className="font-semibold text-emerald-100">{favoredTeam} controla mejor el punto de partida</p><p className="mt-1 text-sm leading-6 text-slate-300">Ocupa la posición {favoredStanding?.position ?? 'no informada'} con {favoredStanding?.points ?? 'puntos no informados'} y una secuencia reciente de {recentSummary(context, favoredSide)}.</p></div>
               <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-4"><p className="font-semibold text-amber-100">{opposingTeam} necesita sobrevivir al primer tramo</p><p className="mt-1 text-sm leading-6 text-slate-300">Su mejor escenario es mantener el partido corto, proteger los espacios y atacar tras recuperación.</p></div>
-            <div className="rounded-xl border border-slate-700 bg-black/25 p-4"><p className="font-semibold text-white">El historial respalda al local, pero no decide solo</p><p className="mt-1 text-sm leading-6 text-slate-300">En la muestra disponible: {h2h?.homeWins ?? 0} victorias de {homeTeam}, {h2h?.draws ?? 0} empates y {h2h?.awayWins ?? 0} de {awayTeam}.</p></div>
+            <div className="rounded-xl border border-slate-700 bg-black/25 p-4"><p className="font-semibold text-white">Historial directo</p><p className="mt-1 text-sm leading-6 text-slate-300">{historyReading} El historial aporta contexto, pero no determina por sí solo la previa.</p></div>
           </div>
         </article>
       </section>

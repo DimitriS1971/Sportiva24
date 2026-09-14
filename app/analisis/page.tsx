@@ -9,17 +9,16 @@ export const dynamic = 'force-dynamic';
 
 export default async function AnalysisPage() {
   const todayMatches = await getTodayFootballMatches(50);
-  let analysisData = todayMatches.filter((match) => match.status === 'PROXIMO' && match.sourceTier !== 'mock');
-
-  if (analysisData.length === 0) {
-    const featuredMatches = await getFeaturedFootballMatches(50);
-    analysisData = featuredMatches.filter((match) => match.status === 'PROXIMO' && match.sourceTier !== 'mock');
-  }
-
-  if (analysisData.length === 0) {
-    const upcomingMatches = await getUpcomingFootballMatches(50);
-    analysisData = upcomingMatches.filter((match) => match.status === 'PROXIMO' && match.sourceTier !== 'mock');
-  }
+  const [featuredMatches, upcomingMatches] = await Promise.all([
+    getFeaturedFootballMatches(50),
+    getUpcomingFootballMatches(50),
+  ]);
+  const allMatches = [...todayMatches, ...featuredMatches, ...upcomingMatches]
+    .filter((match) => match.status === 'PROXIMO' && match.sourceTier !== 'mock');
+  const uniqueMatches = new Map(allMatches.map((match) => [match.slug, match]));
+  const analysisData = [...uniqueMatches.values()]
+    .sort((left, right) => (left.dateTimeUtc ?? '').localeCompare(right.dateTimeUtc ?? ''))
+    .slice(0, 50);
 
   return (
     <main className="min-h-screen bg-black text-white">

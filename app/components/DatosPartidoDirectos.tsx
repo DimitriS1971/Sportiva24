@@ -82,6 +82,36 @@ export default function DatosPartidoDirectos({ match, providerId, realContext, s
         </div>
       </article>
 
+      {match.status === 'EN VIVO' && realContext && realContext.liveStatistics.length > 0 ? (
+        <article className="rounded-2xl border border-emerald-400/25 bg-slate-950 p-5 shadow-xl shadow-black/20 md:p-7">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-300">Estadísticas en vivo</p>
+              <h2 className="mt-2 font-editorial text-2xl text-white">Datos del partido en juego</h2>
+            </div>
+            <ProviderLabel providerId={providerId} />
+          </div>
+          <div className="mt-5 overflow-hidden rounded-xl border border-slate-800">
+            <div className="grid grid-cols-[1fr_5rem_5rem] border-b border-slate-800 bg-black/30 px-4 py-3 text-xs font-semibold uppercase tracking-[0.1em] text-slate-500 md:grid-cols-[1fr_8rem_8rem]">
+              <span>Estadística</span>
+              {realContext.liveStatistics.map((team) => <span key={team.teamName} className="truncate text-center text-slate-300">{team.teamName}</span>)}
+            </div>
+            {[
+              { label: 'Tiros al arco', value: (team: typeof realContext.liveStatistics[number]) => team.shotsOnTarget },
+              { label: 'Tarjetas', value: (team: typeof realContext.liveStatistics[number]) => team.yellowCards !== undefined || team.redCards !== undefined ? `${team.yellowCards ?? 0} A · ${team.redCards ?? 0} R` : undefined },
+              { label: 'Corners', value: (team: typeof realContext.liveStatistics[number]) => team.corners },
+              { label: 'Faltas', value: (team: typeof realContext.liveStatistics[number]) => team.fouls },
+              { label: 'Posesión', value: (team: typeof realContext.liveStatistics[number]) => team.possession },
+            ].map((statistic) => (
+              <div key={statistic.label} className="grid grid-cols-[1fr_5rem_5rem] items-center border-b border-slate-800 px-4 py-3 text-sm last:border-b-0 md:grid-cols-[1fr_8rem_8rem]">
+                <span className="text-slate-400">{statistic.label}</span>
+                {realContext.liveStatistics.map((team) => <span key={team.teamName} className="text-center font-semibold text-white">{statistic.value(team) ?? '-'}</span>)}
+              </div>
+            ))}
+          </div>
+        </article>
+      ) : null}
+
       {realContext && (realContext.recentForm.home.length > 0 || realContext.recentForm.away.length > 0) ? (
         <article className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 shadow-xl shadow-black/20 md:p-7">
           <div className="flex flex-wrap items-center justify-between gap-3">

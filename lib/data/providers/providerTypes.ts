@@ -100,6 +100,20 @@ export interface ApiFootballLineupsResponse {
   response?: ApiFootballLineup[];
 }
 
+export interface ApiFootballFixtureStatistic {
+  type?: string;
+  value?: string | number | null;
+}
+
+export interface ApiFootballFixtureStatistics {
+  team?: { id?: number; name?: string; logo?: string };
+  statistics?: ApiFootballFixtureStatistic[];
+}
+
+export interface ApiFootballFixtureStatisticsResponse {
+  response?: ApiFootballFixtureStatistics[];
+}
+
 export interface TheSportsDbEvent {
   idEvent?: string;
   strLeague?: string;

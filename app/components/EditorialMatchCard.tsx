@@ -70,7 +70,7 @@ export default function EditorialMatchCard({
 
         <div className="mt-5 flex items-center justify-between gap-3 border-t border-slate-800 pt-4">
           <span className="text-[10px] uppercase tracking-[0.11em] text-slate-500">{sourceLabel ?? 'Ficha del partido'}</span>
-          <Link href={href ?? `/match/${slug}`} className="text-sm font-semibold text-cyan-200 transition-colors hover:text-white">Ver previa</Link>
+          <Link href={href ?? `/match/${slug}`} className="text-sm font-semibold text-cyan-200 transition-colors hover:text-white">{isLive ? 'Ver Partido' : 'Ver previa'}</Link>
         </div>
       </div>
     </article>

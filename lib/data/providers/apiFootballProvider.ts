@@ -3,6 +3,7 @@ import type {
   ApiFootballFixture,
   ApiFootballFixturesResponse,
   ApiFootballLineupsResponse,
+  ApiFootballFixtureStatisticsResponse,
   ApiFootballStandingsEntry,
   ApiFootballStandingsResponse,
 } from '@/lib/data/providers/providerTypes';
@@ -153,6 +154,20 @@ export class ApiFootballProvider {
 
     if (!response.ok) return [];
     const payload = (await response.json()) as ApiFootballLineupsResponse;
+    return payload.response ?? [];
+  }
+
+  async getFixtureStatistics(fixtureId: number): Promise<ApiFootballFixtureStatisticsResponse['response']> {
+    if (!dataEnv.apiFootballApiKey) return [];
+
+    const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures/statistics?fixture=${fixtureId}`;
+    const response = await fetch(endpoint, {
+      headers: { 'x-apisports-key': dataEnv.apiFootballApiKey },
+      next: { revalidate: 30 },
+    });
+
+    if (!response.ok) return [];
+    const payload = (await response.json()) as ApiFootballFixtureStatisticsResponse;
     return payload.response ?? [];
   }
 }

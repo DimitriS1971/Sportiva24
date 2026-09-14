@@ -30,6 +30,16 @@ export interface RealLineup {
   substitutes: string[];
 }
 
+export interface RealLiveTeamStatistics {
+  teamName: string;
+  shotsOnTarget?: number;
+  yellowCards?: number;
+  redCards?: number;
+  corners?: number;
+  fouls?: number;
+  possession?: string;
+}
+
 export interface RealMatchContext {
   source: 'api-football';
   fixture: {
@@ -52,6 +62,7 @@ export interface RealMatchContext {
   };
   standings: RealTeamStanding[];
   lineups: RealLineup[];
+  liveStatistics: RealLiveTeamStatistics[];
   summary: string;
   unavailableData: string[];
 }
@@ -123,6 +134,21 @@ function sortNewestFirst(fixtures: ApiFootballFixture[]): ApiFootballFixture[] {
   });
 }
 
+function isLiveFixture(fixture: ApiFootballFixture): boolean {
+  return ['LIVE', '1H', '2H', 'HT', 'ET', 'BT', 'P', 'INT'].includes(fixture.fixture?.status?.short ?? '');
+}
+
+function statisticValue(statistics: { type?: string; value?: string | number | null }[], type: string): string | number | null | undefined {
+  return statistics.find((item) => item.type?.toLowerCase() === type.toLowerCase())?.value;
+}
+
+function numericStatistic(value: string | number | null | undefined): number | undefined {
+  if (typeof value === 'number') return value;
+  if (typeof value !== 'string') return undefined;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isNaN(parsed) ? undefined : parsed;
+}
+
 export async function getRealMatchContext(slug: string, providerId: string): Promise<RealMatchContext | null> {
   if (providerId !== 'api-football') {
     return null;
@@ -150,6 +176,9 @@ export async function getRealMatchContext(slug: string, providerId: string): Pro
     apiFootballProvider.getStandings(fixture.league?.id ?? 0, fixture.league?.season),
     fixtureId ? apiFootballProvider.getLineups(fixtureId) : Promise.resolve([]),
   ]);
+  const liveStatistics = isLiveFixture(fixture)
+    ? await apiFootballProvider.getFixtureStatistics(fixtureId)
+    : [];
   const headToHeadMatches = sortNewestFirst(history)
     .filter((item) => item.fixture?.id !== fixtureId)
     .map(toHeadToHeadMatch)
@@ -199,6 +228,17 @@ export async function getRealMatchContext(slug: string, providerId: string): Pro
     starters: (lineup.startXI ?? []).map((item) => item.player?.name).filter((name): name is string => Boolean(name)),
     substitutes: (lineup.substitutes ?? []).map((item) => item.player?.name).filter((name): name is string => Boolean(name)),
   }));
+  const realLiveStatistics = (liveStatistics ?? []).filter((item) => item.team?.name).map((item) => ({
+    teamName: item.team!.name!,
+    shotsOnTarget: numericStatistic(statisticValue(item.statistics ?? [], 'Shots on Goal')),
+    yellowCards: numericStatistic(statisticValue(item.statistics ?? [], 'Yellow Cards')),
+    redCards: numericStatistic(statisticValue(item.statistics ?? [], 'Red Cards')),
+    corners: numericStatistic(statisticValue(item.statistics ?? [], 'Corner Kicks')),
+    fouls: numericStatistic(statisticValue(item.statistics ?? [], 'Fouls')),
+    possession: typeof statisticValue(item.statistics ?? [], 'Ball Possession') === 'string'
+      ? statisticValue(item.statistics ?? [], 'Ball Possession') as string
+      : undefined,
+  }));
 
   return {
     source: 'api-football',
@@ -219,6 +259,7 @@ export async function getRealMatchContext(slug: string, providerId: string): Pro
     recentForm,
     standings: toStanding.filter((entry) => entry.teamId === homeTeamId || entry.teamId === awayTeamId),
     lineups: realLineups,
+    liveStatistics: realLiveStatistics,
     summary: `${homeTeamName} vs ${awayTeamName} se juega el ${formatDate(fixture.fixture?.date)} en ${fixture.league?.name ?? 'la competicion informada'}. ${h2hSummary}`,
     unavailableData: [
       ...(toStanding.length === 0 ? ['Clasificacion y puntos de la temporada'] : []),

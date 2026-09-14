@@ -23,3 +23,32 @@ create policy "Authenticated admins can manage articles"
   to authenticated
   using (true)
   with check (true);
+
+create table if not exists public.site_stats (
+  id boolean primary key default true check (id),
+  visits bigint not null default 0,
+  updated_at timestamptz not null default now()
+);
+
+insert into public.site_stats (id, visits)
+values (true, 0)
+on conflict (id) do nothing;
+
+alter table public.site_stats enable row level security;
+
+create or replace function public.increment_site_visits()
+returns bigint
+language sql
+security definer
+set search_path = public
+as $$
+  insert into public.site_stats (id, visits, updated_at)
+  values (true, 1, now())
+  on conflict (id) do update
+    set visits = public.site_stats.visits + 1,
+        updated_at = now();
+  select visits from public.site_stats where id = true;
+$$;
+
+revoke all on function public.increment_site_visits() from public;
+grant execute on function public.increment_site_visits() to anon, authenticated;

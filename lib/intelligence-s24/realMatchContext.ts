@@ -218,7 +218,11 @@ export async function getRealMatchContext(slug: string, providerId: string): Pro
     toStanding
       .filter((entry) => entry.teamId === homeTeamId || entry.teamId === awayTeamId)
       .map((entry) => [entry.teamId, entry] as const),
-  ).values()].slice(0, 2);
+  ).values()].sort((left, right) => {
+    if (left.teamId === homeTeamId) return -1;
+    if (right.teamId === homeTeamId) return 1;
+    return 0;
+  });
   const recentForm = {
     home: sortNewestFirst(homeRecent)
       .filter((item) => item.fixture?.id !== fixtureId)

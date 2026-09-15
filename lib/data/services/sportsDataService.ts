@@ -368,7 +368,7 @@ export class SportsDataService {
             id: 'api-football',
             enabled: providerPriority.some((p) => p.id === 'api-football' && p.enabled),
             timeoutMs: providerPriority.find((p) => p.id === 'api-football')?.timeoutMs,
-            execute: async () => (await apiFootballProvider.getFeaturedFixtures(20)).length,
+            execute: async () => apiFootballProvider.getFeaturedFixturesCount(),
             isValid: (value) => value > 0,
           },
           'football-data': {

@@ -145,6 +145,19 @@ export async function getTodayFootballMatchesCount(): Promise<number> {
   return sportsDataService.getTodayMatchesCount('football');
 }
 
+export async function getPublishedAnalysisCount(): Promise<number> {
+  const [todayMatches, featuredMatches, upcomingMatches] = await Promise.all([
+    getTodayFootballMatches(50),
+    getFeaturedFootballMatches(50),
+    getUpcomingFootballMatches(50),
+  ]);
+
+  const allMatches = [...todayMatches, ...featuredMatches, ...upcomingMatches]
+    .filter((match) => match.status === 'PROXIMO' && match.sourceTier !== 'mock');
+
+  return new Map(allMatches.map((match) => [match.slug, match])).size;
+}
+
 export async function getTodayBasketballMatchesCount(): Promise<number> {
   return sportsDataService.getTodayMatchesCount('basketball');
 }

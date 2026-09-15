@@ -35,7 +35,7 @@ export class ApiFootballProvider {
       return [];
     }
 
-    const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures?date=${toYmd(new Date())}`;
+    const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures?date=${toYmd(new Date())}&timezone=${encodeURIComponent(SPORTIVA_TIME_ZONE)}`;
     const response = await fetch(endpoint, {
       headers: {
         'x-apisports-key': dataEnv.apiFootballApiKey,
@@ -49,6 +49,27 @@ export class ApiFootballProvider {
 
     const payload = (await response.json()) as ApiFootballFixturesResponse;
     return (payload.response ?? []).slice(0, Math.max(limit, 4));
+  }
+
+  async getFeaturedFixturesCount(): Promise<number> {
+    if (!dataEnv.apiFootballApiKey) {
+      return 0;
+    }
+
+    const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures?date=${toYmd(new Date())}&timezone=${encodeURIComponent(SPORTIVA_TIME_ZONE)}`;
+    const response = await fetch(endpoint, {
+      headers: {
+        'x-apisports-key': dataEnv.apiFootballApiKey,
+      },
+      next: { revalidate: 30 },
+    });
+
+    if (!response.ok) {
+      return 0;
+    }
+
+    const payload = (await response.json()) as ApiFootballFixturesResponse;
+    return (payload.response ?? []).length;
   }
 
   async getNextFixtures(limit: number): Promise<ApiFootballFixture[]> {
@@ -91,7 +112,7 @@ export class ApiFootballProvider {
       return [];
     }
 
-    const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures?date=${toYmd(date)}`;
+    const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures?date=${toYmd(date)}&timezone=${encodeURIComponent(SPORTIVA_TIME_ZONE)}`;
     const response = await fetch(endpoint, {
       headers: {
         'x-apisports-key': dataEnv.apiFootballApiKey,

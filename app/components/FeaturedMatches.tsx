@@ -70,7 +70,7 @@ export default function FeaturedMatches({ featuredMatches, activeMatches }: Feat
       <section>
         <div className="mb-4 flex items-center justify-between gap-3">
           <h3 className="text-xl font-semibold text-white">Destacados del día</h3>
-          <span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">Top 3 por competición</span>
+          <span className="rounded-full border border-emerald-400/35 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-emerald-200">Top 3 por competición</span>
         </div>
         {visibleFeaturedMatches.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">

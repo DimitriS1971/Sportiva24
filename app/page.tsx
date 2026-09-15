@@ -5,7 +5,7 @@ import FeaturedMatches from './components/FeaturedMatches';
 import HeroCropIcon from './components/HeroCropIcon';
 import AdSlot from './components/AdSlot';
 import Footer from './components/Footer';
-import { getTodayFootballMatches, getTodayFootballMatchesCount } from './lib/realSportsData';
+import { getPublishedAnalysisCount, getTodayFootballMatches, getTodayFootballMatchesCount } from './lib/realSportsData';
 import { selectHomeMatches } from './lib/footballMatchPriority';
 
 export const revalidate = 30;
@@ -23,9 +23,10 @@ const heroBySport = {
 } as const;
 
 export default async function Home() {
-  const [todayMatches, footballTodayCount] = await Promise.all([
+  const [todayMatches, footballTodayCount, publishedAnalysisCount] = await Promise.all([
     getTodayFootballMatches(200),
     getTodayFootballMatchesCount(),
+    getPublishedAnalysisCount(),
   ]);
   const { activeMatches, featuredMatches } = selectHomeMatches(todayMatches);
 
@@ -42,7 +43,7 @@ export default async function Home() {
       <section className="bg-black px-4 md:px-12 py-4 md:py-5">
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
           <StatCardNew icon={<HeroCropIcon source={heroBySport.football} alt="Fútbol" className="h-11 w-11" />} value={String(footballTodayCount)} title="Partidos hoy" detail="" accent="blue" href="/match" />
-          <StatCardNew icon={<HeroCropIcon source={heroBySport.all} alt="Análisis" className="h-11 w-11" />} value="1.248" title="Análisis publicados" detail="" accent="violet" href="/analisis" />
+          <StatCardNew icon={<HeroCropIcon source={heroBySport.all} alt="Análisis" className="h-11 w-11" />} value={String(publishedAnalysisCount)} title="Análisis disponibles" detail="" accent="violet" href="/analisis" />
           <StatCardNew icon={<HeroCropIcon source={heroBySport.football} alt="Modelo online" className="h-11 w-11" />} value="Modelo Online" title="Última actualización: Ahora" detail="" accent="green" href="/modelo-online" />
         </div>
       </section>

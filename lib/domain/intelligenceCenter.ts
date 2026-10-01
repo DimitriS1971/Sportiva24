@@ -1,4 +1,7 @@
-export type MatchStatus = 'EN VIVO' | 'PROXIMO' | 'PRÓXIMO' | 'FINALIZADO';
+export type MatchStatus =
+  | 'EN VIVO' | 'PROXIMO' | 'PRÓXIMO' | 'FINALIZADO'
+  | 'POSTERGADO' | 'CANCELADO' | 'SUSPENDIDO' | 'ABANDONADO' | 'ADJUDICADO'
+  | 'DESPUÉS DE PRÓRROGA' | 'PENALES' | 'ENTRETIEMPO' | 'PRÓRROGA' | 'DESCANSO' | 'RETRASADO';
 
 export type ConfidenceLevel = 'Alta' | 'Media' | 'Baja';
 
@@ -47,6 +50,8 @@ export interface IntelligenceNewsItem {
   date: string;
   title: string;
   excerpt: string;
+  image?: string;
+  href?: string;
   team: { name: string; badge: string };
 }
 
@@ -61,6 +66,12 @@ export interface IntelligenceEvent {
   title: string;
   time: string;
   note: string;
+}
+
+export interface IntelligenceCalendarDay {
+  label: string;
+  day: string;
+  active: boolean;
 }
 
 export interface IntelligenceCenterContent {
@@ -118,6 +129,7 @@ export interface IntelligenceCenterContent {
     title: string;
     calendarLabel: string;
     items: IntelligenceEvent[];
+    calendarDays?: IntelligenceCalendarDay[];
   };
   newsletter: {
     intro: string;

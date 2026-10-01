@@ -31,17 +31,21 @@ function getMatchCountry(match: IntelligenceMatch): string {
 interface FeaturedMatchesProps {
   featuredMatches: IntelligenceMatch[];
   activeMatches: IntelligenceMatch[];
+  finishedMatches: IntelligenceMatch[];
 }
 
-export default function FeaturedMatches({ featuredMatches, activeMatches }: FeaturedMatchesProps) {
+export default function FeaturedMatches({ featuredMatches, activeMatches, finishedMatches }: FeaturedMatchesProps) {
   const router = useRouter();
   const [country, setCountry] = useState('Todos los países');
-  const matches = [...featuredMatches, ...activeMatches];
+  const matches = [...featuredMatches, ...activeMatches, ...finishedMatches];
   const countries = ['Todos los países', ...Array.from(new Set(matches.map(getMatchCountry))).sort()];
   const visibleFeaturedMatches = featuredMatches
     .filter((match) => country === 'Todos los países' || getMatchCountry(match) === country)
     .slice(0, 3);
   const visibleActiveMatches = activeMatches
+    .filter((match) => country === 'Todos los países' || getMatchCountry(match) === country)
+    .slice(0, 3);
+  const visibleFinishedMatches = finishedMatches
     .filter((match) => country === 'Todos los países' || getMatchCountry(match) === country)
     .slice(0, 3);
 
@@ -92,6 +96,20 @@ export default function FeaturedMatches({ featuredMatches, activeMatches }: Feat
           </div>
         ) : (
           <p className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-sm text-slate-400">No hay partidos en vivo con este filtro.</p>
+        )}
+      </section>
+
+      <section className="mt-10">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h3 className="text-xl font-semibold text-white">Finalizados</h3>
+          <span className="rounded-full border border-slate-500/35 bg-slate-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-300">Último resultado</span>
+        </div>
+        {visibleFinishedMatches.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {visibleFinishedMatches.map((match) => <FeaturedMatchCard key={match.slug} match={match} />)}
+          </div>
+        ) : (
+          <p className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-sm text-slate-400">No hay partidos finalizados con este filtro.</p>
         )}
       </section>
     </>

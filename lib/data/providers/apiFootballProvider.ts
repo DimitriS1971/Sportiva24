@@ -4,8 +4,14 @@ import type {
   ApiFootballFixturesResponse,
   ApiFootballLineupsResponse,
   ApiFootballFixtureStatisticsResponse,
+  ApiFootballInjury,
+  ApiFootballInjuriesResponse,
+  ApiFootballOdds,
+  ApiFootballOddsResponse,
   ApiFootballStandingsEntry,
   ApiFootballStandingsResponse,
+  ApiFootballTeamStatistics,
+  ApiFootballTeamStatisticsResponse,
 } from '@/lib/data/providers/providerTypes';
 
 const SPORTIVA_TIME_ZONE = 'America/Argentina/Buenos_Aires';
@@ -86,6 +92,34 @@ export class ApiFootballProvider {
     return payload.response ?? [];
   }
 
+  async getFixturesByLeague(leagueId: number, limit: number): Promise<ApiFootballFixture[]> {
+    if (!dataEnv.apiFootballApiKey) return [];
+
+    const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures?league=${leagueId}&season=${new Date().getUTCFullYear()}&next=${limit}`;
+    const response = await fetch(endpoint, {
+      headers: { 'x-apisports-key': dataEnv.apiFootballApiKey },
+      next: { revalidate: 60 },
+    });
+
+    if (!response.ok) return [];
+    const payload = (await response.json()) as ApiFootballFixturesResponse;
+    return payload.response ?? [];
+  }
+
+  async getFixturesByLeagueSeason(leagueId: number, season: number, limit = 100): Promise<ApiFootballFixture[]> {
+    if (!dataEnv.apiFootballApiKey) return [];
+
+    const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures?league=${leagueId}&season=${season}&next=${limit}`;
+    const response = await fetch(endpoint, {
+      headers: { 'x-apisports-key': dataEnv.apiFootballApiKey },
+      next: { revalidate: 300 },
+    });
+
+    if (!response.ok) return [];
+    const payload = (await response.json()) as ApiFootballFixturesResponse;
+    return payload.response ?? [];
+  }
+
   async getFixtureById(id: string): Promise<ApiFootballFixture | null> {
     if (!dataEnv.apiFootballApiKey) {
       return null;
@@ -105,6 +139,20 @@ export class ApiFootballProvider {
 
     const payload = (await response.json()) as ApiFootballFixturesResponse;
     return payload.response?.[0] ?? null;
+  }
+
+  async getFixtureByTeams(homeTeamId: number, awayTeamId: number, mode: 'last' | 'next'): Promise<ApiFootballFixture | null> {
+    if (!dataEnv.apiFootballApiKey) return null;
+
+    const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures?team=${homeTeamId}&${mode}=20`;
+    const response = await fetch(endpoint, {
+      headers: { 'x-apisports-key': dataEnv.apiFootballApiKey },
+      next: { revalidate: 60 },
+    });
+
+    if (!response.ok) return null;
+    const payload = (await response.json()) as ApiFootballFixturesResponse;
+    return payload.response?.find((fixture) => fixture.teams?.away?.id === awayTeamId) ?? null;
   }
 
   async getFixturesByDate(date: Date): Promise<ApiFootballFixture[]> {
@@ -212,6 +260,45 @@ export class ApiFootballProvider {
     if (!response.ok) return [];
     const payload = (await response.json()) as ApiFootballFixtureStatisticsResponse;
     return payload.response ?? [];
+  }
+
+  async getTeamSeasonStatistics(teamId: number, leagueId: number, season?: number): Promise<ApiFootballTeamStatistics | null> {
+    if (!dataEnv.apiFootballApiKey || !season || !leagueId) return null;
+
+    const endpoint = `${dataEnv.apiFootballBaseUrl}/teams/statistics?team=${teamId}&league=${leagueId}&season=${season}`;
+    const response = await fetch(endpoint, {
+      headers: { 'x-apisports-key': dataEnv.apiFootballApiKey },
+      next: { revalidate: 900 },
+    });
+
+    if (!response.ok) return null;
+    return ((await response.json()) as ApiFootballTeamStatisticsResponse).response ?? null;
+  }
+
+  async getTeamInjuries(teamId: number, leagueId: number, season?: number): Promise<ApiFootballInjury[]> {
+    if (!dataEnv.apiFootballApiKey || !season || !leagueId) return [];
+
+    const endpoint = `${dataEnv.apiFootballBaseUrl}/injuries?team=${teamId}&league=${leagueId}&season=${season}`;
+    const response = await fetch(endpoint, {
+      headers: { 'x-apisports-key': dataEnv.apiFootballApiKey },
+      next: { revalidate: 300 },
+    });
+
+    if (!response.ok) return [];
+    return ((await response.json()) as ApiFootballInjuriesResponse).response ?? [];
+  }
+
+  async getFixtureOdds(fixtureId: number): Promise<ApiFootballOdds[]> {
+    if (!dataEnv.apiFootballApiKey || !fixtureId) return [];
+
+    const endpoint = `${dataEnv.apiFootballBaseUrl}/odds?fixture=${fixtureId}`;
+    const response = await fetch(endpoint, {
+      headers: { 'x-apisports-key': dataEnv.apiFootballApiKey },
+      next: { revalidate: 300 },
+    });
+
+    if (!response.ok) return [];
+    return ((await response.json()) as ApiFootballOddsResponse).response ?? [];
   }
 }
 

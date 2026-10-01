@@ -10,16 +10,19 @@ import type { ApiFootballFixture, FootballDataMatch, TheSportsDbEvent } from '@/
 import type { Match } from '@/lib/data/types/domain';
 
 function mapStatus(status: string): Match['status'] {
-  if (new Set(['LIVE', 'IN_PLAY', 'PAUSED']).has(status)) return 'EN VIVO';
-  if (new Set(['FINISHED', 'CANCELLED']).has(status)) return 'FINALIZADO';
+  if (status === 'LIVE' || status === 'IN_PLAY') return 'EN VIVO';
+  if (status === 'PAUSED') return 'DESCANSO';
+  if (status === 'FINISHED') return 'FINALIZADO';
+  if (status === 'CANCELLED') return 'CANCELADO';
   return 'PRÓXIMO';
 }
 
 function mapApiFootballStatus(statusShort?: string): Match['status'] {
-  if (!statusShort) return 'PRÓXIMO';
-  if (new Set(['1H', '2H', 'HT', 'ET', 'BT', 'P', 'PEN', 'LIVE']).has(statusShort)) return 'EN VIVO';
-  if (new Set(['FT', 'AET', 'CANC']).has(statusShort)) return 'FINALIZADO';
-  return 'PRÓXIMO';
+  const statusLabels: Record<string, Match['status']> = {
+    NS: 'PRÓXIMO', TBD: 'PRÓXIMO', PST: 'POSTERGADO', CANC: 'CANCELADO', ABD: 'ABANDONADO', AWD: 'ADJUDICADO', WO: 'ADJUDICADO',
+    LIVE: 'EN VIVO', '1H': 'EN VIVO', '2H': 'EN VIVO', HT: 'ENTRETIEMPO', ET: 'PRÓRROGA', BT: 'DESCANSO', P: 'PENALES', PEN: 'PENALES', FT: 'FINALIZADO', AET: 'DESPUÉS DE PRÓRROGA',
+  };
+  return statusLabels[statusShort ?? ''] ?? 'RETRASADO';
 }
 
 function mapSportsDbStatus(status?: string): Match['status'] {
@@ -31,7 +34,7 @@ function mapSportsDbStatus(status?: string): Match['status'] {
 
 function shouldHideApiFootballFixture(fixture: ApiFootballFixture): boolean {
   const status = fixture.fixture?.status?.short;
-  if (new Set(['TBD', 'PST', 'CANC', 'ABD', 'AWD', 'WO']).has(status ?? '')) {
+  if (status === 'TBD') {
     return true;
   }
 
@@ -65,9 +68,6 @@ export class FootballAdapter implements SportAdapter {
         name: normalizeTeamName(match.awayTeam?.name ?? 'Equipo visitante'),
         shortName: match.awayTeam?.shortName,
       },
-      indexScore: 82 + index * 3,
-      confidence: index % 2 === 0 ? 'Media' : 'Alta',
-      probabilityHomeWin: 50 + (index % 4) * 3,
     }));
   }
 
@@ -99,9 +99,6 @@ export class FootballAdapter implements SportAdapter {
         homeScore: fixture.goals?.home ?? undefined,
         awayScore: fixture.goals?.away ?? undefined,
         elapsedMinutes: fixture.fixture?.status?.elapsed ?? undefined,
-        indexScore: Math.min(100, 83 + index * 2),
-        confidence: index % 2 === 0 ? 'Alta' : 'Media',
-        probabilityHomeWin: Math.min(100, 51 + index * 2),
       };
     });
   }
@@ -129,9 +126,6 @@ export class FootballAdapter implements SportAdapter {
           id: normalizeInternalId('team', `${eventId}-a`),
           name: awayName,
         },
-        indexScore: 80 + index * 2,
-        confidence: 'Media',
-        probabilityHomeWin: 50,
       };
     });
   }

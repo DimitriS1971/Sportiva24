@@ -1,55 +1,60 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
-import type { SportCode } from '@/lib/domain/entities';
-import { isSportActive } from '@/lib/data/config/activeSports';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const navItems: Array<{ label: string; href: string; sport?: SportCode }> = [
-    { label: 'Fútbol', href: '/futbol', sport: 'football' as const },
-    { label: 'Inteligencia Deportiva S24', href: '/centro-inteligencia-s24' },
+  const navItems = [
+    { label: 'Fútbol', href: '#' },
+    { label: 'Basketball', href: '#' },
     { label: 'Análisis', href: '/analisis' },
     { label: 'Noticias', href: '/noticias' },
   ];
 
-  const visibleNavItems = navItems.filter((item) => !item.sport || isSportActive(item.sport));
-
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/85 backdrop-blur-xl border-b border-blue-950/40">
-      <div className="mx-auto flex w-full max-w-6xl flex-col px-6 md:px-8">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-gray-800/50">
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <div className="flex shrink-0 items-center">
-            <Link href="/" className="flex items-center space-x-2 group">
+          <div className="flex items-center">
+            <a href="/" className="flex items-center space-x-2 group">
               <div className="text-3xl md:text-4xl font-bold text-white">
                 SPORTIVA<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">24</span>
               </div>
-            </Link>
+            </a>
           </div>
 
           {/* Desktop Menu */}
-          <div className="ml-auto hidden items-center space-x-0.5 md:flex">
-            {visibleNavItems.map((item) => (
-              <Link
+          <div className="hidden md:flex items-center space-x-1">
+            {navItems.map((item) => (
+              <a
                 key={item.label}
                 href={item.href}
-                className="px-3 py-2 text-sm text-gray-300 hover:text-white transition-colors duration-200 font-medium"
+                className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors duration-200 font-light"
               >
                 {item.label}
-              </Link>
+              </a>
             ))}
+          </div>
+
+          {/* Right Side - Desktop */}
+          <div className="hidden md:flex items-center space-x-4">
+            <a
+              href="/premium"
+              className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors duration-200 font-light"
+            >
+              Premium
+            </a>
+            <button className="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300">
+              Login
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="relative z-10 ml-auto mr-3 flex h-11 w-11 shrink-0 flex-col items-center justify-center space-y-1.5 rounded-md border border-slate-600 bg-black text-white shadow-lg shadow-black/40 md:hidden"
-            aria-label="Abrir menú"
-            aria-expanded={isMobileMenuOpen}
+            className="md:hidden flex flex-col space-y-1.5 w-8 h-8 justify-center items-center"
           >
             <div className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'transform rotate-45 translate-y-2' : ''}`} />
             <div className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''}`} />
@@ -59,16 +64,27 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="border-t border-slate-800 bg-black/95 px-4 pb-5 pt-3 shadow-2xl shadow-black/50 md:hidden">
-            {visibleNavItems.map((item) => (
-              <Link
+          <div className="md:hidden pb-4 space-y-2 border-t border-gray-800/50">
+            {navItems.map((item) => (
+              <a
                 key={item.label}
                 href={item.href}
-                className="block px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors duration-200 font-medium"
+                className="block px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors duration-200 font-light"
               >
                 {item.label}
-              </Link>
+              </a>
             ))}
+            <div className="px-4 py-2 border-t border-gray-800/50 mt-2 pt-2 space-y-2">
+              <a
+                href="/premium"
+                className="block text-sm text-gray-300 hover:text-white transition-colors duration-200 font-light py-2"
+              >
+                Premium
+              </a>
+              <button className="w-full px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300">
+                Login
+              </button>
+            </div>
           </div>
         )}
       </div>

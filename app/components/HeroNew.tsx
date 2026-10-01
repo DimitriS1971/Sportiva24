@@ -78,8 +78,8 @@ export default function HeroNew() {
               <div className="flex items-center gap-2.5 px-1 py-1">
                 <span className="w-7 h-7 rounded-full border border-blue-500/40 bg-blue-500/10 text-blue-300 flex items-center justify-center text-xs">◎</span>
                 <div>
-                  <p className="text-sm text-gray-200 font-semibold leading-none">Cobertura Global</p>
-                  <p className="text-xs text-gray-500 mt-1">Múltiples deportes</p>
+                  <p className="text-sm text-gray-200 font-semibold leading-none">Cobertura global de fútbol</p>
+                  <p className="text-xs text-gray-500 mt-1">Competiciones y partidos destacados</p>
                 </div>
               </div>
             </div>

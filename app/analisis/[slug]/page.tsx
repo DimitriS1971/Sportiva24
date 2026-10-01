@@ -7,6 +7,9 @@ import Navbar from '@/app/components/Navbar';
 import { sportsDataService } from '@/lib/data';
 import { buildInformeS24V1 } from '@/lib/intelligence-s24/informeS24V1';
 import { getRealMatchContext } from '@/lib/intelligence-s24/realMatchContext';
+import { buildMatchPredictionFeatures, buildMatchPredictionV2 } from '@/lib/intelligence-s24/v2';
+
+export const dynamic = 'force-dynamic';
 
 interface AnalysisPageProps {
   params: Promise<{ slug: string }>;
@@ -42,12 +45,13 @@ export default async function MatchAnalysisEditorialPage({ params }: AnalysisPag
     usedFailover: result.usedFallback,
     realContext,
   });
+  const prediction = buildMatchPredictionV2(buildMatchPredictionFeatures(result.match, realContext));
 
   return (
     <main className="min-h-screen bg-black text-white">
       <Navbar />
       <div className="mx-auto max-w-7xl px-4 pb-16 pt-24 md:px-8 md:pt-28">
-        <MatchAnalysisEditorial informe={informe} context={realContext} />
+        <MatchAnalysisEditorial informe={informe} context={realContext} prediction={prediction} />
       </div>
       <Footer />
     </main>

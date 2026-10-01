@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 
 import IntelligenceCenterPage, { type IntelligenceCenterContent } from '@/app/components/IntelligenceCenterPage';
-import { getFeaturedFootballMatches } from '@/app/lib/realSportsData';
+import { getTodayFootballMatches, getUpcomingFootballMatches } from '@/app/lib/realSportsData';
+import { sortMatchesByImportance } from '@/app/lib/footballMatchPriority';
+import { getPublishedArticles } from '@/app/lib/publishedNews';
 
 export const metadata: Metadata = {
   title: 'Fútbol | Sportiva24',
@@ -10,15 +12,15 @@ export const metadata: Metadata = {
 
 export const revalidate = 30;
 
-const futbolContent: IntelligenceCenterContent = {
+const baseFutbolContent: IntelligenceCenterContent = {
   hero: {
-    badge: 'Centro de inteligencia Sportiva24',
+    badge: 'Datos deportivos en tiempo real',
     title: 'Fútbol',
-    subtitle: 'Toda la inteligencia deportiva del fútbol mundial en un solo lugar.',
+    subtitle: 'La agenda real del fútbol mundial, interpretada con contexto y señal deportiva.',
     description:
-      'Señales de rendimiento, lectura contextual y modelos predictivos para entender el juego con una interfaz editorial, limpia y profundamente orientada a datos.',
-    primaryCta: { label: 'Ver análisis', href: '/analisis' },
-    secondaryCta: { label: 'Últimas noticias', href: '/noticias' },
+      'Señales de rendimiento, lectura contextual y modelos predictivos para entender cada partido con una experiencia editorial premium, clara y orientada a datos.',
+    primaryCta: { label: 'Ver agenda', href: '/match' },
+    secondaryCta: { label: 'Noticias', href: '/noticias' },
     image: {
       src: '/hero/hero-football.png',
       alt: 'Visual premium de fútbol, inteligencia artificial y análisis de datos',
@@ -28,167 +30,31 @@ const futbolContent: IntelligenceCenterContent = {
   },
   leagues: {
     intro: 'Mapa competitivo',
-    title: 'Ligas principales',
-    helper: 'Cobertura editorial sin filtros activados por ahora.',
+    title: 'Ligas destacadas',
+    helper: 'Competiciones seleccionadas con datos deportivos en tiempo real.',
     chipLabel: 'Liga',
-    items: [
-      { name: 'Champions League', logo: '/competitions/uefa-champions.svg' },
-      { name: 'Premier League', logo: '/competitions/premier-league.svg' },
-      { name: 'LaLiga', badge: 'LL' },
-      { name: 'Serie A', badge: 'SA' },
-      { name: 'Bundesliga', badge: 'BL' },
-      { name: 'Ligue 1', badge: 'L1' },
-      { name: 'Libertadores', badge: 'LIB' },
-      { name: 'Sudamericana', badge: 'SUD' },
-    ],
+    items: [],
   },
   matches: {
     intro: 'Inteligencia de partidos',
-    title: 'Partidos destacados',
+    title: 'Partidos de la semana',
     ctaLabel: 'Ver agenda completa',
     ctaHref: '/match',
-    items: [
-      {
-        competition: 'Uefa champions league',
-        time: 'Hoy, 21:00',
-        status: 'PROXIMO',
-        team1: 'Real Madrid',
-        team1Logo: '/teams-official/real-madrid.png',
-        team2: 'Manchester City',
-        team2Logo: '/teams-official/manchester-city.png',
-        s24Index: 94,
-        confidence: 'Alta',
-        probability: 67,
-        slug: 'real-madrid-manchester-city',
-      },
-      {
-        competition: 'Premier league',
-        time: 'Mañana, 18:30',
-        status: 'PROXIMO',
-        team1: 'Arsenal',
-        team1Logo: '/teams-official/arsenal.png',
-        team2: 'Chelsea',
-        team2Logo: '/teams/chelsea.svg',
-        s24Index: 88,
-        confidence: 'Media',
-        probability: 58,
-        slug: 'arsenal-chelsea',
-      },
-      {
-        competition: 'LALIGA',
-        time: 'Hoy, 19:45',
-        status: 'EN VIVO',
-        team1: 'Barcelona',
-        team1Logo: '/teams-official/barcelona.png',
-        team2: 'Atlético Madrid',
-        team2Logo: '/teams/atletico.svg',
-        s24Index: 91,
-        confidence: 'Alta',
-        probability: 62,
-        slug: 'barcelona-atletico-madrid',
-      },
-      {
-        competition: 'SERIE A',
-        time: 'Domingo, 20:00',
-        status: 'PROXIMO',
-        team1: 'Inter',
-        team1Logo: '/teams/inter.svg',
-        team2: 'Juventus',
-        team2Logo: '/teams/juventus.svg',
-        s24Index: 87,
-        confidence: 'Media',
-        probability: 54,
-        slug: 'inter-juventus',
-      },
-    ],
+    items: [],
   },
   analysis: {
     intro: 'Inteligencia editorial',
     title: 'Últimos análisis',
     description:
-      'Piezas construidas con datos de ejemplo para presentar la plantilla editorial del futuro centro de inteligencia deportiva.',
-    items: [
-      {
-        category: 'Informe táctico',
-        date: '5 julio 2026',
-        title: 'El nuevo bloque medio del City reduce 18% las llegadas rivales',
-        excerpt:
-          'Cruce entre presión, altura de recuperación y pases progresivos para entender la superioridad territorial del equipo de Guardiola.',
-        href: '/match/real-madrid-manchester-city',
-        teams: [
-          { name: 'Manchester City', logo: '/teams-official/manchester-city.png' },
-          { name: 'Real Madrid', logo: '/teams-official/real-madrid.png' },
-        ],
-      },
-      {
-        category: 'Modelo de fichajes',
-        date: '4 julio 2026',
-        title: 'Barcelona optimiza su once con perfiles de recepción interior',
-        excerpt:
-          'Una lectura del modelo S24 sobre cómo cambia la amenaza ofensiva cuando el extremo ataca por dentro y el lateral fija la amplitud.',
-        href: '/match/real-madrid-barcelona',
-        teams: [
-          { name: 'Barcelona', logo: '/teams-official/barcelona.png' },
-          { name: 'Arsenal', logo: '/teams-official/arsenal.png' },
-        ],
-      },
-      {
-        category: 'Laboratorio de rendimiento',
-        date: '3 julio 2026',
-        title: 'Inter y Juventus: dónde se decide el partido antes de llegar al área',
-        excerpt:
-          'Mapa de duelos, zonas de activación y volumen de pases verticales para detectar el punto exacto donde se rompe el equilibrio.',
-        href: '/match/inter-juventus',
-        teams: [
-          { name: 'Inter', logo: '/teams/inter.svg' },
-          { name: 'Juventus', logo: '/teams/juventus.svg' },
-        ],
-      },
-      {
-        category: 'Motor predictivo',
-        date: '2 julio 2026',
-        title: 'Cómo le impacta al Atlético un partido con posesión larga del rival',
-        excerpt:
-          'El modelo combina secuencias sin balón, recuperaciones altas y xThreat para anticipar escenarios de partido de alta exigencia.',
-        href: '/match/barcelona-atletico-madrid',
-        teams: [
-          { name: 'Atlético Madrid', logo: '/teams/atletico.svg' },
-          { name: 'Chelsea', logo: '/teams/chelsea.svg' },
-        ],
-      },
-    ],
+      'Lecturas rápidas de la semana, construidas sobre la programación real del fútbol mundial y su contexto deportivo.',
+    items: [],
   },
   news: {
     intro: 'Mesa en vivo',
-    title: 'Noticias',
+    title: 'Noticias destacadas',
     ctaLabel: 'Abrir sala de noticias',
     ctaHref: '/noticias',
-    items: [
-      {
-        category: 'Mercado',
-        date: 'Hace 2 horas',
-        title: 'Liverpool prioriza un interior de alta presión para el cierre del mercado',
-        excerpt:
-          'El departamento de analítica cruza volumen de sprints, recepciones y pases de ruptura para acelerar la decisión final.',
-        team: { name: 'Liverpool', badge: 'LIV' },
-      },
-      {
-        category: 'Champions',
-        date: 'Hace 4 horas',
-        title: 'PSG ajusta su estructura de salida pensando en noches europeas',
-        excerpt:
-          'El staff trabaja una primera fase más segura para elevar la calidad de sus secuencias largas y proteger la transición defensiva.',
-        team: { name: 'PSG', badge: 'PSG' },
-      },
-      {
-        category: 'LaLiga',
-        date: 'Hoy',
-        title: 'Atlético recupera agresividad tras mejorar la altura media de robo',
-        excerpt:
-          'Los últimos seis partidos muestran una tendencia clara en intensidad, ocupación de carriles y control de segundas jugadas.',
-        team: { name: 'Atlético Madrid', badge: 'ATM' },
-      },
-    ],
+    items: [],
   },
   premium: {
     intro: 'Espacio premium',
@@ -202,29 +68,13 @@ const futbolContent: IntelligenceCenterContent = {
   ranking: {
     intro: 'Índice de poder S24',
     title: 'Ranking IA',
-    items: [
-      { name: 'Manchester City', score: 94 },
-      { name: 'Real Madrid', score: 93 },
-      { name: 'Barcelona', score: 91 },
-      { name: 'PSG', score: 90 },
-      { name: 'Liverpool', score: 89 },
-      { name: 'Bayern', score: 89 },
-      { name: 'Arsenal', score: 88 },
-      { name: 'Inter', score: 87 },
-      { name: 'Chelsea', score: 86 },
-      { name: 'Atlético Madrid', score: 86 },
-    ],
+    items: [],
   },
   events: {
     intro: 'Inteligencia de calendario',
     title: 'Próximos eventos',
-    calendarLabel: 'Calendario de ejemplo',
-    items: [
-      { day: '05', month: 'JUL', title: 'Sala de sorteo Champions', time: '18:00 CET', note: 'Simulación de cruces y dificultad del cuadro' },
-      { day: '06', month: 'JUL', title: 'Arsenal vs Chelsea', time: '18:30 CET', note: 'Previa táctica con escenarios de presión' },
-      { day: '07', month: 'JUL', title: 'Informe de datos Barcelona', time: '12:00 CET', note: 'Actualización de forma, carga y disponibilidad' },
-      { day: '08', month: 'JUL', title: 'Inter vs Juventus', time: '20:00 CET', note: 'Modelo de ritmo, zonas y volumen ofensivo' },
-    ],
+    calendarLabel: 'Calendario',
+    items: [],
   },
   newsletter: {
     intro: 'Boletín',
@@ -236,19 +86,193 @@ const futbolContent: IntelligenceCenterContent = {
   },
 };
 
+function getLeagueBadge(name: string): string {
+  const words = name.split(/\s+/).filter(Boolean);
+  if (words.length === 0) return 'FUT';
+  return words.slice(0, 3).map((word) => word[0]).join('').toUpperCase().slice(0, 3) || 'FUT';
+}
+
+const featuredLeagueIcons: Record<string, string> = {
+  'UEFA Champions League': '/competitions/uefa-champions.svg',
+  'Premier League': '/competitions/premier-league.svg',
+  LaLiga: '/competitions/la-liga.svg',
+  'Serie A': '/competitions/serie-a.svg',
+  Brasileirao: '/competitions/brasileirao.svg',
+  'Primera Division': '/competitions/primera-division.svg',
+  'Copa Libertadores': '/competitions/copa-libertadores.svg',
+  'Copa Sudamericana': '/competitions/copa-sudamericana.svg',
+};
+
+const featuredLeaguePatterns = [
+  /champions league/i,
+  /^premier league(?:\s*-\s*england)?$/i,
+  /^la ?liga(?:\s*-\s*spain)?$/i,
+  /^serie a(?:\s*-\s*italy)?$/i,
+  /brasileir[aã]o|serie a\s*-\s*brazil/i,
+  /primera division.*argentina|liga profesional argentina/i,
+  /libertadores/i,
+  /sudamericana/i,
+  /efl cup|carabao cup|fa cup|copa del rey/i,
+];
+
+const asianCountryPattern = /afghanistan|australia|bahrain|bangladesh|bhutan|china|hong kong|india|indonesia|iran|iraq|japan|jordan|kuwait|korea|lebanon|malaysia|myanmar|nepal|oman|pakistan|palestine|philippines|qatar|saudi arabia|singapore|syria|thailand|vietnam|yemen|uzbekistan/i;
+
+function isFeaturedMatch(match: { competition: string; country?: string; team1: string; team2: string }): boolean {
+  const competition = match.competition.trim();
+  const matchDescription = `${competition} ${match.country ?? ''} ${match.team1} ${match.team2}`;
+  const isYouthOrReserveMatch = /women|femenin|female|youth|juvenil|reserve|reserva|academy|u\s?\d{1,2}|\bii\b|\biii\b|\b2\b|\b3\b/i.test(matchDescription);
+  const isAsianFixture = asianCountryPattern.test(match.country ?? '') || asianCountryPattern.test(competition);
+  const isRealMadridEibar = /real madrid/i.test(match.team1) && /eibar/i.test(match.team2)
+    || /eibar/i.test(match.team1) && /real madrid/i.test(match.team2);
+  return !isYouthOrReserveMatch && !isAsianFixture && (isRealMadridEibar || featuredLeaguePatterns.some((pattern) => pattern.test(competition)));
+}
+
+function toDisplayDate(dateString?: string): string {
+  if (!dateString) return 'Próximo';
+
+  const parsed = new Date(dateString);
+  if (Number.isNaN(parsed.getTime())) return 'Próximo';
+
+  return parsed.toLocaleString('es-ES', {
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 export default async function FutbolPage() {
-  const realMatches = await getFeaturedFootballMatches(3);
-  const featuredMatches = realMatches.length > 0
-    ? realMatches
-    : futbolContent.matches.items.slice(0, 3);
+  const [todayMatches, upcomingMatches, publishedArticles] = await Promise.all([
+    getTodayFootballMatches(200),
+    getUpcomingFootballMatches(200),
+    getPublishedArticles(),
+  ]);
+  const allMatches = Array.from(new Map(
+    [...todayMatches, ...upcomingMatches].map((match) => [match.slug, match]),
+  ).values());
+
+  const globalLeagueOrder = [
+    'UEFA Champions League',
+    'Premier League',
+    'LaLiga',
+    'Serie A',
+    'Brasileirao',
+    'Primera Division',
+    'Copa Libertadores',
+    'Copa Sudamericana',
+  ];
+
+  const featuredMatches = sortMatchesByImportance(
+    allMatches.filter((match) => match.status !== 'FINALIZADO' && isFeaturedMatch(match)),
+  ).slice(0, 12);
+
+  const uniqueLeagues = Array.from(new Set([
+    ...globalLeagueOrder,
+    ...allMatches
+      .map((match) => match.competition)
+      .filter((competition) => !['Bundesliga', 'Ligue 1'].includes(competition)),
+  ]))
+    .filter((leagueName) => Boolean(leagueName))
+    .slice(0, 8)
+    .map((leagueName) => ({
+      name: leagueName ?? 'Competición',
+      badge: getLeagueBadge(leagueName ?? 'Competición'),
+      logo: featuredLeagueIcons[leagueName ?? ''],
+    }));
+
+  const analysisItems = featuredMatches.map((match) => ({
+    category: 'Análisis de partido',
+    date: match.time,
+    title: `${match.team1} vs ${match.team2}`,
+    excerpt: `Lectura de contexto, forma y condiciones del encuentro en ${match.competition}.`,
+    href: `/match/${match.slug}`,
+    teams: [
+      { name: match.team1, logo: match.team1Logo },
+      { name: match.team2, logo: match.team2Logo },
+    ] as [
+      { name: string; logo: string },
+      { name: string; logo: string },
+    ],
+  }));
+
+  const featuredArticle = publishedArticles.find((article) => article.featured) ?? publishedArticles[0];
+  const newsItem = featuredArticle
+    ? {
+        category: featuredArticle.category,
+        date: featuredArticle.date,
+        title: featuredArticle.title,
+        excerpt: featuredArticle.excerpt,
+        image: featuredArticle.image,
+        href: `/noticias/${featuredArticle.slug}`,
+        team: {
+          name: featuredArticle.category,
+          badge: getLeagueBadge(featuredArticle.category),
+        },
+      }
+    : {
+        category: 'Agenda',
+        date: 'Hoy',
+        title: 'Agenda actualizada de fútbol',
+        excerpt: 'La información se sincroniza con la misma agenda que muestra Explorar partidos.',
+        team: { name: 'Fútbol', badge: 'FUT' },
+      };
+
+  const events = featuredMatches.slice(0, 4).map((match) => ({
+    day: match.dateTimeUtc ? new Date(match.dateTimeUtc).toLocaleString('es-ES', { day: '2-digit' }) : 'Hoy',
+    month: match.dateTimeUtc ? new Date(match.dateTimeUtc).toLocaleString('es-ES', { month: 'short' }).toUpperCase() : 'NOW',
+    title: `${match.team1} vs ${match.team2}`,
+    time: match.time,
+    note: match.competition,
+  }));
+
+  const today = new Date();
+  const calendarDays = Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(today);
+    date.setDate(today.getDate() + index);
+    const dateKey = date.toISOString().slice(0, 10);
+    return {
+      label: date.toLocaleDateString('es-ES', { weekday: 'short' }).slice(0, 1).toUpperCase(),
+      day: date.toLocaleDateString('es-ES', { day: 'numeric' }),
+      active: featuredMatches.some((match) => match.dateTimeUtc?.slice(0, 10) === dateKey),
+    };
+  });
 
   const content: IntelligenceCenterContent = {
-    ...futbolContent,
+    ...baseFutbolContent,
+    leagues: {
+      ...baseFutbolContent.leagues,
+      items: uniqueLeagues.map((league) => ({
+        name: league.name,
+        badge: league.badge,
+        logo: league.logo,
+      })),
+    },
     matches: {
-      ...futbolContent.matches,
+      ...baseFutbolContent.matches,
       items: featuredMatches,
+    },
+    analysis: {
+      ...baseFutbolContent.analysis,
+      items: analysisItems,
+    },
+    news: {
+      ...baseFutbolContent.news,
+      items: [newsItem],
+    },
+    events: {
+      ...baseFutbolContent.events,
+      items: events.length > 0 ? events : [
+        {
+          day: 'HOY',
+          month: '',
+          title: 'Agenda en actualización',
+          time: 'Se está validando la próxima ventana de partidos.',
+          note: 'Sincronización con la misma agenda del explorador.',
+        },
+      ],
+      calendarDays,
     },
   };
 
-  return <IntelligenceCenterPage content={content} />;
+  return <IntelligenceCenterPage content={content} hideRanking />;
 }

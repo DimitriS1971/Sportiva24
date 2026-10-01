@@ -13,7 +13,7 @@ export default function ContextoRealPartidoS24({ context }: ContextoRealPartidoS
     <section className="rounded-3xl border border-emerald-400/30 bg-[linear-gradient(155deg,rgba(6,78,59,0.38),rgba(3,7,18,0.96))] p-5 md:p-7">
       <div className="flex flex-wrap items-center gap-2">
         <span className="rounded-full border border-emerald-400/40 bg-emerald-500/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-100">Datos verificados</span>
-        <span className="text-xs text-emerald-200/80">Fuente: API-Football</span>
+        <span className="text-xs text-emerald-200/80">Fuente de datos: API-Football</span>
       </div>
 
       <h2 className="mt-4 font-editorial text-2xl md:text-3xl text-white">Situacion previa</h2>

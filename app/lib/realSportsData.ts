@@ -4,16 +4,8 @@ import { apiFootballProvider } from '@/lib/data/providers/apiFootballProvider';
 import { sportsDataService } from '@/lib/data';
 import { getTeamCrest } from './teamCrests';
 
-function toUiStatus(status: 'EN VIVO' | 'PRÓXIMO' | 'FINALIZADO'): IntelligenceMatch['status'] {
-  if (status === 'EN VIVO') {
-    return 'EN VIVO';
-  }
-
-  if (status === 'PRÓXIMO') {
-    return 'PROXIMO';
-  }
-
-  return 'FINALIZADO';
+function toUiStatus(status: string): IntelligenceMatch['status'] {
+  return status === 'PRÓXIMO' ? 'PROXIMO' : status as IntelligenceMatch['status'];
 }
 
 const topCompetitionMatchers = [
@@ -72,6 +64,7 @@ function envFlag(value: string | undefined, fallback: boolean): boolean {
 }
 
 const strictFreeMode = envFlag(process.env.NEXT_PUBLIC_FREE_STRICT_MODE, false);
+const priorityFootballLeagueIds = [39, 140, 48, 13, 11, 71, 128];
 
 function mapToIntelligenceMatch(match: Awaited<ReturnType<typeof sportsDataService.getTodayMatches>>[number]): IntelligenceMatch {
   const source = sourceFromSlug(match.slug);
@@ -87,9 +80,9 @@ function mapToIntelligenceMatch(match: Awaited<ReturnType<typeof sportsDataServi
     team1Logo: getTeamCrest(match.homeTeam.name, match.homeTeam.badgeUrl),
     team2: match.awayTeam.name,
     team2Logo: getTeamCrest(match.awayTeam.name, match.awayTeam.badgeUrl),
-    s24Index: match.indexScore ?? 84,
-    confidence: match.confidence ?? 'Media',
-    probability: match.probabilityHomeWin ?? 52,
+    s24Index: match.indexScore ?? 0,
+    confidence: match.confidence ?? 'Baja',
+    probability: match.probabilityHomeWin ?? 0,
     slug: match.slug,
     sourceLabel: source.sourceLabel,
     sourceTier: source.sourceTier,
@@ -125,6 +118,16 @@ export async function getFeaturedFootballMatches(limit = 4): Promise<Intelligenc
 }
 
 export async function getTodayFootballMatches(limit = 8): Promise<IntelligenceMatch[]> {
+  if (apiFootballProvider.isConfigured()) {
+    const apiMatches = footballAdapter
+      .adaptApiFootballFeaturedMatches(await apiFootballProvider.getFixturesByDate(new Date()), limit * 4)
+      .map(mapToIntelligenceMatch);
+
+    if (apiMatches.length > 0) {
+      return applyQualityFilters(apiMatches, limit);
+    }
+  }
+
   const matches = await sportsDataService.getTodayMatches('football', limit);
   return applyQualityFilters(
     matches.map(mapToIntelligenceMatch),
@@ -132,11 +135,35 @@ export async function getTodayFootballMatches(limit = 8): Promise<IntelligenceMa
   );
 }
 
-export async function getUpcomingFootballMatches(limit = 50): Promise<IntelligenceMatch[]> {
+export async function getAnalysisFootballMatches(limit = 50): Promise<IntelligenceMatch[]> {
+  const [todayMatches, upcomingMatches] = await Promise.all([
+    getTodayFootballMatches(limit),
+    getUpcomingFootballMatches(limit, 2),
+  ]);
+
+  return Array.from(new Map(
+    [...todayMatches, ...upcomingMatches]
+      .filter((match) => match.status === 'PROXIMO' && match.sourceTier !== 'mock')
+      .map((match) => [match.slug, match]),
+  ).values())
+    .sort((left, right) => (left.dateTimeUtc ?? '').localeCompare(right.dateTimeUtc ?? ''))
+    .slice(0, limit);
+}
+
+export async function getUpcomingFootballMatches(limit = 50, daysAhead = 7): Promise<IntelligenceMatch[]> {
+  const priorityFixtures = (await Promise.all(
+    priorityFootballLeagueIds.map((leagueId) => apiFootballProvider.getFixturesByLeague(leagueId, Math.ceil(limit / priorityFootballLeagueIds.length))),
+  )).flat();
+  const fixtures = priorityFixtures.length > 0 ? priorityFixtures : await apiFootballProvider.getNextFixtures(limit);
   const matches = footballAdapter
-    .adaptApiFootballFeaturedMatches(await apiFootballProvider.getNextFixtures(limit), limit)
+    .adaptApiFootballFeaturedMatches(fixtures, limit)
     .map(mapToIntelligenceMatch)
-    .filter((match) => match.status === 'PROXIMO');
+    .filter((match) => {
+      if (match.status !== 'PROXIMO' || !match.dateTimeUtc) return false;
+      const kickoff = new Date(match.dateTimeUtc).getTime();
+      const now = Date.now();
+      return Number.isFinite(kickoff) && kickoff >= now - 15 * 60 * 1000 && kickoff <= now + daysAhead * 24 * 60 * 60 * 1000;
+    });
 
   return applyQualityFilters(matches, limit);
 }
@@ -146,16 +173,7 @@ export async function getTodayFootballMatchesCount(): Promise<number> {
 }
 
 export async function getPublishedAnalysisCount(): Promise<number> {
-  const [todayMatches, featuredMatches, upcomingMatches] = await Promise.all([
-    getTodayFootballMatches(50),
-    getFeaturedFootballMatches(50),
-    getUpcomingFootballMatches(50),
-  ]);
-
-  const allMatches = [...todayMatches, ...featuredMatches, ...upcomingMatches]
-    .filter((match) => match.status === 'PROXIMO' && match.sourceTier !== 'mock');
-
-  return new Map(allMatches.map((match) => [match.slug, match])).size;
+  return (await getAnalysisFootballMatches(50)).length;
 }
 
 export async function getTodayBasketballMatchesCount(): Promise<number> {

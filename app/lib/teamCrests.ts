@@ -8,16 +8,14 @@ const localTeamCrests: Record<string, string> = {
   Juventus: '/teams/juventus.svg',
   Inter: '/teams/inter.svg',
   Chelsea: '/teams/chelsea.svg',
-  'Atlético Madrid': '/teams/atletico.svg',
+  Sevilla: 'https://media.api-sports.io/football/teams/536.png',
+  'Atlético Madrid': 'https://media.api-sports.io/football/teams/530.png',
 };
 
 export function getTeamCrest(teamName: string, providedCrest?: string): string {
-  if (providedCrest) {
-    return providedCrest;
-  }
+  const normalize = (value: string) => value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const normalizedName = normalize(teamName);
+  const localEntry = Object.entries(localTeamCrests).find(([name]) => normalize(name) === normalizedName);
 
-  const normalizedName = teamName.trim().toLowerCase();
-  const localEntry = Object.entries(localTeamCrests).find(([name]) => name.toLowerCase() === normalizedName);
-
-  return localEntry?.[1] ?? '/icons/football-premium.svg';
+  return localEntry?.[1] ?? providedCrest ?? '/icons/football-premium.svg';
 }

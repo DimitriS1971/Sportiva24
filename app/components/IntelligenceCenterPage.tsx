@@ -91,12 +91,12 @@ function NewsRow({ item }: { item: IntelligenceNewsItem }) {
   return (
     <article className="group grid gap-5 rounded-[26px] border border-slate-800/80 bg-slate-950/70 p-5 transition-all duration-300 hover:border-sky-500/35 hover:bg-slate-950 md:grid-cols-[220px_1fr]">
       <div className="relative overflow-hidden rounded-2xl border border-slate-800/70 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.18),transparent_40%),linear-gradient(135deg,#111827,#020617)] p-5">
+        {item.image ? <img src={item.image} alt={item.title} className="absolute inset-0 h-full w-full object-cover opacity-80 transition duration-500 group-hover:scale-105" /> : null}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-slate-950/10" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(30,41,59,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(30,41,59,0.2)_1px,transparent_1px)] bg-[size:30px_30px] opacity-30" />
         <div className="relative z-10 flex h-full min-h-[140px] flex-col justify-between">
           <span className="text-[11px] uppercase tracking-[0.24em] text-slate-500">Señal de noticias</span>
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sm font-semibold tracking-[0.18em] text-sky-100">
-            {item.team.badge}
-          </div>
+          {!item.image && <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sm font-semibold tracking-[0.18em] text-sky-100">{item.team.badge}</div>}
           <div className="h-1.5 w-24 rounded-full bg-slate-800">
             <div className="h-1.5 w-16 rounded-full bg-gradient-to-r from-sky-400 to-emerald-400" />
           </div>
@@ -111,7 +111,7 @@ function NewsRow({ item }: { item: IntelligenceNewsItem }) {
           <h3 className="text-2xl font-semibold leading-tight text-white">{item.title}</h3>
           <p className="mt-3 text-sm leading-7 text-slate-300">{item.excerpt}</p>
         </div>
-        <Link href="/noticias" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-100 transition-colors hover:text-sky-200">
+        <Link href={item.href ?? '/noticias'} className="inline-flex items-center gap-2 text-sm font-semibold text-slate-100 transition-colors hover:text-sky-200">
           Ver noticia
           <span className="transition-transform group-hover:translate-x-1">{'->'}</span>
         </Link>
@@ -139,7 +139,7 @@ function RankingRow({ position, name, score }: { position: number; name: string;
   );
 }
 
-export default function IntelligenceCenterPage({ content }: { content: IntelligenceCenterContent }) {
+export default function IntelligenceCenterPage({ content, hideRanking = false }: { content: IntelligenceCenterContent; hideRanking?: boolean }) {
   return (
     <main className="min-h-screen bg-black text-white">
       <Navbar />
@@ -162,7 +162,7 @@ export default function IntelligenceCenterPage({ content }: { content: Intellige
               <Link href={content.hero.primaryCta.href} className="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 px-6 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(14,165,233,0.32)] transition-all hover:from-sky-400 hover:to-blue-500">
                 {content.hero.primaryCta.label}
               </Link>
-              <Link href={content.hero.secondaryCta.href} className="inline-flex h-12 items-center justify-center rounded-xl border border-slate-700 bg-slate-950/60 px-6 text-sm font-semibold text-slate-100 transition-all hover:border-sky-500/35 hover:text-sky-200">
+              <Link href={content.hero.secondaryCta.href} className="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 px-6 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(14,165,233,0.32)] transition-all hover:from-sky-400 hover:to-blue-500">
                 {content.hero.secondaryCta.label}
               </Link>
             </div>
@@ -296,8 +296,8 @@ export default function IntelligenceCenterPage({ content }: { content: Intellige
       </section>
 
       <section className="px-4 py-10 md:px-12 md:py-14">
-        <div className="mx-auto grid max-w-7xl gap-8 xl:grid-cols-[0.95fr_1.05fr]">
-          <div className="rounded-[30px] border border-slate-800/80 bg-slate-950/70 p-6 md:p-7">
+        <div className={`mx-auto grid max-w-7xl gap-8 ${hideRanking ? 'grid-cols-1' : 'xl:grid-cols-[0.95fr_1.05fr]'}`}>
+          {!hideRanking && <div className="rounded-[30px] border border-slate-800/80 bg-slate-950/70 p-6 md:p-7">
             <div className="mb-7">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">{content.ranking.intro}</p>
               <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white md:text-4xl">{content.ranking.title}</h2>
@@ -307,10 +307,10 @@ export default function IntelligenceCenterPage({ content }: { content: Intellige
                 <RankingRow key={entry.name} position={index + 1} name={entry.name} score={entry.score} />
               ))}
             </div>
-          </div>
+          </div>}
 
-          <div className="rounded-[30px] border border-slate-800/80 bg-slate-950/70 p-6 md:p-7">
-            <div className="mb-7 flex items-end justify-between gap-4">
+          <div className="rounded-[30px] border border-slate-800/80 bg-slate-950/70 p-4 md:p-5">
+            <div className="mb-4 flex items-end justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">{content.events.intro}</p>
                 <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white md:text-4xl">{content.events.title}</h2>
@@ -320,33 +320,38 @@ export default function IntelligenceCenterPage({ content }: { content: Intellige
               </div>
             </div>
 
-            <div className="mb-6 grid grid-cols-7 gap-2 text-center text-xs uppercase tracking-[0.18em] text-slate-500">
-              {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((day) => (
-                <div key={day} className="py-2">{day}</div>
-              ))}
-              {[1, 2, 3, 4, 5, 6, 7].map((item) => (
-                <div
-                  key={item}
-                  className={`rounded-2xl border px-2 py-4 text-sm font-medium ${item === 5 || item === 6 ? 'border-sky-500/35 bg-sky-500/10 text-sky-200' : 'border-slate-800/80 bg-slate-900/60 text-slate-300'}`}
-                >
-                  {item}
+            <div className="mb-4 grid grid-cols-7 gap-1.5 text-center text-[11px] uppercase tracking-[0.16em] text-slate-500">
+              {(content.events.calendarDays ?? [
+                { label: 'L', day: '1', active: false },
+                { label: 'M', day: '2', active: false },
+                { label: 'X', day: '3', active: false },
+                { label: 'J', day: '4', active: false },
+                { label: 'V', day: '5', active: true },
+                { label: 'S', day: '6', active: true },
+                { label: 'D', day: '7', active: false },
+              ]).map((calendarDay) => (
+                <div key={`${calendarDay.label}-${calendarDay.day}`}>
+                  <div className="py-1">{calendarDay.label}</div>
+                  <div className={`rounded-xl border px-2 py-2.5 text-sm font-medium ${calendarDay.active ? 'border-sky-500/35 bg-sky-500/10 text-sky-200' : 'border-slate-800/80 bg-slate-900/60 text-slate-300'}`}>
+                    {calendarDay.day}
+                  </div>
                 </div>
               ))}
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-2.5">
               {content.events.items.map((event) => (
-                <article key={event.title} className="grid gap-4 rounded-2xl border border-slate-800/80 bg-slate-950/75 p-4 md:grid-cols-[80px_1fr] md:items-center">
-                  <div className="rounded-2xl border border-slate-700/80 bg-slate-900/75 px-3 py-4 text-center">
+                <article key={event.title} className="grid gap-3 rounded-2xl border border-slate-800/80 bg-slate-950/75 p-3 md:grid-cols-[64px_1fr] md:items-center">
+                  <div className="rounded-xl border border-slate-700/80 bg-slate-900/75 px-2 py-2.5 text-center">
                     <p className="text-[11px] uppercase tracking-[0.22em] text-slate-500">{event.month}</p>
-                    <p className="mt-1 text-3xl font-semibold text-white">{event.day}</p>
+                    <p className="mt-0.5 text-2xl font-semibold text-white">{event.day}</p>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-3">
-                      <h3 className="text-lg font-semibold text-white">{event.title}</h3>
+                      <h3 className="truncate text-base font-semibold text-white">{event.title}</h3>
                       <span className="rounded-full border border-slate-700/80 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-slate-400">{event.time}</span>
                     </div>
-                    <p className="mt-2 text-sm leading-7 text-slate-400">{event.note}</p>
+                    <p className="mt-1 text-xs leading-5 text-slate-400">{event.note}</p>
                   </div>
                 </article>
               ))}

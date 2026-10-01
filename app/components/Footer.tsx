@@ -11,6 +11,7 @@ export default function Footer() {
       { label: 'Fútbol', href: '/futbol' },
       { label: 'Análisis', href: '/analisis' },
       { label: 'Noticias', href: '/noticias' },
+      { label: 'Rendimiento del modelo', href: '/rendimiento-modelo' },
     ],
     Empresa: [
       { label: 'Sobre nosotros', href: '/sobre-nosotros' },
@@ -93,16 +94,21 @@ export default function Footer() {
             © {currentYear} Sportiva24. Todos los derechos reservados.
           </p>
           <div className="flex items-center space-x-6">
+            <button type="button" onClick={() => window.dispatchEvent(new CustomEvent('sportiva24-open-cookie-settings'))} className="text-sm text-gray-400 transition-colors hover:text-white">
+              Preferencias de cookies
+            </button>
             <a href="mailto:contacto@sportiva24.com" className="text-gray-400 hover:text-white transition-colors duration-200">
               <span className="text-sm">contacto@sportiva24.com</span>
             </a>
             <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
               <span className="text-sm">Twitter</span>
             </a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
-              <span className="text-sm">LinkedIn</span>
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+            <a
+              href="https://www.instagram.com/sportiva24oficial/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-white transition-colors duration-200"
+            >
               <span className="text-sm">Instagram</span>
             </a>
           </div>

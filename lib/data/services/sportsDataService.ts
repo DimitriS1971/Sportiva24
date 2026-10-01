@@ -42,6 +42,13 @@ function extractMatchIdFromSlug(slug: string): string {
   return slug;
 }
 
+function providerIdFromSlug(slug: string): string | null {
+  if (slug.startsWith('af-match-')) return 'api-football';
+  if (slug.startsWith('fd-match-')) return 'football-data';
+  if (slug.startsWith('sdb-match-')) return 'sportsdb';
+  return null;
+}
+
 const SPORTIVA_TIME_ZONE = 'America/Argentina/Buenos_Aires';
 
 function calendarParts(value: Date): { year: number; month: number; day: number } {
@@ -272,6 +279,7 @@ export class SportsDataService {
 
   async getMatchBySlugWithMeta(slug: string): Promise<MatchLookupResult> {
     const matchId = extractMatchIdFromSlug(slug);
+    const providerIdFromMatchSlug = providerIdFromSlug(slug);
     const ttlSeconds = getProviderPriority('football', 'matchBySlug')[0]?.ttlSeconds ?? 300;
 
     return this.withCache(`match-meta:${slug}`, async () => {
@@ -328,6 +336,7 @@ export class SportsDataService {
       };
 
       const orderedExecutions = providerPriority
+        .filter((provider) => !providerIdFromMatchSlug || provider.id === providerIdFromMatchSlug)
         .map((provider) => providerExecutions[provider.id])
         .filter((entry): entry is ProviderExecution<Match | null> => Boolean(entry));
 

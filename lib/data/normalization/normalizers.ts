@@ -1,9 +1,30 @@
-export function normalizeTeamName(name: string): string {
+const editorialTeamNames: Record<string, string> = {
+  lanus: 'Lanús',
+  goias: 'Goiás',
+  leon: 'León',
+  'union la calera': 'Unión La Calera',
+  'america de cali': 'América de Cali',
+  'universidad catolica': 'Universidad Católica',
+  'shanghai sipg': 'Shanghai Port',
+};
+
+function teamNameKey(name: string): string {
   return name
+    .trim()
+    .replace(/\s+/g, ' ')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+export function normalizeTeamName(name: string): string {
+  const cleanedName = name
     .trim()
     .replace(/\s+/g, ' ')
     .replace('Atletico', 'Atlético')
     .replace('Juventus FC', 'Juventus');
+
+  return editorialTeamNames[teamNameKey(cleanedName)] ?? cleanedName;
 }
 
 export function normalizeLeagueName(name: string): string {

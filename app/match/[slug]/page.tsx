@@ -1,7 +1,9 @@
 import { matchesData } from '@/app/data/matches';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import DatosPartidoDirectos from '@/app/components/DatosPartidoDirectos';
+import DerbyEditorialBrief from '@/app/components/DerbyEditorialBrief';
 import Footer from '@/app/components/Footer';
 import LiveMatchRefresh from '@/app/components/LiveMatchRefresh';
 import LocalizedMatchDateTime from '@/app/components/LocalizedMatchDateTime';
@@ -12,15 +14,7 @@ import { displayLabel } from '@/app/lib/displayLabel';
 import { sportsDataService } from '@/lib/data';
 import type { Match } from '@/lib/data/types/domain';
 import { getRealMatchContext } from '@/lib/intelligence-s24/realMatchContext';
-
-interface MatchHeaderData {
-  slug: string;
-  competition: string;
-  homeTeam: string;
-  awayTeam: string;
-  time: string;
-  status: 'EN VIVO' | 'PROXIMO' | 'PRÓXIMO' | 'FINALIZADO' | 'PAUSADO';
-}
+import { buildMatchPredictionFeatures, buildMatchPredictionV2 } from '@/lib/intelligence-s24/v2';
 
 export const revalidate = 120;
 export const dynamic = 'force-dynamic';
@@ -70,8 +64,51 @@ function buildEditorialDemoMatch(slug: string): Match | null {
   };
 }
 
-const BallIcon = () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 2 C10 7 10 17 12 22"/><path d="M2 12 C7 10 17 10 22 12"/></svg>;
-const CalendarIcon = () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>;
+function buildHomeDemoMatch(slug: string): Match | null {
+  const matches: Record<string, Match> = {
+    'demo-barcelona-sevilla-finalizado': {
+      id: slug,
+      slug,
+      sport: 'football',
+      competition: 'LA LIGA',
+      time: 'Finalizado',
+      dateTimeUtc: '2026-09-18T16:00:00.000Z',
+      status: 'FINALIZADO',
+      homeTeam: { id: 'demo-barcelona', name: 'Barcelona', badgeUrl: '/teams/barcelona.svg' },
+      awayTeam: { id: 'demo-sevilla', name: 'Sevilla', badgeUrl: 'https://media.api-sports.io/football/teams/536.png' },
+      homeScore: 2,
+      awayScore: 1,
+      elapsedMinutes: 90,
+    },
+    'demo-arsenal-chelsea-en-vivo': {
+      id: slug,
+      slug,
+      sport: 'football',
+      competition: 'PREMIER LEAGUE',
+      time: 'En juego',
+      dateTimeUtc: '2026-09-18T18:00:00.000Z',
+      status: 'EN VIVO',
+      homeTeam: { id: 'demo-arsenal', name: 'Arsenal', badgeUrl: '/teams/arsenal.svg' },
+      awayTeam: { id: 'demo-chelsea', name: 'Chelsea', badgeUrl: '/teams/chelsea.svg' },
+      homeScore: 1,
+      awayScore: 1,
+      elapsedMinutes: 67,
+    },
+    'demo-atletico-madrid-real-madrid': {
+      id: slug,
+      slug,
+      sport: 'football',
+      competition: 'LA LIGA',
+      time: 'Mañana, 21:00',
+      dateTimeUtc: '2026-09-19T19:00:00.000Z',
+      status: 'PRÓXIMO',
+      homeTeam: { id: 'demo-atletico', name: 'Atlético Madrid', badgeUrl: '/teams/atletico.svg' },
+      awayTeam: { id: 'demo-real-madrid', name: 'Real Madrid', badgeUrl: '/teams/real-madrid.svg' },
+    },
+  };
+
+  return matches[slug] ?? null;
+}
 
 function TeamBadge({ team, crestUrl }: { team: string; crestUrl?: string }) {
   const isRemoteCrest = Boolean(crestUrl && !crestUrl.startsWith('/'));
@@ -80,8 +117,8 @@ function TeamBadge({ team, crestUrl }: { team: string; crestUrl?: string }) {
   if (crest || isRemoteCrest) {
     return (
       <div className="flex flex-col items-center">
-        <div className="flex h-[86px] w-[86px] shrink-0 items-center justify-center rounded-2xl border border-slate-600/45 bg-slate-900/45 md:h-[122px] md:w-[122px]">
-          {crest ? <Image src={crest} alt={team} width={104} height={104} className="object-contain drop-shadow-2xl" /> : <img src={crestUrl} alt={`Escudo de ${team}`} className="h-[78px] w-[78px] object-contain md:h-[104px] md:w-[104px]" />}
+        <div className="ref-crest !h-[82px] !w-[82px] md:!h-[112px] md:!w-[112px]">
+          {crest ? <Image src={crest} alt={team} width={104} height={104} className="object-contain drop-shadow-2xl" /> : <img src={crestUrl} alt={`Escudo de ${team}`} className="h-[68px] w-[68px] object-contain md:h-[96px] md:w-[96px]" />}
         </div>
         <p className="mt-2 max-w-[8rem] text-center text-sm font-semibold leading-tight text-white md:max-w-[13rem] md:text-2xl">{team}</p>
       </div>
@@ -90,7 +127,7 @@ function TeamBadge({ team, crestUrl }: { team: string; crestUrl?: string }) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex h-[86px] w-[86px] shrink-0 items-center justify-center rounded-2xl border border-slate-600/55 bg-slate-900/60 md:h-[122px] md:w-[122px]">
+      <div className="ref-crest !h-[82px] !w-[82px] md:!h-[112px] md:!w-[112px]">
         <span className="px-2 text-center text-xs font-semibold leading-tight text-white md:px-3 md:text-sm">{team}</span>
       </div>
       <p className="mt-2 max-w-[8rem] text-center text-sm font-semibold leading-tight text-white md:max-w-[13rem] md:text-2xl">{team}</p>
@@ -147,9 +184,10 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
   const slug = decodeURIComponent(rawSlug ?? '');
 
   const editorialPreview = editorialMatchPreviews[slug];
-  const serviceResult = editorialPreview || !slug ? null : await sportsDataService.getMatchBySlugWithMeta(slug);
-  const matchData = buildEditorialDemoMatch(slug) ?? buildLegacyMatch(slug) ?? serviceResult?.match;
-  const providerId = serviceResult?.match ? serviceResult.providerId : 'editorial-demo';
+  const homeDemoMatch = buildHomeDemoMatch(slug);
+  const serviceResult = editorialPreview || homeDemoMatch || !slug ? null : await sportsDataService.getMatchBySlugWithMeta(slug);
+  const matchData = buildEditorialDemoMatch(slug) ?? homeDemoMatch ?? buildLegacyMatch(slug) ?? serviceResult?.match;
+  const providerId = homeDemoMatch ? 'api-football' : serviceResult?.match ? serviceResult.providerId : 'editorial-demo';
 
   if (!matchData) {
     return (
@@ -164,6 +202,7 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
   }
 
   const realContext = await getRealMatchContext(matchData.slug, providerId);
+  const prediction = buildMatchPredictionV2(buildMatchPredictionFeatures(matchData, realContext));
   const preview = editorialPreview ?? buildEditorialMatchPreview(matchData, providerId, realContext);
   const cleanMatch = {
     competition: sanitizeCompetitionName(matchData.competition),
@@ -175,70 +214,86 @@ export default async function MatchAnalysisPage({ params }: { params: Promise<{ 
   const editorialDateFallback = editorialPreview
     ? 'Fecha por confirmar'
     : formatEditorialDate(matchData.dateTimeUtc ?? matchData.time);
-  const statusStyle = matchData.status === 'EN VIVO'
-    ? 'text-emerald-200 border-emerald-400/40 bg-emerald-500/15'
-    : 'text-slate-200 border-slate-500/55 bg-slate-800/45';
-  const isLive = matchData.status === 'EN VIVO';
-  const hasLiveScore = isLive && matchData.homeScore !== undefined && matchData.awayScore !== undefined;
+  const isLive = ['EN VIVO', 'ENTRETIEMPO', 'PRÓRROGA', 'DESCANSO', 'PENALES'].includes(matchData.status);
+  const isFinished = ['FINALIZADO', 'DESPUÉS DE PRÓRROGA', 'ADJUDICADO'].includes(matchData.status);
+  const hasMatchScore = (isLive || isFinished) && matchData.homeScore !== undefined && matchData.awayScore !== undefined;
+  const probabilityItems = prediction.probabilities ? [
+    { label: cleanMatch.homeTeam, value: prediction.probabilities.home, tone: 'text-cyan-200' },
+    { label: 'Empate', value: prediction.probabilities.draw, tone: 'text-amber-200' },
+    { label: cleanMatch.awayTeam, value: prediction.probabilities.away, tone: 'text-rose-200' },
+  ] : [];
 
   return (
-    <main className="min-h-screen bg-black text-white">
-      <Navbar />
-      <LiveMatchRefresh enabled={matchData.status === 'EN VIVO'} />
+    <main className="reference-match">
+      <header className="ref-topbar">
+        <Link href="/" className="ref-brand">SPORTIVA<span>24</span></Link>
+        <small>INTELIGENCIA DEPORTIVA</small>
+        <nav aria-label="Navegación principal">
+          <Link href="/futbol">Fútbol</Link>
+          <Link href="/analisis">Análisis</Link>
+          <Link href="/centro-inteligencia-s24">Competencias</Link>
+          <Link href="/noticias">Noticias</Link>
+        </nav>
+      </header>
+      <LiveMatchRefresh enabled={isLive} />
 
-      <div className="px-4 md:px-12 pt-20 md:pt-24 pb-12 md:pb-16 max-w-6xl mx-auto">
-        <header className="premium-grid-pattern mb-8 rounded-3xl border border-slate-700/45 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.16),transparent_45%),linear-gradient(165deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))] px-4 py-5 md:px-7 md:py-7">
-          <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-start gap-2 md:flex md:items-center md:justify-between md:gap-5">
-            <div className="flex min-w-0 items-center justify-center md:flex-1">
-              <TeamBadge team={cleanMatch.homeTeam} crestUrl={preview.homeCrestUrl ?? matchData.homeTeam.badgeUrl} />
-            </div>
-
-            <div className="flex min-w-[4.8rem] flex-col items-center gap-2 px-0 md:min-w-0 md:px-3 flex-shrink-0">
-              <span className={`leading-none font-semibold ${hasLiveScore ? 'text-2xl md:text-4xl text-white' : 'text-sm md:text-2xl font-light text-slate-400'}`}>
-                {hasLiveScore ? `${matchData.homeScore} - ${matchData.awayScore}` : 'VS'}
-              </span>
-              {isLive && matchData.elapsedMinutes !== undefined ? (
-                <span className="text-xs font-semibold text-emerald-300">{matchData.elapsedMinutes}&apos;</span>
-              ) : null}
-              <div className={`px-3 py-1 border rounded-full ${statusStyle}`}>
-                <span className="text-[10px] md:text-xs font-semibold uppercase tracking-[0.12em]">{matchData.status}</span>
-              </div>
-            </div>
-
-            <div className="flex min-w-0 items-center justify-center md:flex-1">
-              <TeamBadge team={cleanMatch.awayTeam} crestUrl={preview.awayCrestUrl ?? matchData.awayTeam.badgeUrl} />
-            </div>
+      <div className="ref-wrap">
+        <header className="ref-hero">
+          <div className="ref-hero-meta">
+            <b>{cleanMatch.competition}</b>
+            <span className={isLive ? '!border-emerald-300/70 !text-emerald-100' : ''}>{matchData.status}</span>
           </div>
-
-          <div className="mt-6 grid gap-2.5 md:grid-cols-3">
-            <div className="flex items-center gap-2 rounded-xl border border-slate-700/55 bg-black/30 px-3 py-2 text-xs md:text-sm text-slate-300">
-              <BallIcon />
-              <span>{cleanMatch.competition}</span>
+          <p><LocalizedMatchDateTime dateTimeUtc={matchData.dateTimeUtc} fallback={editorialDateFallback} /></p>
+          <p>{stadium}</p>
+          <div className="ref-teams">
+            <TeamBadge team={cleanMatch.homeTeam} crestUrl={preview.homeCrestUrl ?? matchData.homeTeam.badgeUrl} />
+            <div className="flex flex-col items-center gap-2">
+              <strong className="ref-vs">{hasMatchScore ? `${matchData.homeScore}-${matchData.awayScore}` : 'VS'}</strong>
+              {isLive && matchData.elapsedMinutes !== undefined ? <span className="text-sm font-bold text-emerald-200">{matchData.elapsedMinutes}&apos;</span> : null}
             </div>
-
-            <div className="rounded-xl border border-slate-700/55 bg-black/30 px-3 py-2 text-xs md:text-sm text-slate-300">
-              <p className="text-[10px] uppercase tracking-[0.12em] text-slate-500">Estadio</p>
-              <p className="mt-0.5">{stadium}</p>
-            </div>
-
-            <div className="flex items-center gap-2 rounded-xl border border-slate-700/55 bg-black/30 px-3 py-2 text-xs md:text-sm text-slate-300">
-              <CalendarIcon />
-              <span><LocalizedMatchDateTime dateTimeUtc={matchData.dateTimeUtc} fallback={editorialDateFallback} /></span>
-            </div>
-
+            <TeamBadge team={cleanMatch.awayTeam} crestUrl={preview.awayCrestUrl ?? matchData.awayTeam.badgeUrl} />
           </div>
-
-          <div className="mt-5 border-t border-slate-700/60" />
         </header>
 
-        <DatosPartidoDirectos
-          match={matchData}
-          providerId={providerId}
-          realContext={realContext}
-          scheduleDateTimeUtc={matchData.dateTimeUtc}
-          scheduleLabel={editorialDateFallback}
-        />
+        <nav className="ref-tabs" aria-label="Secciones del partido">
+          <a href="#resumen">Resumen</a>
+          <a href="#modelo">Modelo S24</a>
+          <a href="#datos">Datos del partido</a>
+        </nav>
+
+        <section id="resumen" className="ref-grid-two mt-4">
+          <article id="modelo" className="ref-model">
+            <div>
+              <h2>MODELO SPORTIVA24</h2>
+              <p>{prediction.status === 'ready' ? 'Estimación basada en el contexto disponible del partido' : 'Cobertura limitada para este encuentro'}</p>
+            </div>
+            {probabilityItems.length > 0 ? (
+              <div className="mt-6 grid grid-cols-3 gap-3 text-center">
+                {probabilityItems.map((item) => <div key={item.label}><strong className={`block text-3xl font-black ${item.tone}`}>{Math.round(item.value * 100)}%</strong><small className="mt-2 block text-[10px] font-bold uppercase text-slate-300">{item.label}</small></div>)}
+              </div>
+            ) : <p className="mt-5 text-sm leading-6 text-slate-300">{prediction.limitations[0] ?? 'No hay datos suficientes para estimar probabilidades.'}</p>}
+            <span className="ref-confidence">CALIDAD DE DATOS · {prediction.dataQuality.score}/100</span>
+          </article>
+          <article className="ref-key">
+            <h2>CLAVES DEL PARTIDO</h2>
+            <p>{preview.overview}</p>
+            <p className="mt-3 text-xs text-slate-400">{preview.conclusion}</p>
+          </article>
+        </section>
+
+        <section id="datos" className="mt-6">
+          <DatosPartidoDirectos
+            match={matchData}
+            providerId={providerId}
+            realContext={realContext}
+            prediction={prediction}
+            scheduleDateTimeUtc={matchData.dateTimeUtc}
+            scheduleLabel={editorialDateFallback}
+          />
+        </section>
       </div>
+
+      {slug === 'demo-atletico-madrid-real-madrid' ? <div className="ref-wrap"><DerbyEditorialBrief /></div> : null}
 
       <Footer />
     </main>

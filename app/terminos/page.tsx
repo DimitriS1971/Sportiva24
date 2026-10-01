@@ -4,7 +4,8 @@ import SimpleInfoPage from '@/app/components/SimpleInfoPage';
 
 export const metadata: Metadata = {
   title: 'Términos | Sportiva24',
-  description: 'Términos y condiciones de uso de Sportiva24.',
+  description: 'Términos y condiciones de uso del contenido y los servicios editoriales de Sportiva24.',
+  alternates: { canonical: '/terminos' },
 };
 
 export default function TerminosPage() {
@@ -12,7 +13,7 @@ export default function TerminosPage() {
     <SimpleInfoPage
       title="Términos"
       subtitle="Estas condiciones describen reglas básicas de uso para navegar y consumir contenido dentro de Sportiva24."
-      updatedAt="7 julio 2026"
+      updatedAt="15 septiembre 2026"
       sections={[
         {
           heading: 'Uso permitido',
@@ -20,7 +21,7 @@ export default function TerminosPage() {
         },
         {
           heading: 'Limitación de responsabilidad',
-          body: 'Las proyecciones y análisis son de carácter editorial y no constituyen garantía de resultados deportivos o financieros.',
+          body: 'Las proyecciones y análisis son de carácter editorial y no constituyen garantía de resultados deportivos. No ofrecemos productos financieros, apuestas, cuotas ni mercados de inversión desde Sportiva24.',
         },
       ]}
     />

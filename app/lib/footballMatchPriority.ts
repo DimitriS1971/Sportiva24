@@ -8,6 +8,7 @@ const competitionPriorities: Array<{ pattern: RegExp; priority: number }> = [
   { pattern: /uefa europa league|uefa conference league|uefa super cup/i, priority: 5 },
   { pattern: /libertadores/i, priority: 6 },
   { pattern: /sudamericana/i, priority: 7 },
+  { pattern: /efl cup|carabao cup|fa cup|copa del rey/i, priority: 8 },
   { pattern: /^premier league$/i, priority: 8 },
   { pattern: /^serie a$|^la ?liga$|^bundesliga$|^ligue 1$/i, priority: 8 },
   { pattern: /brasileirao|liga profesional argentina|primera division argentina|liga 1 peru|primera a colombia|primera division uruguay/i, priority: 9 },
@@ -18,6 +19,7 @@ const clubProminence: Array<{ pattern: RegExp; score: number }> = [
   { pattern: /real madrid|barcelona|bayern|psg/i, score: 8 },
   { pattern: /manchester city|manchester united|liverpool|arsenal|chelsea/i, score: 7 },
   { pattern: /inter|juventus|milan|napoli|atletico madrid|dortmund/i, score: 6 },
+  { pattern: /vasco da gama|flamengo|palmeiras|corinthians|santos/i, score: 6 },
   { pattern: /roma|newcastle|tottenham|leeds/i, score: 5 },
   { pattern: /torino|parma|como|udinese/i, score: 2 },
 ];
@@ -41,13 +43,13 @@ function getMatchProminence(match: IntelligenceMatch): number {
 
 export function sortMatchesByImportance(matches: IntelligenceMatch[]): IntelligenceMatch[] {
   return [...matches].sort((first, second) => {
-    const priorityDifference = getCompetitionPriority(first.competition) - getCompetitionPriority(second.competition);
-    if (priorityDifference !== 0) {
-      return priorityDifference;
+    const prominenceDifference = getMatchProminence(second) - getMatchProminence(first);
+    if (prominenceDifference !== 0) {
+      return prominenceDifference;
     }
 
-    const prominenceDifference = getMatchProminence(second) - getMatchProminence(first);
-    return prominenceDifference !== 0 ? prominenceDifference : kickoffTimestamp(first) - kickoffTimestamp(second);
+    const priorityDifference = getCompetitionPriority(first.competition) - getCompetitionPriority(second.competition);
+    return priorityDifference !== 0 ? priorityDifference : kickoffTimestamp(first) - kickoffTimestamp(second);
   });
 }
 

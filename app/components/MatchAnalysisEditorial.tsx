@@ -1,21 +1,24 @@
 import type { InformeS24V1 } from '@/lib/intelligence-s24/informeS24V1';
 import type { RealMatchContext } from '@/lib/intelligence-s24/realMatchContext';
+import type { MatchPredictionV2 } from '@/lib/intelligence-s24/v2';
 import LocalizedMatchDateTime from '@/app/components/LocalizedMatchDateTime';
 
 interface MatchAnalysisEditorialProps {
   informe: InformeS24V1;
   context: RealMatchContext | null;
+  prediction: MatchPredictionV2;
 }
 
-function probabilityBar(label: string, value: number, tone: string) {
+function probabilityBar(label: string, probability: number, tone: string) {
+  const percentage = probability * 100;
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-3 text-sm">
         <span className="text-slate-200">{label}</span>
-        <span className="font-semibold text-white">{value}%</span>
+        <span className="font-semibold text-white">{percentage.toFixed(1)}%</span>
       </div>
       <div className="h-2 overflow-hidden rounded-full bg-slate-800">
-        <div className={`h-full rounded-full ${tone}`} style={{ width: `${value}%` }} />
+        <div className={`h-full rounded-full ${tone}`} style={{ width: `${percentage}%` }} />
       </div>
     </div>
   );
@@ -29,47 +32,37 @@ function recentSummary(context: RealMatchContext | null, side: 'home' | 'away') 
   return `${wins}V · ${draws}E · ${losses}D`;
 }
 
-function textSeed(value: string): number {
-  return value.split('').reduce((total, character, index) => total + character.charCodeAt(0) * (index + 1), 0);
-}
-
 function headToHeadReading(homeTeam: string, awayTeam: string, homeWins: number, draws: number, awayWins: number): string {
   if (homeWins > awayWins) return `La muestra favorece a ${homeTeam}: ${homeWins} victorias, ${draws} empates y ${awayWins} de ${awayTeam}.`;
   if (awayWins > homeWins) return `La muestra favorece a ${awayTeam}: ${awayWins} victorias, ${draws} empates y ${homeWins} de ${homeTeam}.`;
   return `La muestra está equilibrada: ${homeWins} victorias de ${homeTeam}, ${draws} empates y ${awayWins} de ${awayTeam}.`;
 }
 
-export default function MatchAnalysisEditorial({ informe, context }: MatchAnalysisEditorialProps) {
+export default function MatchAnalysisEditorial({ informe, context, prediction }: MatchAnalysisEditorialProps) {
   const homeTeam = informe.match.homeTeam;
   const awayTeam = informe.match.awayTeam;
-  const seed = textSeed(`${homeTeam}:${awayTeam}:${informe.match.competition}`);
-  const homeIndex = informe.indicadores.equipos.find((team) => team.side === 'local')?.s24Index ?? 50;
-  const awayIndex = informe.indicadores.equipos.find((team) => team.side === 'visitante')?.s24Index ?? 50;
-  const indexGap = homeIndex - awayIndex;
-  const normalizedTeams = `${homeTeam} ${awayTeam}`.toLowerCase();
-  const isTorqueLiverpool = normalizedTeams.includes('torque') && normalizedTeams.includes('liverpool');
-  const probabilities = {
-    home: Math.max(25, Math.min(70, Math.round(48 + indexGap * 0.55 + 4))),
-    away: Math.max(12, Math.min(38, Math.round(27 - indexGap * 0.35))),
-    draw: 0,
-  };
-  if (isTorqueLiverpool) {
-    probabilities.home = 24;
-    probabilities.away = 53;
-  }
-  probabilities.draw = 100 - probabilities.home - probabilities.away;
-  const variant = seed % 3;
-  const favoredTeam = isTorqueLiverpool ? awayTeam : indexGap >= 0 ? homeTeam : awayTeam;
+  const probabilities = prediction.probabilities;
+  const probabilityEntries = probabilities
+    ? [
+      { team: homeTeam, probability: probabilities.home },
+      { team: awayTeam, probability: probabilities.away },
+    ].sort((left, right) => right.probability - left.probability)
+    : [];
+  const favoredTeam = probabilities && probabilityEntries[0].probability - probabilityEntries[1].probability >= 0.05
+    ? probabilityEntries[0].team
+    : null;
+  const focalTeam = favoredTeam ?? homeTeam;
+  const variant = probabilities ? Math.round(probabilities.home * 100) % 3 : 0;
   const copy = [
     {
-      intro: `El modelo detecta una ventaja de ${favoredTeam}, aunque el partido todavía conserva zonas de incertidumbre. La forma reciente y la capacidad de administrar los momentos serán más importantes que la posesión aislada.`,
+      intro: favoredTeam ? `El modelo detecta una ventaja de ${favoredTeam}, aunque el partido todavía conserva zonas de incertidumbre.` : 'La información disponible no permite sostener un favorito. La previa se mantiene abierta.',
       risk: `${awayTeam} puede convertir el partido en una disputa de detalles si logra cerrar los pasillos interiores.`,
       localTitle: `Cómo puede imponerse ${homeTeam}`,
       awayTitle: `La respuesta de ${awayTeam}`,
     },
     {
       intro: `La diferencia entre ambos equipos no es lineal: ${homeTeam} tiene el contexto local, pero ${awayTeam} puede equilibrar el duelo con disciplina sin balón y transiciones rápidas.`,
-      risk: `El principal riesgo para ${favoredTeam} es confundir control territorial con ocasiones realmente claras.`,
+      risk: `El principal riesgo para ${focalTeam} es confundir control territorial con ocasiones realmente claras.`,
       localTitle: `La presión inicial de ${homeTeam}`,
       awayTitle: `El plan de ${awayTeam} sin balón`,
     },
@@ -84,8 +77,8 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
   const homeStanding = standings.find((team) => team.teamName === homeTeam);
   const awayStanding = standings.find((team) => team.teamName === awayTeam);
   const h2h = context?.headToHead;
-  const favoredStanding = favoredTeam === homeTeam ? homeStanding : awayStanding;
-  const favoredSide = favoredTeam === homeTeam ? 'home' : 'away';
+  const favoredStanding = favoredTeam === homeTeam ? homeStanding : favoredTeam === awayTeam ? awayStanding : undefined;
+  const favoredSide = favoredTeam === awayTeam ? 'away' : 'home';
   const homeWins = h2h?.homeWins ?? 0;
   const draws = h2h?.draws ?? 0;
   const awayWins = h2h?.awayWins ?? 0;
@@ -118,37 +111,40 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
             </div>
           ) : <p className="mt-2 text-sm text-slate-400">Las alineaciones todavía no fueron confirmadas por el proveedor.</p>}
         </div>
-        <h1 className="mx-auto mt-5 max-w-4xl font-editorial text-4xl leading-tight text-white md:text-6xl">{homeTeam} vs {awayTeam}: {favoredTeam} parte como favorito</h1>
+        <h1 className="mx-auto mt-5 max-w-4xl font-editorial text-4xl leading-tight text-white md:text-6xl">{homeTeam} vs {awayTeam}: {favoredTeam ? `${favoredTeam} parte con ventaja` : 'previa abierta'}</h1>
         <p className="mx-auto mt-4 max-w-4xl text-base leading-7 text-slate-200 md:text-lg">{copy.intro}</p>
         <div className="mx-auto mt-6 grid max-w-5xl gap-3 text-center sm:grid-cols-3">
-          <div className="rounded-2xl border border-cyan-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Señal principal</p><p className="mt-2 text-xl font-semibold text-cyan-100">{favoredTeam}</p><p className="mt-1 text-sm text-slate-300">La señal principal coincide con el favorito del modelo.</p></div>
+          <div className="rounded-2xl border border-cyan-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Señal principal</p><p className="mt-2 text-xl font-semibold text-cyan-100">{favoredTeam ?? 'Sin ventaja clara'}</p><p className="mt-1 text-sm text-slate-300">La señal se publica solo cuando el modelo tiene cobertura suficiente.</p></div>
           <div className="rounded-2xl border border-amber-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Riesgo clave</p><p className="mt-2 text-xl font-semibold text-amber-100">Variación de ritmo</p><p className="mt-1 text-sm text-slate-300">{copy.risk}</p></div>
-          <div className="rounded-2xl border border-emerald-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Confianza</p><p className="mt-2 text-xl font-semibold text-emerald-100">Media-alta</p><p className="mt-1 text-sm text-slate-300">La diferencia existe, pero no elimina la varianza.</p></div>
+          <div className="rounded-2xl border border-emerald-300/20 bg-black/25 p-4"><p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">Confianza</p><p className="mt-2 text-xl font-semibold text-emerald-100">{informe.indicadores.resumen.s24Confianza}</p><p className="mt-1 text-sm text-slate-300">La cobertura disponible define el alcance de la lectura.</p></div>
         </div>
       </section>
 
       <section className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
         <article className="rounded-2xl border border-sky-400/25 bg-slate-950 p-5 md:p-7">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-300">01 · Probabilidades del modelo</p>
-          <h2 className="mt-2 font-editorial text-3xl text-white">Escenario 1X2</h2>
-          <p className="mt-3 text-sm leading-6 text-slate-300">Estimación editorial previa, no cuota ni garantía. El porcentaje refleja el diferencial actual y debe actualizarse si cambian las alineaciones o el contexto del partido.</p>
-          <div className="mt-6 space-y-5">
-            {probabilityBar(`Gana ${homeTeam}`, probabilities.home, 'bg-cyan-400')}
-            {probabilityBar('Empate', probabilities.draw, 'bg-amber-300')}
-            {probabilityBar(`Gana ${awayTeam}`, probabilities.away, 'bg-rose-400')}
-          </div>
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="text-xs text-slate-500">Marcador de referencia</p><p className="mt-1 text-2xl font-semibold text-white">2-0 / 2-1</p></div>
-            <div className="rounded-xl border border-slate-800 bg-black/25 p-4"><p className="text-xs text-slate-500">Goles esperados</p><p className="mt-1 text-2xl font-semibold text-white">1.8 - 0.8</p></div>
-          </div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-300">01 · Distribución probabilística</p>
+          <h2 className="mt-2 font-editorial text-3xl text-white">Probabilidades 1X2</h2>
+          {probabilities ? <>
+            <p className="mt-3 text-sm leading-6 text-slate-300">Las tres probabilidades proceden de una única matriz de marcadores y suman 100% salvo redondeo visual.</p>
+            <div className="mt-6 space-y-5">
+              {probabilityBar(`Gana ${homeTeam}`, probabilities.home, 'bg-cyan-400')}
+              {probabilityBar('Empate', probabilities.draw, 'bg-amber-300')}
+              {probabilityBar(`Gana ${awayTeam}`, probabilities.away, 'bg-rose-400')}
+            </div>
+            <div className="mt-6 grid grid-cols-3 gap-3 text-center">
+              <div className="rounded-xl border border-slate-800 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.12em] text-slate-500">xG local</p><p className="mt-1 text-lg font-semibold text-white">{prediction.expectedGoals?.home.toFixed(2)}</p></div>
+              <div className="rounded-xl border border-slate-800 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.12em] text-slate-500">xG total</p><p className="mt-1 text-lg font-semibold text-white">{prediction.expectedGoals?.total.toFixed(2)}</p></div>
+              <div className="rounded-xl border border-slate-800 bg-black/25 p-3"><p className="text-[10px] uppercase tracking-[0.12em] text-slate-500">xG visitante</p><p className="mt-1 text-lg font-semibold text-white">{prediction.expectedGoals?.away.toFixed(2)}</p></div>
+            </div>
+          </> : <p className="mt-4 text-sm leading-6 text-amber-100">Predicción no disponible: {prediction.limitations[0]}</p>}
         </article>
 
         <article className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 md:p-7">
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">02 · Diferencial competitivo</p>
           <h2 className="mt-2 font-editorial text-3xl text-white">Qué inclina la previa</h2>
           <div className="mt-5 space-y-3">
-              <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-4"><p className="font-semibold text-emerald-100">{favoredTeam} controla mejor el punto de partida</p><p className="mt-1 text-sm leading-6 text-slate-300">Ocupa la posición {favoredStanding?.position ?? 'no informada'} con {favoredStanding?.points ?? 'puntos no informados'} y una secuencia reciente de {recentSummary(context, favoredSide)}.</p></div>
-              <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-4"><p className="font-semibold text-amber-100">{favoredTeam === homeTeam ? awayTeam : homeTeam} necesita sobrevivir al primer tramo</p><p className="mt-1 text-sm leading-6 text-slate-300">Su mejor escenario es mantener el partido corto, proteger los espacios y atacar tras recuperación.</p></div>
+              <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-4"><p className="font-semibold text-emerald-100">{favoredTeam ? `${favoredTeam} controla mejor el punto de partida` : 'No hay una ventaja competitiva publicada'}</p><p className="mt-1 text-sm leading-6 text-slate-300">{favoredTeam ? `Ocupa la posición ${favoredStanding?.position ?? 'no informada'} con ${favoredStanding?.points ?? 'puntos no informados'} y una secuencia reciente de ${recentSummary(context, favoredSide)}.` : 'La información disponible requiere cautela antes de inclinarse por uno de los equipos.'}</p></div>
+              <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-4"><p className="font-semibold text-amber-100">{favoredTeam ? `${favoredTeam === homeTeam ? awayTeam : homeTeam} puede equilibrar el partido` : 'Ambos equipos conservan una vía competitiva'}</p><p className="mt-1 text-sm leading-6 text-slate-300">La previa debe contrastarse con las alineaciones y el contexto final antes del inicio.</p></div>
             <div className="rounded-xl border border-slate-700 bg-black/25 p-4"><p className="font-semibold text-white">Historial directo</p><p className="mt-1 text-sm leading-6 text-slate-300">{historyReading} El historial aporta contexto, pero no determina por sí solo la previa.</p></div>
           </div>
         </article>
@@ -164,10 +160,56 @@ export default function MatchAnalysisEditorial({ informe, context }: MatchAnalys
         </div>
       </section>
 
+      {prediction.markets && prediction.correctScores ? <section className="grid gap-5 lg:grid-cols-2">
+        <article className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 md:p-7">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">04 · Mercados estadísticos</p>
+          <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
+            <p className="rounded-xl border border-slate-800 bg-black/25 p-3 text-slate-200">Over 2.5 <strong className="float-right text-white">{(prediction.markets.over25 * 100).toFixed(1)}%</strong></p>
+            <p className="rounded-xl border border-slate-800 bg-black/25 p-3 text-slate-200">Under 2.5 <strong className="float-right text-white">{(prediction.markets.under25 * 100).toFixed(1)}%</strong></p>
+            <p className="rounded-xl border border-slate-800 bg-black/25 p-3 text-slate-200">BTTS Sí <strong className="float-right text-white">{(prediction.markets.bttsYes * 100).toFixed(1)}%</strong></p>
+            <p className="rounded-xl border border-slate-800 bg-black/25 p-3 text-slate-200">BTTS No <strong className="float-right text-white">{(prediction.markets.bttsNo * 100).toFixed(1)}%</strong></p>
+          </div>
+        </article>
+        <article className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 md:p-7">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">05 · Marcadores más probables</p>
+          <div className="mt-5 space-y-2">
+            {prediction.correctScores.map((score) => <p key={`${score.home}-${score.away}`} className="flex justify-between rounded-xl border border-slate-800 bg-black/25 px-4 py-2.5 text-sm text-slate-200"><span>{score.home} - {score.away}</span><strong className="text-white">{(score.probability * 100).toFixed(1)}%</strong></p>)}
+          </div>
+        </article>
+      </section> : null}
+
+      <section className="grid gap-5 lg:grid-cols-2">
+        <article className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 md:p-7">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">06 · Calidad del modelo</p>
+          <div className="mt-4 flex items-end justify-between gap-4">
+            <p className="text-4xl font-semibold text-cyan-100">{prediction.dataQuality.score}/100</p>
+            <p className="text-right text-xs uppercase tracking-[0.14em] text-slate-400">{prediction.status === 'ready' ? 'Modelo listo' : prediction.status === 'limited-data' ? 'Datos limitados' : 'Datos insuficientes'}</p>
+          </div>
+          <p className="mt-4 text-sm leading-6 text-slate-300">Cobertura disponible: {prediction.dataQuality.available.join(', ') || 'sin bloques verificados'}.</p>
+          {prediction.limitations.length > 0 ? <p className="mt-3 text-sm leading-6 text-amber-100">{prediction.limitations[0]}</p> : null}
+        </article>
+        <article className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 md:p-7">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">07 · Por qué el modelo llega a esta lectura</p>
+          {prediction.drivers.length > 0 ? <ul className="mt-4 space-y-2 text-sm leading-6 text-slate-300">
+            {prediction.drivers.map((driver) => <li key={driver} className="border-l-2 border-cyan-400/60 pl-3">{driver}</li>)}
+          </ul> : <p className="mt-4 text-sm leading-6 text-slate-400">No se publican factores mientras la muestra por condición sea insuficiente.</p>}
+        </article>
+      </section>
+
+      {prediction.marketConsensus ? <section className="rounded-2xl border border-slate-700/60 bg-slate-950 p-5 md:p-7">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">08 · Consenso de mercado</p>
+        <p className="mt-2 text-sm leading-6 text-slate-300">Promedio sin margen de {prediction.marketConsensus.bookmakers} casas disponibles. Es una referencia externa, no una instrucción para el modelo.</p>
+        <div className="mt-5 grid grid-cols-3 gap-3 text-center text-sm">
+          <div className="rounded-xl border border-slate-800 bg-black/25 p-3"><p className="text-slate-400">{homeTeam}</p><p className="mt-1 font-semibold text-white">{(prediction.marketConsensus.home * 100).toFixed(1)}%</p></div>
+          <div className="rounded-xl border border-slate-800 bg-black/25 p-3"><p className="text-slate-400">Empate</p><p className="mt-1 font-semibold text-white">{(prediction.marketConsensus.draw * 100).toFixed(1)}%</p></div>
+          <div className="rounded-xl border border-slate-800 bg-black/25 p-3"><p className="text-slate-400">{awayTeam}</p><p className="mt-1 font-semibold text-white">{(prediction.marketConsensus.away * 100).toFixed(1)}%</p></div>
+        </div>
+      </section> : null}
+
       <section className="rounded-2xl border border-cyan-400/25 bg-[linear-gradient(135deg,rgba(8,47,73,0.65),rgba(2,6,23,0.96))] p-5 md:p-7">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan-200">Conclusión editorial</p>
-        <h2 className="mt-2 font-editorial text-3xl text-white">{favoredTeam} parte arriba, pero la clave es la paciencia</h2>
-        <p className="mt-4 max-w-5xl text-base leading-8 text-slate-200">La combinación de localía, posición, forma reciente y diferencial histórico coloca a {favoredTeam} como favorito principal, aunque no absoluto. La probabilidad central es {probabilities.home}% para el local, {probabilities.draw}% para el empate y {probabilities.away}% para {awayTeam}. La señal principal de {favoredTeam} puede consolidarse si encuentra su mejor escenario competitivo. Es una previa informativa: las alineaciones, el ritmo inicial y la calidad de las ocasiones deben validar o rebajar esta ventaja.</p>
+        <h2 className="mt-2 font-editorial text-3xl text-white">{favoredTeam ? `${favoredTeam} parte con ventaja, con cautela` : 'La previa no define un favorito'}</h2>
+        <p className="mt-4 max-w-5xl text-base leading-8 text-slate-200">{favoredTeam ? `La combinación de las señales verificables disponibles coloca a ${favoredTeam} por delante en la lectura S24. La ventaja solo se mantiene mientras el contexto y las alineaciones no la contradigan.` : 'La información disponible no alcanza para atribuir una ventaja competitiva fiable. La ficha presenta el contexto verificado sin convertirlo en una predicción.'}</p>
       </section>
     </section>
   );

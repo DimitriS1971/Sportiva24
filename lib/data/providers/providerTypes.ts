@@ -114,6 +114,56 @@ export interface ApiFootballFixtureStatisticsResponse {
   response?: ApiFootballFixtureStatistics[];
 }
 
+export interface ApiFootballTeamStatistics {
+  league?: {
+    fixtures?: {
+      played?: { home?: number; away?: number; total?: number };
+      wins?: { home?: number; away?: number; total?: number };
+      draws?: { home?: number; away?: number; total?: number };
+      loses?: { home?: number; away?: number; total?: number };
+    };
+    goals?: {
+      for?: { total?: { home?: number; away?: number; total?: number }; average?: { home?: string; away?: string; total?: string } };
+      against?: { total?: { home?: number; away?: number; total?: number }; average?: { home?: string; away?: string; total?: string } };
+    };
+    clean_sheet?: { home?: number; away?: number; total?: number };
+    failed_to_score?: { home?: number; away?: number; total?: number };
+  };
+}
+
+export interface ApiFootballTeamStatisticsResponse {
+  response?: ApiFootballTeamStatistics;
+}
+
+export interface ApiFootballInjury {
+  player?: { id?: number; name?: string; type?: string; reason?: string };
+  team?: { id?: number; name?: string };
+  fixture?: { id?: number; date?: string };
+}
+
+export interface ApiFootballInjuriesResponse {
+  response?: ApiFootballInjury[];
+}
+
+export interface ApiFootballOddsValue {
+  value?: string;
+  odd?: string;
+}
+
+export interface ApiFootballOddsBet {
+  name?: string;
+  values?: ApiFootballOddsValue[];
+}
+
+export interface ApiFootballOdds {
+  bookmaker?: { id?: number; name?: string };
+  bets?: ApiFootballOddsBet[];
+}
+
+export interface ApiFootballOddsResponse {
+  response?: ApiFootballOdds[];
+}
+
 export interface TheSportsDbEvent {
   idEvent?: string;
   strLeague?: string;

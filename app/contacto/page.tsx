@@ -18,10 +18,6 @@ export default function ContactoPage() {
           heading: 'Consultas generales',
           body: 'Escríbenos a contacto@sportiva24.com para dudas generales sobre el producto y la plataforma.',
         },
-        {
-          heading: 'Alianzas y marcas',
-          body: 'Para colaboraciones, patrocinios o acciones de marca, utiliza alianzas@sportiva24.com y te responderemos a la brevedad.',
-        },
       ]}
     />
   );

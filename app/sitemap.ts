@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 const baseUrl = 'https://sportiva24.com';
+const blogSlugs = ['como-funciona-sportiva24', 'como-calculamos-probabilidades', 'que-significa-indice-s24', 'como-interpretamos-xg', 'como-utilizamos-ia-en-analisis-deportivo'];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
@@ -10,12 +11,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/match',
     '/noticias',
     '/blog',
+    '/rendimiento-modelo',
     '/centro-inteligencia-s24',
     '/sobre-nosotros',
     '/contacto',
   ];
 
-  return routes.map((path) => ({
+  return [...routes, ...blogSlugs.map((slug) => `/blog/${slug}`)].map((path) => ({
     url: `${baseUrl}${path}`,
     lastModified: new Date(),
     changeFrequency: path === '/' || path === '/futbol' || path === '/match' ? 'hourly' : 'weekly',

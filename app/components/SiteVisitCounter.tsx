@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { getCookiePreferences } from './CookieConsent';
 
 export default function SiteVisitCounter() {
   const [visits, setVisits] = useState<number | null>(null);
@@ -8,7 +9,10 @@ export default function SiteVisitCounter() {
   useEffect(() => {
     let active = true;
 
-    fetch('/api/visits', { method: 'POST' })
+    const sendVisit = () => {
+      if (getCookiePreferences()?.analytics !== true) return;
+
+      fetch('/api/visits', { method: 'POST' })
       .then(async (response) => {
         if (!response.ok) return null;
         const contentType = response.headers.get('content-type') ?? '';
@@ -21,9 +25,14 @@ export default function SiteVisitCounter() {
         }
       })
       .catch(() => undefined);
+    };
+
+    sendVisit();
+    window.addEventListener('sportiva24-cookie-preferences-updated', sendVisit);
 
     return () => {
       active = false;
+      window.removeEventListener('sportiva24-cookie-preferences-updated', sendVisit);
     };
   }, []);
 

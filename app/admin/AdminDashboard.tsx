@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 
 type Article = { id: string; title: string; excerpt: string; content: string; image: string; category: string; published_at: string | null; featured: boolean };
@@ -15,6 +15,7 @@ export default function AdminDashboard({ email }: { email: string }) {
   const [message, setMessage] = useState('');
   const [busyId, setBusyId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const contentRef = useRef<HTMLTextAreaElement>(null);
 
   async function load() {
     const response = await fetch('/api/admin/articles');
@@ -103,6 +104,26 @@ export default function AdminDashboard({ email }: { email: string }) {
     window.location.href = '/admin/login';
   }
 
+  function wrapSelection(prefix: string, suffix: string, placeholder: string) {
+    const textarea = contentRef.current;
+    if (!textarea) return;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = form.content.slice(start, end) || placeholder;
+    const value = `${form.content.slice(0, start)}${prefix}${selected}${suffix}${form.content.slice(end)}`;
+    setForm({ ...form, content: value });
+    window.setTimeout(() => textarea.focus(), 0);
+  }
+
+  function insertArticleLink() {
+    const target = window.prompt('Pega la URL interna de la nota, por ejemplo /noticias/mi-nota');
+    if (!target || !target.startsWith('/noticias/')) {
+      if (target) setMessage('El enlace debe comenzar con /noticias/.');
+      return;
+    }
+    wrapSelection('[', `](${target})`, 'Texto del enlace');
+  }
+
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-8 text-white md:px-10">
       <div className="mx-auto max-w-6xl">
@@ -124,7 +145,11 @@ export default function AdminDashboard({ email }: { email: string }) {
               <input required placeholder="Resumen" value={form.excerpt} onChange={(event) => setForm({ ...form, excerpt: event.target.value })} className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-3" />
               <select value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value })} className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-3"><option>Fútbol</option><option>Basketball</option><option>Análisis</option><option>Noticias</option></select>
             </div>
-            <textarea required placeholder="Contenido" value={form.content} onChange={(event) => setForm({ ...form, content: event.target.value })} rows={10} className="mt-3 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-3" />
+            <div className="mt-3 flex items-center gap-2 border border-slate-700 bg-slate-900 p-2">
+              <button type="button" onClick={() => wrapSelection('**', '**', 'Texto en negrita')} className="flex h-9 w-9 items-center justify-center border border-slate-600 text-sm font-black" title="Negrita" aria-label="Negrita">B</button>
+              <button type="button" onClick={insertArticleLink} className="flex h-9 w-9 items-center justify-center border border-slate-600 text-sm font-semibold" title="Enlazar otra nota" aria-label="Enlazar otra nota">Link</button>
+            </div>
+            <textarea ref={contentRef} required placeholder="Contenido" value={form.content} onChange={(event) => setForm({ ...form, content: event.target.value })} rows={10} className="w-full rounded-b-lg border border-t-0 border-slate-700 bg-slate-950 px-3 py-3" />
             <label className="mt-4 flex items-center gap-2 text-sm text-slate-300"><input type="checkbox" checked={form.publish} onChange={(event) => setForm({ ...form, publish: event.target.checked })} /> Publicar inmediatamente</label>
             {message ? <p className="mt-4 text-sm text-cyan-300">{message}</p> : null}
             <button className="mt-4 rounded-lg bg-cyan-500 px-4 py-3 font-semibold text-slate-950">{editingId ? 'Guardar cambios' : 'Guardar artículo'}</button>

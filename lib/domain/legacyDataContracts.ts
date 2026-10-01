@@ -37,7 +37,7 @@ export interface LegacyMatch {
   country?: string;
   time: string;
   dateTimeUtc?: string;
-  status: 'EN VIVO' | 'PRÓXIMO' | 'FINALIZADO';
+  status: 'EN VIVO' | 'PRÓXIMO' | 'FINALIZADO' | 'POSTERGADO' | 'CANCELADO' | 'SUSPENDIDO' | 'ABANDONADO' | 'ADJUDICADO' | 'DESPUÉS DE PRÓRROGA' | 'PENALES' | 'ENTRETIEMPO' | 'PRÓRROGA' | 'DESCANSO' | 'RETRASADO';
   homeTeam: Team;
   awayTeam: Team;
   homeScore?: number;

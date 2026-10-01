@@ -95,70 +95,63 @@ export interface BuildInformeS24Params {
   realContext?: RealMatchContext | null;
 }
 
-function round2(value: number): number {
-  return Math.round(value * 100) / 100;
-}
-
 function clampScore(value: number): number {
   if (value < 0) return 0;
   if (value > 100) return 100;
   return value;
 }
 
-function scoreConfidenceBase(confidence?: Match['confidence']): number {
-  if (confidence === 'Alta') return 84;
-  if (confidence === 'Media') return 68;
-  if (confidence === 'Baja') return 50;
-  return 64;
+function formScore(matches: RealMatchContext['recentForm']['home']): number | undefined {
+  if (matches.length === 0) return undefined;
+
+  const points = matches.reduce((total, match) => total + (match.result === 'V' ? 3 : match.result === 'E' ? 1 : 0), 0);
+  return clampScore((points / (matches.length * 3)) * 100);
 }
 
-function buildSeed(input: string): number {
-  return input.split('').reduce((acc, char, index) => acc + (char.charCodeAt(0) * (index + 1)), 0);
+function standingScore(context: RealMatchContext | null, side: 'local' | 'visitante'): number | undefined {
+  if (!context || context.standings.length !== 2) return undefined;
+
+  const teamName = side === 'local' ? context.standings[0].teamName : context.standings[1].teamName;
+  const team = context.standings.find((standing) => standing.teamName === teamName);
+  const opponent = context.standings.find((standing) => standing.teamName !== teamName);
+  if (!team || !opponent) return undefined;
+
+  return clampScore(Math.max(25, Math.min(75, 50 + (opponent.position - team.position) * 3)));
 }
 
-function deterministicOffset(seed: number, span: number): number {
-  const normalized = (seed % (span * 2 + 1)) - span;
-  return normalized;
+function headToHeadScore(context: RealMatchContext | null, side: 'local' | 'visitante'): number | undefined {
+  if (!context || context.headToHead.matches.length === 0) return undefined;
+
+  const wins = side === 'local' ? context.headToHead.homeWins : context.headToHead.awayWins;
+  const points = wins * 3 + context.headToHead.draws;
+  return clampScore((points / (context.headToHead.matches.length * 3)) * 100);
 }
 
-function deriveTeamInput(match: Match, side: 'local' | 'visitante', profile: SportProfile) {
+function deriveTeamInput(
+  match: Match,
+  side: 'local' | 'visitante',
+  profile: SportProfile,
+  context: RealMatchContext | null,
+) {
   const team = side === 'local' ? match.homeTeam : match.awayTeam;
-  const homeProbability = clampScore(match.probabilityHomeWin ?? 50);
-  const sideProbability = side === 'local' ? homeProbability : 100 - homeProbability;
-  const baseIndex = clampScore(match.indexScore ?? 74);
-  const confidenceBase = scoreConfidenceBase(match.confidence);
-
-  const seed = buildSeed(`${match.slug}:${team.id}:${team.name}:${side}`);
-  const dynamicBias = deterministicOffset(seed, 6);
-
-  const recentForm = clampScore(baseIndex + (sideProbability - 50) * 0.6 + dynamicBias);
-  const offensivePerformance = clampScore(baseIndex + (sideProbability - 50) * 0.45 + deterministicOffset(seed + 17, 7));
-  const defensivePerformance = clampScore(baseIndex + (50 - sideProbability) * 0.2 + deterministicOffset(seed + 29, 6));
-  const squadQuality = clampScore(baseIndex + deterministicOffset(seed + 41, 5));
-  const squadAvailability = clampScore(confidenceBase + deterministicOffset(seed + 53, 6));
-  const fatigue = clampScore(70 + deterministicOffset(seed + 67, 12));
-
-  const localBonus = side === 'local' ? 9 : -4;
-  const matchContext = clampScore(baseIndex + localBonus + deterministicOffset(seed + 79, 6));
-  const headToHead = clampScore(50 + (sideProbability - 50) * 0.25 + deterministicOffset(seed + 97, 10));
-
-  const computedFactorPool: Record<string, number> = {
-    recentForm,
-    offensivePerformance,
-    defensivePerformance,
-    squadQuality,
-    squadAvailability,
-    fatigue,
-    matchContext,
-    headToHead,
+  const recentMatches = context?.recentForm[side === 'local' ? 'home' : 'away'] ?? [];
+  const computedFactorPool: Partial<Record<string, number>> = {
+    recentForm: formScore(recentMatches),
+    squadQuality: standingScore(context, side),
+    matchContext: context ? side === 'local' ? 55 : 45 : undefined,
+    headToHead: headToHeadScore(context, side),
   };
 
-  const profileFactors = profile.availableFactors.reduce<Record<string, number>>((acc, factorKey) => {
-    const fallbackSeed = seed + (factorKey.length * 11);
-    const fallbackValue = clampScore(baseIndex + deterministicOffset(fallbackSeed, 10));
-    acc[factorKey] = computedFactorPool[factorKey] ?? fallbackValue;
+  const profileFactors = profile.availableFactors.reduce<Partial<Record<string, number>>>((acc, factorKey) => {
+    const score = computedFactorPool[factorKey];
+    if (score !== undefined) {
+      acc[factorKey] = score;
+    }
     return acc;
   }, {});
+
+  const availableSignals = Object.values(computedFactorPool).filter((score) => score !== undefined).length;
+  const dataCoverage = context ? Math.min(75, 25 + availableSignals * 15) : 20;
 
   return {
     sport: match.sport,
@@ -166,12 +159,12 @@ function deriveTeamInput(match: Match, side: 'local' | 'visitante', profile: Spo
     teamName: team.name,
     factors: profileFactors,
     signals: {
-      dataCoverage: clampScore(confidenceBase + deterministicOffset(seed + 113, 6)),
-      volatility: clampScore(42 + deterministicOffset(seed + 131, 15)),
-      trendSignal: clampScore((recentForm * 0.55) + (offensivePerformance * 0.3) + (defensivePerformance * 0.15)) - 50,
+      dataCoverage,
+      volatility: recentMatches.length >= 5 ? 45 : 65,
+      trendSignal: computedFactorPool.recentForm === undefined ? undefined : computedFactorPool.recentForm - 50,
     },
     metadata: {
-      sampleSize: 8,
+      sampleSize: recentMatches.length,
       lastUpdatedAt: new Date().toISOString(),
     },
   };
@@ -329,8 +322,8 @@ export function buildInformeS24V1(params: BuildInformeS24Params): InformeS24V1 {
   const motorVersion = 'Motor S24 v1';
   const methodologicalVersion = profile.methodologyVersion;
 
-  const localInput = deriveTeamInput(params.match, 'local', profile);
-  const visitanteInput = deriveTeamInput(params.match, 'visitante', profile);
+  const localInput = deriveTeamInput(params.match, 'local', profile, params.realContext ?? null);
+  const visitanteInput = deriveTeamInput(params.match, 'visitante', profile, params.realContext ?? null);
 
   const localOutput = motorDeInteligenciaS24.calculate(localInput, {
     profile,

@@ -5,8 +5,7 @@ import FeaturedMatches from './components/FeaturedMatches';
 import HeroCropIcon from './components/HeroCropIcon';
 import AdSlot from './components/AdSlot';
 import Footer from './components/Footer';
-import type { IntelligenceMatch } from '@/lib/domain/intelligenceCenter';
-import { getPublishedAnalysisCount, getTodayFootballMatchesCount } from './lib/realSportsData';
+import { getPublishedAnalysisCount, getTodayFootballMatches } from './lib/realSportsData';
 
 export const revalidate = 30;
 
@@ -22,74 +21,17 @@ const heroBySport = {
   more: '/hero/hero-mas.png',
 } as const;
 
-const homeMatchCards: IntelligenceMatch[] = [
-  {
-    competition: 'LA LIGA',
-    country: 'España',
-    time: 'Finalizado',
-    dateTimeUtc: '2026-09-18T16:00:00.000Z',
-    status: 'FINALIZADO',
-    team1: 'Barcelona',
-    team1Logo: '/teams/barcelona.svg',
-    team2: 'Sevilla',
-    team2Logo: 'https://media.api-sports.io/football/teams/536.png',
-    s24Index: 82,
-    confidence: 'Alta',
-    probability: 0.64,
-    slug: 'demo-barcelona-sevilla-finalizado',
-    sourceLabel: 'Demo local',
-    sourceTier: 'mock',
-    homeScore: 2,
-    awayScore: 1,
-    elapsedMinutes: 90,
-  },
-  {
-    competition: 'PREMIER LEAGUE',
-    country: 'Inglaterra',
-    time: 'En juego',
-    dateTimeUtc: '2026-09-18T18:00:00.000Z',
-    status: 'EN VIVO',
-    team1: 'Arsenal',
-    team1Logo: '/teams/arsenal.svg',
-    team2: 'Chelsea',
-    team2Logo: '/teams/chelsea.svg',
-    s24Index: 79,
-    confidence: 'Media',
-    probability: 0.55,
-    slug: 'demo-arsenal-chelsea-en-vivo',
-    sourceLabel: 'Demo local',
-    sourceTier: 'mock',
-    homeScore: 1,
-    awayScore: 1,
-    elapsedMinutes: 67,
-  },
-  {
-    competition: 'LA LIGA',
-    country: 'España',
-    time: 'Mañana, 21:00',
-    dateTimeUtc: '2026-09-19T19:00:00.000Z',
-    status: 'PROXIMO',
-    team1: 'Atlético Madrid',
-    team1Logo: '/teams/atletico.svg',
-    team2: 'Real Madrid',
-    team2Logo: '/teams/real-madrid.svg',
-    s24Index: 86,
-    confidence: 'Media',
-    probability: 0.42,
-    slug: 'demo-atletico-madrid-real-madrid',
-    sourceLabel: 'Demo local',
-    sourceTier: 'mock',
-  },
-];
-
 export default async function Home() {
-  const [footballTodayCount, publishedAnalysisCount] = await Promise.all([
-    getTodayFootballMatchesCount(),
+  const [todayMatches, publishedAnalysisCount] = await Promise.all([
+    getTodayFootballMatches(200),
     getPublishedAnalysisCount(),
   ]);
-  const activeMatches = homeMatchCards.filter((match) => match.status === 'EN VIVO');
-  const featuredMatches = homeMatchCards.filter((match) => match.status === 'PROXIMO');
-  const finishedMatches = homeMatchCards.filter((match) => match.status === 'FINALIZADO');
+  const footballTodayCount = todayMatches.length;
+  const activeStatuses = new Set(['EN VIVO', 'ENTRETIEMPO', 'PRÓRROGA', 'DESCANSO', 'PENALES']);
+  const finishedStatuses = new Set(['FINALIZADO', 'DESPUÉS DE PRÓRROGA', 'ADJUDICADO']);
+  const activeMatches = todayMatches.filter((match) => activeStatuses.has(match.status));
+  const featuredMatches = todayMatches.filter((match) => match.status === 'PROXIMO');
+  const finishedMatches = todayMatches.filter((match) => finishedStatuses.has(match.status));
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-black text-white">

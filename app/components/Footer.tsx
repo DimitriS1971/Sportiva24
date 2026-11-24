@@ -8,7 +8,6 @@ export default function Footer() {
 
   const footerLinks = {
     Producto: [
-      { label: 'Fútbol', href: '/futbol' },
       { label: 'Análisis', href: '/analisis' },
       { label: 'Noticias', href: '/noticias' },
       { label: 'Rendimiento del modelo', href: '/rendimiento-modelo' },
@@ -34,7 +33,7 @@ export default function Footer() {
               SPORTIVA<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">24</span>
             </h3>
             <p className="text-sm text-gray-400 font-normal leading-relaxed max-w-xs">
-              Inteligencia deportiva basada en datos e inteligencia artificial.
+              Inteligencia futbolística basada en datos y análisis contextual.
             </p>
           </div>
 

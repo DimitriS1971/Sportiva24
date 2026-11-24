@@ -1,8 +1,11 @@
 import { newsData, type NewsArticle } from '@/app/data/news';
+import { isArticleCategory } from '@/app/lib/articleCategories';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 export async function getPublishedArticles(): Promise<NewsArticle[]> {
-  const fallbackArticles = newsData.map((article) => ({ ...article }));
+  const fallbackArticles = newsData
+    .filter((article) => isArticleCategory(article.category))
+    .map((article) => ({ ...article }));
 
   try {
     const supabase = await createSupabaseServerClient();
@@ -15,21 +18,25 @@ export async function getPublishedArticles(): Promise<NewsArticle[]> {
 
     if (error || !data?.length) return fallbackArticles;
 
-    return data.map((article) => ({
-      id: article.id,
-      slug: article.slug,
-      title: article.title,
-      excerpt: article.excerpt,
-      content: article.content,
-      image: article.image,
-      category: article.category,
-      date: new Date(article.published_at as string).toLocaleDateString('es-CR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      }),
-      featured: article.featured,
-    }));
+    const publishedArticles = data
+      .filter((article) => isArticleCategory(article.category))
+      .map((article) => ({
+        id: article.id,
+        slug: article.slug,
+        title: article.title,
+        excerpt: article.excerpt,
+        content: article.content,
+        image: article.image,
+        category: article.category,
+        date: new Date(article.published_at as string).toLocaleDateString('es-CR', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        }),
+        featured: article.featured,
+      }));
+
+    return publishedArticles.length > 0 ? publishedArticles : fallbackArticles;
   } catch {
     return fallbackArticles;
   }

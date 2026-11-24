@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { label: 'Fútbol', href: '#' },
-    { label: 'Basketball', href: '#' },
+    { label: 'Partidos', href: '/match' },
     { label: 'Análisis', href: '/analisis' },
     { label: 'Noticias', href: '/noticias' },
   ];
@@ -18,11 +18,11 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/" className="flex items-center space-x-2 group">
+            <Link href="/" className="flex items-center space-x-2 group">
               <div className="text-3xl md:text-4xl font-bold text-white">
                 SPORTIVA<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">24</span>
               </div>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Menu */}

@@ -56,7 +56,7 @@ export default function EditorialMatchCard({
 
   return (
     <article className="group relative isolate overflow-hidden rounded-[24px] border border-sky-300/20 bg-[#020817] shadow-[0_24px_70px_rgba(0,0,0,0.45)] transition duration-300 hover:-translate-y-1 hover:border-sky-300/45">
-      <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgba(2,8,23,0.18),rgba(2,8,23,0.94)),url('/hero/hero-football.png')] bg-cover bg-center opacity-75" />
+      <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgba(2,8,23,0.18),rgba(2,8,23,0.94)),url('/hero/hero-portada.png')] bg-cover bg-center opacity-75" />
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_20%,rgba(56,189,248,0.15),transparent_36%),linear-gradient(120deg,rgba(2,8,23,0.88),rgba(3,15,35,0.68),rgba(2,8,23,0.94))]" />
       <div className="relative p-5 md:p-6">
         <div className="flex items-center justify-between gap-3">

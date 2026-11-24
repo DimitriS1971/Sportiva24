@@ -19,19 +19,61 @@ const defaultPreferences: CookiePreferences = {
   preferences: false,
 };
 
+function parsePreferences(value: string): CookiePreferences | null {
+  try {
+    const stored: unknown = JSON.parse(value);
+    if (!stored || typeof stored !== 'object') return null;
+
+    const saved = stored as Partial<CookiePreferences>;
+    return {
+      necessary: true,
+      analytics: typeof saved.analytics === 'boolean' ? saved.analytics : false,
+      advertising: typeof saved.advertising === 'boolean' ? saved.advertising : false,
+      preferences: typeof saved.preferences === 'boolean' ? saved.preferences : false,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export function getCookiePreferences(): CookiePreferences | null {
   try {
     const stored = window.localStorage.getItem(storageKey);
-    return stored ? { ...defaultPreferences, ...JSON.parse(stored), necessary: true } : null;
+    if (stored) {
+      const parsed = parsePreferences(stored);
+      if (parsed) return parsed;
+    }
+  } catch {}
+
+  const cookie = document.cookie
+    .split('; ')
+    .find((entry) => entry.startsWith(`${storageKey}=`))
+    ?.slice(storageKey.length + 1);
+  if (!cookie) return null;
+
+  try {
+    return parsePreferences(decodeURIComponent(cookie));
   } catch {
     return null;
   }
 }
 
 function saveCookiePreferences(preferences: CookiePreferences) {
-  window.localStorage.setItem(storageKey, JSON.stringify(preferences));
-  document.cookie = `${storageKey}=1; Max-Age=31536000; Path=/; SameSite=Lax`;
+  const serialized = JSON.stringify(preferences);
+  let persisted = false;
+
+  try {
+    window.localStorage.setItem(storageKey, serialized);
+    persisted = true;
+  } catch {}
+
+  try {
+    document.cookie = `${storageKey}=${encodeURIComponent(serialized)}; Max-Age=31536000; Path=/; SameSite=Lax`;
+    persisted ||= document.cookie.split('; ').some((entry) => entry.startsWith(`${storageKey}=`));
+  } catch {}
+
   window.dispatchEvent(new CustomEvent(consentEvent));
+  return persisted;
 }
 
 export function hasAnalyticsConsent(): boolean {
@@ -42,34 +84,43 @@ export default function CookieConsent() {
   const [preferences, setPreferences] = useState<CookiePreferences | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [draft, setDraft] = useState(defaultPreferences);
+  const [persistenceError, setPersistenceError] = useState(false);
 
   useEffect(() => {
-    const stored = getCookiePreferences();
-    setPreferences(stored);
-    if (stored) setDraft(stored);
+    let active = true;
+    const timer = window.setTimeout(() => {
+      if (!active) return;
+      const stored = getCookiePreferences();
+      setPreferences(stored);
+      if (stored) setDraft(stored);
+    }, 0);
 
     const openSettings = () => setIsSettingsOpen(true);
     window.addEventListener('sportiva24-open-cookie-settings', openSettings);
-    return () => window.removeEventListener('sportiva24-open-cookie-settings', openSettings);
+    return () => {
+      active = false;
+      window.clearTimeout(timer);
+      window.removeEventListener('sportiva24-open-cookie-settings', openSettings);
+    };
   }, []);
 
   const acceptAll = () => {
     const next = { ...defaultPreferences, analytics: true, preferences: true };
-    saveCookiePreferences(next);
+    setPersistenceError(!saveCookiePreferences(next));
     setPreferences(next);
     setDraft(next);
     setIsSettingsOpen(false);
   };
 
   const rejectOptional = () => {
-    saveCookiePreferences(defaultPreferences);
+    setPersistenceError(!saveCookiePreferences(defaultPreferences));
     setPreferences(defaultPreferences);
     setDraft(defaultPreferences);
     setIsSettingsOpen(false);
   };
 
   const saveCustom = () => {
-    saveCookiePreferences(draft);
+    setPersistenceError(!saveCookiePreferences(draft));
     setPreferences(draft);
     setIsSettingsOpen(false);
   };
@@ -77,9 +128,16 @@ export default function CookieConsent() {
   return (
     <>
       {preferences ? (
-        <button type="button" onClick={() => setIsSettingsOpen(true)} className="fixed bottom-4 left-4 z-[60] rounded-full border border-slate-700 bg-slate-950/95 px-4 py-2 text-xs font-semibold text-slate-300 shadow-xl hover:border-sky-400 hover:text-white">
-          Preferencias de cookies
-        </button>
+        <>
+          <button type="button" onClick={() => setIsSettingsOpen(true)} className="fixed bottom-4 left-4 z-[60] rounded-full border border-slate-700 bg-slate-950/95 px-4 py-2 text-xs font-semibold text-slate-300 shadow-xl hover:border-sky-400 hover:text-white">
+            Preferencias de cookies
+          </button>
+          {persistenceError ? (
+            <p role="status" className="fixed bottom-16 left-4 z-[60] max-w-xs rounded-lg border border-amber-700 bg-slate-950 p-3 text-xs text-amber-200 shadow-xl">
+              No se pudo guardar tu preferencia de cookies en este navegador.
+            </p>
+          ) : null}
+        </>
       ) : (
         <section className="fixed inset-x-4 bottom-4 z-[60] mx-auto max-w-3xl rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl shadow-black/60 md:inset-x-auto md:right-6 md:left-auto">
           <p className="text-sm font-semibold text-white">Tu privacidad importa</p>

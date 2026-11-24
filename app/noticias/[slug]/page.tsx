@@ -5,12 +5,13 @@ import Footer from "@/app/components/Footer";
 import AdSlot from "@/app/components/AdSlot";
 import ArticleContent from '@/app/components/ArticleContent';
 import { newsData, type NewsArticle } from "@/app/data/news";
+import { isArticleCategory } from "@/app/lib/articleCategories";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 type PublishedArticle = NewsArticle & { publishedAt: string };
 
 async function getArticle(slug: string): Promise<PublishedArticle | null> {
-  const localArticle = newsData.find((article) => article.slug === slug);
+  const localArticle = newsData.find((article) => article.slug === slug && isArticleCategory(article.category));
 
   try {
     const supabase = await createSupabaseServerClient();
@@ -22,7 +23,7 @@ async function getArticle(slug: string): Promise<PublishedArticle | null> {
       .lte("published_at", new Date().toISOString())
       .maybeSingle();
 
-    if (!error && data) {
+    if (!error && data && isArticleCategory(data.category)) {
       return {
         id: data.id,
         slug: data.slug,

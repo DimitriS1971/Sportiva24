@@ -18,12 +18,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://sportiva24.com"),
   title: {
-    default: "Sportiva24 | Inteligencia deportiva",
+    default: "Sportiva24 | Inteligencia futbolística",
     template: "%s | Sportiva24",
   },
-  description: "Partidos, datos confirmados e inteligencia deportiva de Sportiva24.",
+  description: "Partidos, datos confirmados e inteligencia futbolística de Sportiva24.",
   applicationName: "Sportiva24",
-  keywords: ["fútbol", "partidos de hoy", "inteligencia deportiva", "análisis deportivo"],
+  keywords: ["fútbol", "partidos de hoy", "inteligencia futbolística", "análisis de fútbol"],
   alternates: {
     canonical: "/",
   },
@@ -32,13 +32,13 @@ export const metadata: Metadata = {
     locale: "es_ES",
     url: "https://sportiva24.com",
     siteName: "Sportiva24",
-    title: "Sportiva24 | Inteligencia deportiva",
-    description: "Partidos, datos confirmados e inteligencia deportiva.",
+    title: "Sportiva24 | Inteligencia futbolística",
+    description: "Partidos, datos confirmados e inteligencia futbolística.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sportiva24 | Inteligencia deportiva",
-    description: "Partidos, datos confirmados e inteligencia deportiva.",
+    title: "Sportiva24 | Inteligencia futbolística",
+    description: "Partidos, datos confirmados e inteligencia futbolística.",
   },
   robots: {
     index: true,

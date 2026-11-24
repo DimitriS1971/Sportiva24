@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
+import { articleCategories, isArticleCategory } from '@/app/lib/articleCategories';
 
 type Article = { id: string; title: string; excerpt: string; content: string; image: string; category: string; published_at: string | null; featured: boolean };
 
@@ -45,7 +46,7 @@ export default function AdminDashboard({ email }: { email: string }) {
 
   function editArticle(article: Article) {
     setEditingId(article.id);
-    setForm({ title: article.title, excerpt: article.excerpt, content: article.content, image: article.image, category: article.category, publish: Boolean(article.published_at) });
+    setForm({ title: article.title, excerpt: article.excerpt, content: article.content, image: article.image, category: isArticleCategory(article.category) ? article.category : 'Fútbol', publish: Boolean(article.published_at) });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -143,7 +144,7 @@ export default function AdminDashboard({ email }: { email: string }) {
             <input placeholder="Imagen (URL opcional)" value={form.image} onChange={(event) => setForm({ ...form, image: event.target.value })} className="mt-3 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-3" />
             <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto]">
               <input required placeholder="Resumen" value={form.excerpt} onChange={(event) => setForm({ ...form, excerpt: event.target.value })} className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-3" />
-              <select value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value })} className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-3"><option>Fútbol</option><option>Basketball</option><option>Análisis</option><option>Noticias</option></select>
+              <select value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value })} className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-3">{articleCategories.map((category) => <option key={category}>{category}</option>)}</select>
             </div>
             <div className="mt-3 flex items-center gap-2 border border-slate-700 bg-slate-900 p-2">
               <button type="button" onClick={() => wrapSelection('**', '**', 'Texto en negrita')} className="flex h-9 w-9 items-center justify-center border border-slate-600 text-sm font-black" title="Negrita" aria-label="Negrita">B</button>

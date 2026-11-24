@@ -1,7 +1,13 @@
 import { NextResponse } from 'next/server';
+import { isArticleCategory } from '@/app/lib/articleCategories';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 function slugify(value: string) { return value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+
+function getArticleCategory(category: string | undefined) {
+  if (category === undefined || category === '') return 'Fútbol';
+  return isArticleCategory(category) ? category : null;
+}
 
 export async function GET() {
   const supabase = await createSupabaseServerClient();
@@ -18,7 +24,9 @@ export async function POST(request: Request) {
   if (!user) return NextResponse.json({ error: 'No autorizado.' }, { status: 401 });
   const body = await request.json() as { title?: string; excerpt?: string; content?: string; image?: string; category?: string; publish?: boolean };
   if (!body.title || !body.excerpt || !body.content) return NextResponse.json({ error: 'Título, resumen y contenido son obligatorios.' }, { status: 400 });
-  const { data, error } = await supabase.from('articles').insert({ title: body.title, slug: `${slugify(body.title)}-${Date.now()}`, excerpt: body.excerpt, content: body.content, image: body.image || '/hero/hero-sportiva24.svg', category: body.category || 'Fútbol', published_at: body.publish ? new Date().toISOString() : null }).select('id,title,category,published_at').single();
+  const category = getArticleCategory(body.category);
+  if (!category) return NextResponse.json({ error: 'La categoría debe corresponder al contenido de fútbol.' }, { status: 400 });
+  const { data, error } = await supabase.from('articles').insert({ title: body.title, slug: `${slugify(body.title)}-${Date.now()}`, excerpt: body.excerpt, content: body.content, image: body.image || '/hero/hero-sportiva24.svg', category, published_at: body.publish ? new Date().toISOString() : null }).select('id,title,category,published_at').single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data, { status: 201 });
 }
@@ -33,9 +41,11 @@ export async function PATCH(request: Request) {
 
   if (!body.action) {
     if (!body.title || !body.excerpt || !body.content) return NextResponse.json({ error: 'Título, resumen y contenido son obligatorios.' }, { status: 400 });
+    const category = getArticleCategory(body.category);
+    if (!category) return NextResponse.json({ error: 'La categoría debe corresponder al contenido de fútbol.' }, { status: 400 });
     const { data, error } = await supabase
       .from('articles')
-      .update({ title: body.title, excerpt: body.excerpt, content: body.content, image: body.image || '/hero/hero-sportiva24.svg', category: body.category || 'Fútbol', updated_at: new Date().toISOString() })
+      .update({ title: body.title, excerpt: body.excerpt, content: body.content, image: body.image || '/hero/hero-sportiva24.svg', category, updated_at: new Date().toISOString() })
       .eq('id', body.id)
       .select('id,title,excerpt,content,image,category,published_at')
       .single();

@@ -6,15 +6,15 @@ import { sortMatchesByImportance } from '@/app/lib/footballMatchPriority';
 import { getPublishedArticles } from '@/app/lib/publishedNews';
 
 export const metadata: Metadata = {
-  title: 'Fútbol | Sportiva24',
-  description: 'Centro de Inteligencia Deportiva de fútbol en Sportiva24.',
+  title: 'Inteligencia de fútbol | Sportiva24',
+  description: 'Partidos, competiciones y análisis futbolístico con contexto y datos en tiempo real.',
 };
 
 export const revalidate = 30;
 
 const baseFutbolContent: IntelligenceCenterContent = {
   hero: {
-    badge: 'Datos deportivos en tiempo real',
+    badge: 'Inteligencia de fútbol en tiempo real',
     title: 'Fútbol',
     subtitle: 'La agenda real del fútbol mundial, interpretada con contexto y señal deportiva.',
     description:
@@ -22,7 +22,7 @@ const baseFutbolContent: IntelligenceCenterContent = {
     primaryCta: { label: 'Ver agenda', href: '/match' },
     secondaryCta: { label: 'Noticias', href: '/noticias' },
     image: {
-      src: '/hero/hero-football.png',
+      src: '/hero/hero-portada.png',
       alt: 'Visual premium de fútbol, inteligencia artificial y análisis de datos',
       width: 1200,
       height: 920,

@@ -18,12 +18,12 @@ export default function HeroNew() {
                 <span className="block whitespace-nowrap">La plataforma líder</span>
                 <span className="block whitespace-nowrap">en</span>
                 <span className="block whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">Inteligencia</span>
-                <span className="block whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">Deportiva</span>
+                <span className="block whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">Futbolística</span>
               </span>
               <span className="hidden md:inline">
                 La plataforma líder en
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">Inteligencia Deportiva</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">Inteligencia Futbolística</span>
               </span>
             </h1>
 
@@ -34,7 +34,7 @@ export default function HeroNew() {
               </div>
               <img
                 src="/hero/hero-portada.png"
-                alt="Visual IA deportiva"
+                alt="Inteligencia artificial aplicada al fútbol"
                 className="relative z-10 w-[99%] h-[95%] object-cover"
                 style={{
                   maskImage: 'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 7%, black 93%, transparent 100%)',
@@ -46,7 +46,7 @@ export default function HeroNew() {
             </div>
 
             <p className="text-lg md:text-lg text-gray-300 leading-relaxed max-w-lg">
-              Analizamos miles de variables, estadísticas e inteligencia artificial para ayudarte a comprender mejor cada partido.
+              Analizamos datos, estadísticas y contexto para ayudarte a comprender mejor cada partido de fútbol.
             </p>
 
             <div className="flex flex-col gap-3.5 pt-1 md:flex-row">
@@ -92,7 +92,7 @@ export default function HeroNew() {
             </div>
             <img
               src="/hero/hero-portada.png"
-              alt="Visual IA deportiva"
+              alt="Inteligencia artificial aplicada al fútbol"
               className="relative z-10 w-[99%] h-[95%] object-cover"
               style={{
                 maskImage: 'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 7%, black 93%, transparent 100%)',

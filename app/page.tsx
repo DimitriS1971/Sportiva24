@@ -9,18 +9,6 @@ import { getPublishedAnalysisCount, getTodayFootballMatches } from './lib/realSp
 
 export const revalidate = 30;
 
-const heroBySport = {
-  all: '/hero/hero-portada.png',
-  football: '/hero/hero-football.png',
-  basketball: '/hero/hero-basketball.png',
-  tennis: '/hero/hero-tenis.png',
-  f1: '/hero/hero-f1.png',
-  cycling: '/hero/hero-ciclismo.png',
-  baseball: '/hero/hero-beisball.png',
-  egames: '/hero/hero-egames.png',
-  more: '/hero/hero-mas.png',
-} as const;
-
 export default async function Home() {
   const [todayMatches, publishedAnalysisCount] = await Promise.all([
     getTodayFootballMatches(200),
@@ -45,9 +33,9 @@ export default async function Home() {
 
       <section className="bg-black px-4 md:px-12 py-4 md:py-5">
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
-          <StatCardNew icon={<HeroCropIcon source={heroBySport.football} alt="Fútbol" className="h-11 w-11" />} value={String(footballTodayCount)} title="Partidos hoy" detail="" accent="blue" href="/match" />
-          <StatCardNew icon={<HeroCropIcon source={heroBySport.all} alt="Análisis" className="h-11 w-11" />} value={String(publishedAnalysisCount)} title="Análisis disponibles" detail="" accent="violet" href="/analisis" />
-          <StatCardNew icon={<HeroCropIcon source={heroBySport.football} alt="Modelo online" className="h-11 w-11" />} value="Modelo Online" title="Última actualización: Ahora" detail="" accent="green" href="/modelo-online" />
+          <StatCardNew icon={<HeroCropIcon source="/hero/hero-portada.png" alt="Fútbol" className="h-11 w-11" />} value={String(footballTodayCount)} title="Partidos hoy" detail="" accent="blue" href="/match" />
+          <StatCardNew icon={<HeroCropIcon source="/hero/hero-portada.png" alt="Análisis de fútbol" className="h-11 w-11" />} value={String(publishedAnalysisCount)} title="Análisis disponibles" detail="" accent="violet" href="/analisis" />
+          <StatCardNew icon={<HeroCropIcon source="/hero/hero-portada.png" alt="Modelo de fútbol online" className="h-11 w-11" />} value="Modelo Online" title="Última actualización: Ahora" detail="" accent="green" href="/modelo-online" />
         </div>
       </section>
 
@@ -77,19 +65,19 @@ export default async function Home() {
       <section className="bg-black px-4 md:px-12 pb-9">
         <div className="max-w-7xl mx-auto rounded-2xl border border-gray-800/70 bg-gradient-to-r from-gray-950 to-gray-900/80 p-5 md:p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
           <div className="rounded-xl bg-black/35 border border-blue-900/35 p-4">
-            <p className="flex items-center gap-2 text-blue-300 text-lg font-semibold"><HeroCropIcon source={heroBySport.egames} alt="Inteligencia Artificial" className="h-7 w-7" />Inteligencia Artificial</p>
-            <p className="text-gray-400 text-sm mt-1">Modelos avanzados que aprenden y mejoran cada día.</p>
+            <p className="flex items-center gap-2 text-blue-300 text-lg font-semibold"><HeroCropIcon source="/hero/hero-portada.png" alt="Inteligencia artificial en fútbol" className="h-7 w-7" />Inteligencia artificial</p>
+            <p className="text-gray-400 text-sm mt-1">Modelos que encuentran señales en el rendimiento de los equipos.</p>
           </div>
           <div className="rounded-xl bg-black/35 border border-orange-900/35 p-4">
-            <p className="flex items-center gap-2 text-orange-300 text-lg font-semibold"><HeroCropIcon source={heroBySport.basketball} alt="Datos en tiempo real" className="h-7 w-7" />Datos en tiempo real</p>
-            <p className="text-gray-400 text-sm mt-1">Estadísticas actualizadas al instante desde múltiples fuentes.</p>
+            <p className="flex items-center gap-2 text-orange-300 text-lg font-semibold"><HeroCropIcon source="/hero/hero-portada.png" alt="Datos de fútbol en tiempo real" className="h-7 w-7" />Datos en tiempo real</p>
+            <p className="text-gray-400 text-sm mt-1">Agenda y estadísticas actualizadas para seguir cada jornada.</p>
           </div>
           <div className="rounded-xl bg-black/35 border border-violet-900/35 p-4">
-            <p className="flex items-center gap-2 text-violet-300 text-lg font-semibold"><HeroCropIcon source={heroBySport.football} alt="Análisis confiable" className="h-7 w-7" />Análisis confiable</p>
-            <p className="text-gray-400 text-sm mt-1">Metodología transparente y resultados respaldados por datos.</p>
+            <p className="flex items-center gap-2 text-violet-300 text-lg font-semibold"><HeroCropIcon source="/hero/hero-portada.png" alt="Análisis de fútbol" className="h-7 w-7" />Análisis contextual</p>
+            <p className="text-gray-400 text-sm mt-1">Lecturas transparentes de partidos respaldadas por datos.</p>
           </div>
           <div className="rounded-xl bg-black/35 border border-emerald-900/35 p-4">
-            <p className="flex items-center gap-2 text-emerald-300 text-lg font-semibold"><HeroCropIcon source={heroBySport.all} alt="Cobertura global de fútbol" className="h-7 w-7" />Cobertura global de fútbol</p>
+            <p className="flex items-center gap-2 text-emerald-300 text-lg font-semibold"><HeroCropIcon source="/hero/hero-portada.png" alt="Cobertura global de fútbol" className="h-7 w-7" />Cobertura global de fútbol</p>
             <p className="text-gray-400 text-sm mt-1">Los principales partidos y competiciones de fútbol en un solo lugar.</p>
           </div>
         </div>

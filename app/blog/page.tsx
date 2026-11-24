@@ -6,7 +6,7 @@ import { blogArticles } from '@/app/data/blog';
 
 export const metadata: Metadata = {
   title: 'Blog | Sportiva24',
-  description: 'Producto, metodología y aprendizajes sobre datos e inteligencia deportiva en Sportiva24.',
+  description: 'Producto, metodología y análisis de datos aplicados al fútbol en Sportiva24.',
   alternates: { canonical: '/blog' },
 };
 
@@ -18,7 +18,7 @@ export default function BlogPage() {
         <div className="mx-auto max-w-6xl">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sky-300">Ideas y metodología</p>
           <h1 className="mt-4 text-4xl font-black tracking-tight md:text-6xl">Blog Sportiva24</h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Producto, metodología y aprendizajes sobre cómo convertimos datos deportivos en contexto útil.</p>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Producto, metodología y aprendizajes sobre cómo convertimos datos de fútbol en contexto útil.</p>
         </div>
       </section>
       <section className="px-6 py-12 md:px-12 md:py-16">

@@ -4,6 +4,12 @@ import NewsCardPremium from "@/app/components/NewsCardPremium";
 import { getPublishedArticles } from "@/app/lib/publishedNews";
 import Link from "next/link";
 import AdSlot from "@/app/components/AdSlot";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Noticias de fútbol | Sportiva24",
+  description: "Actualidad y análisis del fútbol con contexto e inteligencia basada en datos.",
+};
 
 export default async function Noticias() {
   const articles = await getPublishedArticles();
@@ -24,7 +30,7 @@ export default async function Noticias() {
             Noticias
           </h1>
           <p className="text-lg md:text-xl text-gray-300 font-light max-w-2xl">
-            La actualidad del deporte analizada con contexto e inteligencia.
+            La actualidad del fútbol analizada con contexto e inteligencia.
           </p>
           <Link href="/redaccion-sportiva24" className="mt-4 inline-flex text-sm font-semibold text-cyan-300 transition-colors hover:text-cyan-200">
             Conoce la Redacción Sportiva24 <span className="ml-2">→</span>

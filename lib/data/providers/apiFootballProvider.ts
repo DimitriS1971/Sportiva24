@@ -36,25 +36,42 @@ export class ApiFootballProvider {
     return Boolean(dataEnv.apiFootballApiKey);
   }
 
+  private async getFixtures(endpoint: string, revalidateSeconds: number): Promise<ApiFootballFixture[]> {
+    if (!dataEnv.apiFootballApiKey) {
+      throw new Error('API-Football API key is not configured');
+    }
+
+    const response = await fetch(endpoint, {
+      headers: {
+        'x-apisports-key': dataEnv.apiFootballApiKey,
+      },
+      next: { revalidate: revalidateSeconds },
+    });
+
+    if (!response.ok) {
+      throw new Error(`API-Football request failed with HTTP ${response.status}`);
+    }
+
+    const payload = (await response.json()) as ApiFootballFixturesResponse;
+    const errors = Array.isArray(payload.errors) ? payload.errors : Object.values(payload.errors ?? {});
+    if (errors.length > 0) {
+      throw new Error(`API-Football request failed: ${errors.join('; ')}`);
+    }
+
+    if (!Array.isArray(payload.response)) {
+      throw new Error('API-Football returned an invalid fixtures response');
+    }
+
+    return payload.response;
+  }
+
   async getFeaturedFixtures(limit: number): Promise<ApiFootballFixture[]> {
     if (!dataEnv.apiFootballApiKey) {
       return [];
     }
 
-    const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures?date=${toYmd(new Date())}&timezone=${encodeURIComponent(SPORTIVA_TIME_ZONE)}`;
-    const response = await fetch(endpoint, {
-      headers: {
-        'x-apisports-key': dataEnv.apiFootballApiKey,
-      },
-      next: { revalidate: 30 },
-    });
-
-    if (!response.ok) {
-      return [];
-    }
-
-    const payload = (await response.json()) as ApiFootballFixturesResponse;
-    return (payload.response ?? []).slice(0, Math.max(limit, 4));
+    const fixtures = await this.getFixturesByDate(new Date());
+    return fixtures.slice(0, Math.max(limit, 4));
   }
 
   async getFeaturedFixturesCount(): Promise<number> {
@@ -62,20 +79,7 @@ export class ApiFootballProvider {
       return 0;
     }
 
-    const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures?date=${toYmd(new Date())}&timezone=${encodeURIComponent(SPORTIVA_TIME_ZONE)}`;
-    const response = await fetch(endpoint, {
-      headers: {
-        'x-apisports-key': dataEnv.apiFootballApiKey,
-      },
-      next: { revalidate: 30 },
-    });
-
-    if (!response.ok) {
-      return 0;
-    }
-
-    const payload = (await response.json()) as ApiFootballFixturesResponse;
-    return (payload.response ?? []).length;
+    return (await this.getFixturesByDate(new Date())).length;
   }
 
   async getNextFixtures(limit: number): Promise<ApiFootballFixture[]> {
@@ -161,19 +165,7 @@ export class ApiFootballProvider {
     }
 
     const endpoint = `${dataEnv.apiFootballBaseUrl}/fixtures?date=${toYmd(date)}&timezone=${encodeURIComponent(SPORTIVA_TIME_ZONE)}`;
-    const response = await fetch(endpoint, {
-      headers: {
-        'x-apisports-key': dataEnv.apiFootballApiKey,
-      },
-      next: { revalidate: 30 },
-    });
-
-    if (!response.ok) {
-      return [];
-    }
-
-    const payload = (await response.json()) as ApiFootballFixturesResponse;
-    return payload.response ?? [];
+    return this.getFixtures(endpoint, 30);
   }
 
   async getHeadToHead(homeTeamId: number, awayTeamId: number): Promise<ApiFootballFixture[]> {

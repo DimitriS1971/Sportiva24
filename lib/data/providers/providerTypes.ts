@@ -67,6 +67,7 @@ export interface ApiFootballFixture {
 
 export interface ApiFootballFixturesResponse {
   response?: ApiFootballFixture[];
+  errors?: Record<string, string> | string[];
 }
 
 export interface ApiFootballStandingsEntry {

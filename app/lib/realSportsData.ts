@@ -118,16 +118,6 @@ export async function getFeaturedFootballMatches(limit = 4): Promise<Intelligenc
 }
 
 export async function getTodayFootballMatches(limit = 8): Promise<IntelligenceMatch[]> {
-  if (apiFootballProvider.isConfigured()) {
-    const apiMatches = footballAdapter
-      .adaptApiFootballFeaturedMatches(await apiFootballProvider.getFixturesByDate(new Date()), limit * 4)
-      .map(mapToIntelligenceMatch);
-
-    if (apiMatches.length > 0) {
-      return applyQualityFilters(apiMatches, limit);
-    }
-  }
-
   const matches = await sportsDataService.getTodayMatches('football', limit);
   return applyQualityFilters(
     matches.map(mapToIntelligenceMatch),
